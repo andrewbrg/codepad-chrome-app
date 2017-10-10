@@ -19,6 +19,8 @@
   "permissions": [
     "http://fonts.gstatic.com/",
     "https://fonts.gstatic.com/",
+    "http://maxcdn.bootstrapcdn.com/",
+    "https://maxcdn.bootstrapcdn.com/",
     {
       "mediaGalleries": [
         "read",

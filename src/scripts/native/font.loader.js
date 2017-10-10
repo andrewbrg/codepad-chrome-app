@@ -1,10 +1,11 @@
 $(document).ready(function () {
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", "https://fonts.gstatic.com/s/robotomono/v4/hMqPNLsu_dywMa4C_DEpY44P5ICox8Kq3LLUNMylGO4.woff2", true);
-    xhr.responseType = "blob";
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            var myfontblob = window.URL.createObjectURL(xhr.response);
+    var xhr_1 = new XMLHttpRequest();
+
+    xhr_1.open("GET", "https://fonts.gstatic.com/s/robotomono/v4/hMqPNLsu_dywMa4C_DEpY44P5ICox8Kq3LLUNMylGO4.woff2", true);
+    xhr_1.responseType = "blob";
+    xhr_1.onreadystatechange = function () {
+        if (xhr_1.readyState === 4) {
+            var myfontblob = window.URL.createObjectURL(xhr_1.response);
             $("<style>").text("@font-face {\
             font-family: 'Roboto Mono';\
             font-style: normal;\
@@ -13,5 +14,6 @@ $(document).ready(function () {
         }").prependTo("head");
         }
     };
-    xhr.send();
+
+    xhr_1.send();
 });

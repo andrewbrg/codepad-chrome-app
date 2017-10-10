@@ -10,19 +10,81 @@ html, body {
     height: 100%;
 }
 
+/************************************* Navbar ***********************************/
 .navbar {
     padding: .2rem 1rem;
     z-index: 999;
 }
 
+/************************************* End **************************************/
+
+/************************************* Editor ***********************************/
+.nav-tabs {
+    width: 100%;
+}
+
+.tab-content,
+.tab-pane,
 .editor {
-    font-family: 'Roboto Mono', monospace;
     position: relative;
     width: 100%;
     height: 100%;
+}
+
+.editor {
+    font-family: 'Roboto Mono', monospace;
+
     font-size: 17px !important;
 }
 
 .ace_gutter-cell {
     font-size: 15px !important;
 }
+
+/************************************* End *************************************/
+
+/************************************* Tabs ************************************/
+*[contenteditable] {
+    border: solid 1px lightgreen;
+    padding: 5px;
+}
+
+.tab-list li {
+    padding: 5px 12px;
+}
+
+.tab-list li a {
+    display: inline-block;
+}
+
+.tab-list li a.active {
+    font-weight: bold;
+}
+
+.tab-list li a:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.tab-list li span:first-child {
+    padding: 0 3px 0 0;
+}
+
+.tab-list li span.fa {
+    opacity: 0.5;
+}
+
+.tab-list li span.fa:hover {
+    opacity: 1;
+}
+
+.tab-list li span.fa.fa-pencil {
+    margin: -1px 0 0 0;
+    font-size: 0.8em;
+}
+
+.tab-list li span.fa.fa-close {
+    margin: 3px 0 0 2px;
+}
+
+/************************************* End *************************************/

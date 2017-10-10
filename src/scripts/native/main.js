@@ -1,7 +1,7 @@
 chrome.app.runtime.onLaunched.addListener(function () {
     chrome.app.window.create('src/html/main.html',
         {
-            innerBounds: {width: 800, height: 600},
+            innerBounds: {width: 1024, height: 768},
             resizable: true,
             focused: true,
             id: "codepad-main"
@@ -15,7 +15,7 @@ chrome.app.runtime.onLaunched.addListener(function () {
 chrome.app.runtime.onRestarted.addListener(function () {
     chrome.app.window.create('src/html/main.html',
         {
-            innerBounds: {width: 800, height: 600},
+            innerBounds: {width: 1024, height: 768},
             resizable: true,
             focused: true,
             id: "codepad-main"

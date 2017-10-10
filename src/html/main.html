@@ -7,16 +7,20 @@
     <!------------------------------------------------------------------------------------------------------------------
     - https://getbootstrap.com/docs/4.0/getting-started/introduction/
     - https://github.com/ajaxorg/ace
+    - https://github.com/jonmiles/bootstrap-treeview/
     ------------------------------------------------------------------------------------------------------------------->
 
     <link rel="stylesheet" href="/src/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/src/css/bootstrap-treeview.css"/>
+    <link rel="stylesheet" href="/src/css/font-awesome.min.css"/>
+
     <link rel="stylesheet" href="/src/css/native/main.css"/>
 </head>
 <body>
 
-
+<!--Navbar-->
 <nav class="navbar navbar-expand-md navbar-light bg-light">
-    <img class="navbar-brand" src="#"/>
+    <div class="navbar-brand"><i class="fa fa-plus"></i></div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -31,10 +35,10 @@
                     File
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item file-new" href="#">New</a>
-                    <a class="dropdown-item file-open" href="#">Open</a>
-                    <a class="dropdown-item file-save" href="#">Save</a>
-                    <a class="dropdown-item file-save-as" href="#">Save As</a>
+                    <a class="dropdown-item file-new" href="#"><i class="fa fa-file-o"></i> New</a>
+                    <a class="dropdown-item file-open" href="#"><i class="fa fa-folder-o"></i> Open</a>
+                    <a class="dropdown-item file-save" href="#"><i class="fa fa-save"></i> Save</a>
+                    <a class="dropdown-item file-save-as" href="#"><i class="fa fa-save"></i> Save As</a>
                 </div>
             </li>
 
@@ -52,8 +56,27 @@
 </nav>
 
 
-<div id="codepad-editor" class="editor">
+<!-- Nav tabs -->
+<div class="nav-tabs">
+    <button type="button" class="btn btn-sm btn-outline-primary pull-right add-tab"><i class="fa fa-plus"></i></button>
+    <ul class="nav tab-list" role="tablist">
+        <li class="active">
+            <a href="#tab1" role="tab" data-toggle="tab">
+                <span>Tab 1 </span>
+                <span class="fa fa-pencil text-muted edit"></span>
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="tab1">
+            <div id="codepad-editor-1" class="editor"></div>
+        </div>
+    </div>
+
 </div>
+
 
 <!-- Bootstrap -->
 <script src="/src/scripts/jquery-3.2.1.slim.min.js"></script>
@@ -65,8 +88,11 @@
 <script src="/src/scripts/ace/mode-javascript.js"></script>
 <script src="/src/scripts/ace/theme-monokai.js"></script>
 
+<!-- Tree -->
+<script src="/src/scripts/bootstrap-treeview.js"></script>
+
 <!-- Native scripts -->
-<script src="/src/scripts/native/editor.js"></script>
+<script src="/src/scripts/native/editor.tabs.js"></script>
 <script src="/src/scripts/native/font.loader.js"></script>
 </body>
 </html>
