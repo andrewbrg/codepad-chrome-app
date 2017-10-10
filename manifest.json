@@ -17,8 +17,8 @@
     }
   ],
   "permissions": [
-    "http://fonts.googleapis.com/",
-    "https://fonts.googleapis.com/",
+    "http://fonts.gstatic.com/",
+    "https://fonts.gstatic.com/",
     {
       "mediaGalleries": [
         "read",
