@@ -6,7 +6,7 @@
   "app": {
     "background": {
       "scripts": [
-        "src/scripts/main.js"
+        "src/scripts/native/main.js"
       ]
     }
   },
@@ -17,6 +17,8 @@
     }
   ],
   "permissions": [
+    "http://fonts.googleapis.com/",
+    "https://fonts.googleapis.com/",
     {
       "mediaGalleries": [
         "read",

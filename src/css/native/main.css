@@ -1,0 +1,28 @@
+* {
+    outline: none;
+}
+
+html, body {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.navbar {
+    padding: .2rem 1rem;
+    z-index: 999;
+}
+
+.editor {
+    font-family: 'Roboto Mono', monospace;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    font-size: 17px !important;
+}
+
+.ace_gutter-cell {
+    font-size: 15px !important;
+}
