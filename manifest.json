@@ -1,0 +1,29 @@
+{
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "name": "JS Pad",
+  "description": "A JavaScript editor for Chrome OS",
+  "app": {
+    "background": {
+      "scripts": [
+        "src/scripts/main.js"
+      ]
+    }
+  },
+  "file_browser_handlers": [
+    {
+      "id": "open-file",
+      "default_title": "Open file"
+    }
+  ],
+  "permissions": [
+    {
+      "mediaGalleries": [
+        "read",
+        "allAutoDetected"
+      ]
+    },
+    "fileBrowserHandler",
+    "fullscreen"
+  ]
+}
