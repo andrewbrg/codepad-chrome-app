@@ -1,6 +1,6 @@
 var tabID          = 1;
-var tabCloseButton = '<span class="fa fa-close text-muted close"></span>';
-var tabEditButton  = '<span class="fa fa-pencil text-muted edit"></span>';
+var tabCloseButton = '<span class="fa fa-close text-white close"></span>';
+var tabEditButton  = '<span class="fa fa-pencil text-white edit"></span>';
 
 function initAceEditor(id) {
     var editor = ace.edit(id);
@@ -16,8 +16,9 @@ function resetTabs() {
     $(tabs).each(function () {
         len++;
         $(this).find('a').html(
-            '<span>File ' + len + '</span>' +
-            tabEditButton + tabCloseButton
+            '<span>new doc ' + len + '</span>' +
+            tabEditButton +
+            tabCloseButton
         );
     });
     tabID--;
@@ -36,9 +37,10 @@ $(document).ready(function () {
     $(".add-tab").click(function () {
         tabID++;
         $(".tab-list").append(
-            $('<li>' +
+            $(
+                '<li>' +
                 '<a href="#tab' + tabID + '" role="tab" data-toggle="tab">' +
-                '<span>File ' + tabID + '</span> ' +
+                '<span>new doc ' + tabID + '</span> ' +
                 tabEditButton +
                 tabCloseButton +
                 '</a>' +
@@ -46,13 +48,13 @@ $(document).ready(function () {
             )
         );
         $('.tab-content').append(
-            $('<div class="tab-pane fade" id="tab' + tabID + '">' +
+            $(
+                '<div class="tab-pane fade" id="tab' + tabID + '">' +
                 '<div id="codepad-editor-' + tabID + '" class="editor"></div>' +
                 '</div>'
             )
         );
         initAceEditor('codepad-editor-' + tabID);
-        $(".edit").click(editHandler);
     });
 
     $(".tab-list").on("click", ".close", function () {
@@ -65,6 +67,6 @@ $(document).ready(function () {
         tabFirst.tab("show");
     });
 
-    initAceEditor('codepad-editor-' + tabID);
+    initAceEditor("codepad-editor-1");
     $(".edit").click(editHandler);
 });
