@@ -1,7 +1,9 @@
 var EditorTab;
 EditorTab = function () {
 
-    this.tabIndex        = 1;
+    this.idx             = 0;
+    this.currIdx         = null;
+    this.lastIdx         = null;
     this.newTabNameTxt   = 'Untitled';
     this.navCloseBtnHtml = '<span class="fa fa-close text-white close"></span>';
     this.navEditBtnHtml  = '<span class="fa fa-pencil text-white edit"></span>';
@@ -9,11 +11,11 @@ EditorTab = function () {
     /******************************************************
      *** Public Methods
      ******************************************************/
-    this.bootAceEditor = function (tabIndex, editorMode) {
-        tabIndex   = (typeof tabIndex === typeof undefined) ? 1 : tabIndex;
+    this.bootAceEditor = function (idx, editorMode) {
+        idx        = (typeof idx === typeof undefined) ? 1 : idx;
         editorMode = (typeof editorMode === typeof undefined) ? 'javascript' : editorMode;
 
-        var aceEditor = ace.edit('codepad-editor-' + tabIndex);
+        var aceEditor = ace.edit('codepad-editor-' + idx);
         var aceMode   = ace.require('ace/mode/' + editorMode).Mode;
         aceEditor.setTheme("ace/theme/monokai");
         aceEditor.session.setMode(new aceMode());
@@ -29,50 +31,63 @@ EditorTab = function () {
         return $(document).find('.tab-content').first();
     };
 
-    this.getNavElement = function (tabIndex) {
-        if (typeof tabIndex === typeof undefined) {
-            return false;
+    this.getNavElement = function (idx) {
+        if (typeof idx === typeof undefined) {
+            return undefined;
         }
 
-        return this.getNavContainer().find('*[data-tab-index="' + tabIndex + '"]').first().closest('li');
+        return this.getNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
     };
 
-    this.getContentElement = function (tabIndex) {
-        if (typeof tabIndex === typeof undefined) {
-            return false;
+    this.getContentElement = function (idx) {
+        if (typeof idx === typeof undefined) {
+            return undefined;
         }
 
-        return this.getContentContainer().find('.tab-pane[data-tab-index="' + tabIndex + '"]').first();
+        return this.getContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
     };
 
     /******************************************************
      *** Private Methods
      ******************************************************/
     this._makeNewTabObj = function () {
-        this.tabIndex++;
+        this.idx++;
 
         var obj          = {};
-        obj.tabIndex     = this.tabIndex;
-        obj.contentId    = 'tab-' + this.tabIndex;
-        obj.codeEditorId = 'codepad-editor-' + this.tabIndex;
+        obj.idx          = this.idx;
+        obj.contentId    = 'tab-' + this.idx;
+        obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.nav          = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab">' +
-            '<span class="filename">' + this.newTabNameTxt + ' ' + this.tabIndex + '</span>' +
+            '<span class="filename">' + this.newTabNameTxt + ' ' + this.idx + '</span>' +
             this.navEditBtnHtml +
             this.navCloseBtnHtml +
             '</a>' +
             '</li>'
         );
         obj.content      = $(
-            '<div class="tab-pane fade" id="' + obj.contentId + '" data-tab-index="' + this.tabIndex + '">' +
+            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
             '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
             '</div>'
         );
 
-        obj.nav.find('.edit').attr('data-tab-index', this.tabIndex);
-        obj.nav.find('.close').attr('data-tab-index', this.tabIndex);
+        obj.nav.find('.edit').attr('data-idx', this.idx);
+        obj.nav.find('.close').attr('data-idx', this.idx);
         return obj;
+    };
+
+    this._giveFocus = function (idx) {
+        var $el = this.getNavElement(idx);
+        if (typeof $el === typeof undefined) {
+            return false;
+        }
+
+        $el.find('*[role="tab"]').first().tab('show');
+        this.lastIdx = this.currIdx;
+        this.currIdx = idx;
+
+        return true;
     };
 
     /******************************************************
@@ -82,16 +97,15 @@ EditorTab = function () {
         var obj = this._makeNewTabObj();
         this.getNavContainer().append(obj.nav);
         this.getContentContainer().append(obj.content);
-        this.bootAceEditor(obj.tabIndex);
-        this.getNavElement(obj.tabIndex).tab('show');
+        this.bootAceEditor(obj.idx);
+
+        this._giveFocus(obj.idx);
     };
 
-    this.onEditExistingTabName = function (tabIndex) {
-        var $el = this.getNavElement(tabIndex);
-
+    this.onEditExistingTabName = function (idx) {
+        var $el       = this.getNavElement(idx);
         var $filename = $el.find(".filename").first();
         var $children = $filename.siblings().hide();
-
 
         $filename.attr('contenteditable', 'true').one('focusout', function () {
             $(this).removeAttr('contenteditable');
@@ -99,15 +113,15 @@ EditorTab = function () {
         });
     };
 
-    this.onCloseExistingTab = function (tabIndex) {
+    this.onCloseExistingTab = function (idx) {
 
-        if (typeof tabIndex === typeof undefined) {
+        if (typeof idx === typeof undefined) {
             return false;
         }
 
-        this.getNavElement(tabIndex).remove();
-        this.getContentElement(tabIndex).remove();
-        this.getNavElement(1).find('a').first().tab('show');
+        this.getNavElement(idx).remove();
+        this.getContentElement(idx).remove();
+        this._giveFocus(this.lastIdx);
 
         return true;
     };
@@ -121,11 +135,11 @@ $(document).ready(function () {
     });
 
     $(document).on('click', '.tab-list .edit', function () {
-        EditorTabInst.onEditExistingTabName($(this).attr('data-tab-index'));
+        EditorTabInst.onEditExistingTabName($(this).attr('data-idx'));
     });
 
     $(document).on('click', '.tab-list .close', function () {
-        EditorTabInst.onCloseExistingTab($(this).attr('data-tab-index'));
+        EditorTabInst.onCloseExistingTab($(this).attr('data-idx'));
     });
 
     if (EditorTabInst.getContentContainer().children().length === 0) {
