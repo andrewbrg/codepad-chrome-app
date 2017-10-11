@@ -1,72 +1,134 @@
-var tabID          = 1;
-var tabCloseButton = '<span class="fa fa-close text-white close"></span>';
-var tabEditButton  = '<span class="fa fa-pencil text-white edit"></span>';
+var EditorTab;
+EditorTab = function () {
 
-function initAceEditor(id) {
-    var editor = ace.edit(id);
-    editor.setTheme("ace/theme/monokai");
+    this.tabIndex        = 1;
+    this.newTabNameTxt   = 'Untitled';
+    this.navCloseBtnHtml = '<span class="fa fa-close text-white close"></span>';
+    this.navEditBtnHtml  = '<span class="fa fa-pencil text-white edit"></span>';
 
-    var JavaScriptMode = ace.require("ace/mode/javascript").Mode;
-    editor.session.setMode(new JavaScriptMode());
-}
+    /******************************************************
+     *** Public Methods
+     ******************************************************/
+    this.bootAceEditor = function (tabIndex, editorMode) {
+        tabIndex   = (typeof tabIndex === typeof undefined) ? 1 : tabIndex;
+        editorMode = (typeof editorMode === typeof undefined) ? 'javascript' : editorMode;
 
-function resetTabs() {
-    var tabs = $(".tab-list li:not(:first)");
-    var len  = 1;
-    $(tabs).each(function () {
-        len++;
-        $(this).find('a').html(
-            '<span>new doc ' + len + '</span>' +
-            tabEditButton +
-            tabCloseButton
+        var aceEditor = ace.edit('codepad-editor-' + tabIndex);
+        var aceMode   = ace.require('ace/mode/' + editorMode).Mode;
+        aceEditor.setTheme("ace/theme/monokai");
+        aceEditor.session.setMode(new aceMode());
+
+        return aceEditor;
+    };
+
+    this.getNavContainer = function () {
+        return $(document).find('.tab-list').first();
+    };
+
+    this.getContentContainer = function () {
+        return $(document).find('.tab-content').first();
+    };
+
+    this.getNavElement = function (tabIndex) {
+        if (typeof tabIndex === typeof undefined) {
+            return false;
+        }
+
+        return this.getNavContainer().find('*[data-tab-index="' + tabIndex + '"]').first().closest('li');
+    };
+
+    this.getContentElement = function (tabIndex) {
+        if (typeof tabIndex === typeof undefined) {
+            return false;
+        }
+
+        return this.getContentContainer().find('.tab-pane[data-tab-index="' + tabIndex + '"]').first();
+    };
+
+    /******************************************************
+     *** Private Methods
+     ******************************************************/
+    this._makeNewTabObj = function () {
+        this.tabIndex++;
+
+        var obj          = {};
+        obj.tabIndex     = this.tabIndex;
+        obj.contentId    = 'tab-' + this.tabIndex;
+        obj.codeEditorId = 'codepad-editor-' + this.tabIndex;
+        obj.nav          = $(
+            '<li>' +
+            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab">' +
+            '<span class="filename">' + this.newTabNameTxt + ' ' + this.tabIndex + '</span>' +
+            this.navEditBtnHtml +
+            this.navCloseBtnHtml +
+            '</a>' +
+            '</li>'
         );
-    });
-    tabID--;
-}
+        obj.content      = $(
+            '<div class="tab-pane fade" id="' + obj.contentId + '" data-tab-index="' + this.tabIndex + '">' +
+            '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
+            '</div>'
+        );
 
-var editHandler = function () {
-    var t = $(this);
-    t.css("visibility", "hidden");
-    $(this).prev().attr("contenteditable", "true").focusout(function () {
-        $(this).removeAttr("contenteditable").off("focusout");
-        t.css("visibility", "visible");
-    });
+        obj.nav.find('.edit').attr('data-tab-index', this.tabIndex);
+        obj.nav.find('.close').attr('data-tab-index', this.tabIndex);
+        return obj;
+    };
+
+    /******************************************************
+     *** Event callbacks
+     ******************************************************/
+    this.onAddNewTab = function () {
+        var obj = this._makeNewTabObj();
+        this.getNavContainer().append(obj.nav);
+        this.getContentContainer().append(obj.content);
+        this.bootAceEditor(obj.tabIndex);
+        this.getNavElement(obj.tabIndex).tab('show');
+    };
+
+    this.onEditExistingTabName = function (tabIndex) {
+        var $el = this.getNavElement(tabIndex);
+
+        var $filename = $el.find(".filename").first();
+        var $children = $filename.siblings().hide();
+
+
+        $filename.attr('contenteditable', 'true').one('focusout', function () {
+            $(this).removeAttr('contenteditable');
+            $children.show();
+        });
+    };
+
+    this.onCloseExistingTab = function (tabIndex) {
+
+        if (typeof tabIndex === typeof undefined) {
+            return false;
+        }
+
+        this.getNavElement(tabIndex).remove();
+        this.getContentElement(tabIndex).remove();
+        this.getNavElement(1).find('a').first().tab('show');
+
+        return true;
+    };
 };
 
 $(document).ready(function () {
-    $(".add-tab").click(function () {
-        tabID++;
-        $(".tab-list").append(
-            $(
-                '<li>' +
-                '<a href="#tab' + tabID + '" role="tab" data-toggle="tab">' +
-                '<span>new doc ' + tabID + '</span> ' +
-                tabEditButton +
-                tabCloseButton +
-                '</a>' +
-                '</li>'
-            )
-        );
-        $('.tab-content').append(
-            $(
-                '<div class="tab-pane fade" id="tab' + tabID + '">' +
-                '<div id="codepad-editor-' + tabID + '" class="editor"></div>' +
-                '</div>'
-            )
-        );
-        initAceEditor('codepad-editor-' + tabID);
+
+    var EditorTabInst = new EditorTab();
+    $(document).on('click', '.add-tab', function () {
+        EditorTabInst.onAddNewTab();
     });
 
-    $(".tab-list").on("click", ".close", function () {
-        var tabID = $(this).parents("a").attr("href");
-        $(this).parents("li").remove();
-        $(tabID).remove();
-
-        var tabFirst = $(".tab-list a:first");
-        resetTabs();
-        tabFirst.tab("show");
+    $(document).on('click', '.tab-list .edit', function () {
+        EditorTabInst.onEditExistingTabName($(this).attr('data-tab-index'));
     });
 
-    initAceEditor("codepad-editor-1");
-    $(".edit").click(editHandler);
+    $(document).on('click', '.tab-list .close', function () {
+        EditorTabInst.onCloseExistingTab($(this).attr('data-tab-index'));
+    });
+
+    if (EditorTabInst.getContentContainer().children().length === 0) {
+        EditorTabInst.onAddNewTab();
+    }
 });

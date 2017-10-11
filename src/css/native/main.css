@@ -95,8 +95,7 @@ html, body {
 }
 
 .tab-list li a.active span,
-.tab-list li a:hover span,
-.add-tab:hover {
+.tab-list li a:hover span {
     opacity: 1;
     text-decoration: none;
     cursor: pointer;
