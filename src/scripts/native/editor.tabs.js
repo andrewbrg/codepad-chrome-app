@@ -201,7 +201,7 @@ var EditorTab = function () {
 
         var that      = this;
         var $el       = this.getNavElement(idx);
-        var $fileName = $el.find(".filename").first();
+        var $fileName = $el.find('.filename').first();
         var $siblings = $fileName.siblings().css('visibility', 'hidden');
 
         $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
@@ -229,8 +229,8 @@ var EditorTab = function () {
 
 $(document).ready(function () {
 
-    var EditorTabInstance = new EditorTab();
-    var $contentContainer = EditorTabInstance.getContentContainer();
+    window.EditorTabInstance = new EditorTab();
+    var $contentContainer    = EditorTabInstance.getContentContainer();
 
     $(document).on('click', '.add-tab', function () {
         var type = $(this).attr('data-type');

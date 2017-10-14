@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="/src/css/bootstrap-treeview.css"/>
     <link rel="stylesheet" href="/src/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/src/css/font-mfizz.css">
+
     <link rel="stylesheet" href="/src/css/native/main.css"/>
 </head>
 <body>
@@ -67,24 +68,42 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item search" href="#">
-                            <i class="fa fa-search"></i>&nbsp;Search
+                            <i class="fa fa-search"></i>
+                            &nbsp;Search
+                            <span class="navbar-help pull-right">(ctrl+f)</span>
+                            <span class="clearfix"></span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item undo" href="#">
-                            <i class="fa fa-reply"></i>&nbsp;Undo
+                            <i class="fa fa-reply"></i>
+                            &nbsp;Undo
+                            <span class="navbar-help pull-right">(ctrl+z)</span>
+                            <span class="clearfix"></span>
                         </a>
                         <a class="dropdown-item redo" href="#">
-                            <i class="fa fa-share"></i>&nbsp;Redo
+                            <i class="fa fa-share"></i>
+                            &nbsp;Redo
+                            <span class="navbar-help pull-right">(ctrl+y)</span>
+                            <span class="clearfix"></span>
                         </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item cut" href="#">
-                            <i class="fa fa-cut"></i>&nbsp;Cut
+                            <i class="fa fa-cut"></i>
+                            &nbsp;Cut
+                            <span class="navbar-help pull-right">(ctrl+x)</span>
+                            <span class="clearfix"></span>
                         </a>
                         <a class="dropdown-item copy" href="#">
-                            <i class="fa fa-copy"></i>&nbsp;Copy
+                            <i class="fa fa-copy"></i>
+                            &nbsp;Copy
+                            <span class="navbar-help pull-right">(ctrl+c)</span>
+                            <span class="clearfix"></span>
                         </a>
                         <a class="dropdown-item paste" href="#">
-                            <i class="fa fa-paste"></i>&nbsp;Paste
+                            <i class="fa fa-paste"></i>
+                            &nbsp;Paste
+                            <span class="navbar-help pull-right">(ctrl+v)</span>
+                            <span class="clearfix"></span>
                         </a>
                     </div>
                 </li>
@@ -102,16 +121,55 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">
-                        <i class="fa fa-cog"></i>&nbsp;Editor
+                        <i class="fa fa-cog"></i>
+                        &nbsp;Editor
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item editor-theme" href="#" data-toggle="modal"
                            data-target=".modal-sm-container">
-                            <i class="fa fa-magic"></i>&nbsp;Theme
+                            <i class="fa fa-magic"></i>
+                            &nbsp;Theme
                         </a>
                         <a class="dropdown-item editor-font" href="#" data-toggle="modal"
                            data-target=".modal-sm-container">
-                            <i class="fa fa-font"></i>&nbsp;Font face
+                            <i class="fa fa-font"></i>
+                            &nbsp;Font
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item editor-font" href="#">
+                            <i class="fa fa-level-down"></i>
+                            &nbsp;Word wrap
+                            <div class="switch pull-right">
+                                <input id="chk-word-wrap" name="chk-word-wrap"
+                                       class="cmn-toggle cmn-toggle-round-flat"
+                                       type="checkbox">
+                                <label for="chk-word-wrap"></label>
+                            </div>
+                            <span class="clearfix"></span>
+                        </a>
+
+                        <a class="dropdown-item editor-font" href="#">
+                            <i class="fa fa-font"></i>
+                            &nbsp;Active line
+                            <div class="switch pull-right">
+                                <input id="chk-active-line" name="chk-active-line"
+                                       class="cmn-toggle cmn-toggle-round-flat"
+                                       type="checkbox">
+                                <label for="chk-active-line"></label>
+                            </div>
+                            <span class="clearfix"></span>
+                        </a>
+
+                        <a class="dropdown-item editor-font" href="#">
+                            <i class="fa fa-font"></i>
+                            &nbsp;Print margin
+                            <div class="switch pull-right">
+                                <input id="chk-print-margin" name="chk-print-margin"
+                                       class="cmn-toggle cmn-toggle-round-flat"
+                                       type="checkbox">
+                                <label for="chk-print-margin"></label>
+                            </div>
+                            <span class="clearfix"></span>
                         </a>
                     </div>
                 </li>
@@ -162,6 +220,7 @@
 <!-- Native scripts -->
 <script src="/src/scripts/native/font.loader.js"></script>
 <script src="/src/scripts/native/modal.loader.js"></script>
+<script src="/src/scripts/native/nav.helper.js"></script>
 <script src="/src/scripts/native/editor.tabs.js"></script>
 </body>
 </html>

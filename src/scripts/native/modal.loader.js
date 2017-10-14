@@ -39,7 +39,6 @@ var ModalLoader = function () {
         var $el = $(el);
         var $mc = this.getModalContainer($el);
 
-        console.log($mc);
         if (typeof $mc === typeof undefined) {
             return false;
         }
@@ -55,7 +54,6 @@ var ModalLoader = function () {
 $(document).ready(function () {
     var ModalLoaderInstance = new ModalLoader();
     $(document).on('show.bs.modal', '.modal', function (e) {
-        console.log('sadasdasd');
         ModalLoaderInstance.onShowBs(e.relatedTarget);
     });
 });
