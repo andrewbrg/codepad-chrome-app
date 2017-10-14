@@ -16,18 +16,12 @@
       "default_title": "Open file"
     }
   ],
+  "web_accessible_resources": [
+    "src/html/templates/*"
+  ],
   "permissions": [
     "http://fonts.gstatic.com/",
     "https://fonts.gstatic.com/",
-    "http://maxcdn.bootstrapcdn.com/",
-    "https://maxcdn.bootstrapcdn.com/",
-    {
-      "mediaGalleries": [
-        "read",
-        "allAutoDetected"
-      ]
-    },
-    "fileBrowserHandler",
-    "fullscreen"
+    "fileSystem"
   ]
 }

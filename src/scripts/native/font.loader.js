@@ -21,7 +21,7 @@ $(document).ready(function () {
         if (xhr_2.readyState === 4) {
             var myfontblob = window.URL.createObjectURL(xhr_2.response);
             $("<style>").text("@font-face {\
-            font-family: 'Roboto Mono';\
+            font-family: 'Open+Sans';\
             font-style: normal;\
             font-weight: 400;\
             src: '" + myfontblob + "' format('woff2');\

@@ -1,26 +1,44 @@
 var EditorTab = function () {
-    this.idx             = 0;
-    this.aceEditors      = [];
-    this.currIdx         = null;
-    this.lastIdx         = null;
-    this.navCloseBtnHtml = '<span class="fa fa-close text-white close"></span>';
-    this.defaultFileName = 'untitled';
-    this.defaultFileExt  = 'html';
+    this.idx              = 0;
+    this.aceEditors       = [];
+    this.currIdx          = null;
+    this.lastIdx          = null;
+    this.navCloseBtnHtml  = '<span class="fa fa-close text-white close"></span>';
+    this.defaultFileName  = 'untitled';
+    this.defaultFileExt   = 'php';
+    this.undefinedFileExt = 'text';
 
     /******************************************************
      *** Public Methods
      ******************************************************/
-    this.bootAceEditor = function (idx, editorMode) {
-        idx        = (typeof idx === typeof undefined) ? 1 : idx;
-        editorMode = (typeof editorMode === typeof undefined) ? 'javascript' : editorMode;
-
+    this.bootAceEditor = function (idx) {
+        idx           = (typeof idx === typeof undefined) ? 1 : idx;
         var aceEditor = ace.edit('codepad-editor-' + idx);
-        var aceMode   = ace.require('../ace/mode/' + editorMode).Mode;
-        aceEditor.setTheme('../ace/theme/monokai');
-        aceEditor.session.setMode(new aceMode());
 
-        this.aceEditors[idx] = aceEditor;
+        aceEditor.setTheme('../ace/theme/monokai');
+        aceEditor.$blockScrolling = Infinity;
+        this.aceEditors[idx]      = aceEditor;
+        this.setAceEditorTemplate(idx);
+        this.setAceEditorMode(idx);
+
         return aceEditor;
+    };
+
+    this.setAceEditorTemplate = function (idx) {
+        var ext       = this._getFileNameExtension(idx);
+        var aceEditor = this.aceEditors[idx];
+        if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
+            $.get('/src/html/templates/' + ext + '.tpl', function (data) {
+                aceEditor.setValue(data);
+            });
+        }
+    };
+
+    this.setAceEditorMode = function (idx) {
+        var that = this;
+        this._mapExtensionToAceMode(idx).then(function (mode) {
+            that.aceEditors[idx].getSession().setMode('../ace/mode/' + mode);
+        });
     };
 
     this.getNavContainer = function () {
@@ -57,10 +75,11 @@ var EditorTab = function () {
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
+        obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + this.defaultFileExt;
         obj.nav          = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab">' +
-            '<span class="filename">' + this.defaultFileName + '_' + this.idx + '.' + this.defaultFileExt + '</span>' +
+            '<span class="filename">' + obj.fileName + '</span>' +
             this.navCloseBtnHtml +
             '</a>' +
             '</li>'
@@ -77,9 +96,13 @@ var EditorTab = function () {
     };
 
     this._giveFocus = function (idx) {
+        if (this.getNavContainer().children().length === 0) {
+            return false;
+        }
+
         var $el = this.getNavElement(idx);
         if (typeof $el === typeof undefined) {
-            return false;
+            this.getNavContainer().children().first()
         }
 
         $el.find('*[role="tab"]').first().tab('show');
@@ -87,6 +110,38 @@ var EditorTab = function () {
         this.currIdx = idx;
 
         return true;
+    };
+
+    this._getFileNameExtension = function (idx) {
+        var $el   = this.getNavElement(idx);
+        var regEx = /(?:\.([^.]+))?$/;
+
+        if (typeof $el !== typeof undefined) {
+            var ext = regEx.exec($el.find('.filename').first().html())[1];
+            return ext.toLowerCase();
+        }
+
+        return this.undefinedFileExt;
+    };
+
+    this._mapExtensionToAceMode = function (idx) {
+        var that     = this;
+        var deferred = $.Deferred();
+
+        $.get('/src/scripts/editor/modes.map.json').done(function (data) {
+            data    = JSON.parse(data);
+            var ext = that._getFileNameExtension(idx);
+            if (typeof ext === typeof undefined) {
+                deferred.resolve(that.undefinedFileExt);
+            }
+            if (data.hasOwnProperty(ext)) {
+                deferred.resolve(data[ext]);
+            }
+
+            deferred.resolve(ext);
+        });
+
+        return deferred.promise();
     };
 
     /******************************************************
@@ -97,20 +152,25 @@ var EditorTab = function () {
         this.getNavContainer().append(obj.nav);
         this.getContentContainer().append(obj.content);
         this.bootAceEditor(obj.idx);
-
         this._giveFocus(obj.idx);
     };
 
     this.onEditExistingTabName = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
+
+        var that      = this;
         var $el       = this.getNavElement(idx);
-        var $filename = $el.find(".filename").first();
-        var $children = $filename.siblings().css('visibility', 'hidden');
+        var $fileName = $el.find(".filename").first();
+        var $siblings = $fileName.siblings().css('visibility', 'hidden');
 
-        $filename.attr('contenteditable', 'true').focus().one('focusout', function () {
+        $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
             $(this).removeAttr('contenteditable');
-            $children.css('visibility', 'visible');
-
-            console.log($(this).html());
+            that.setAceEditorTemplate(idx);
+            that.setAceEditorMode(idx);
+            $siblings.css('visibility', 'visible');
         });
     };
 
@@ -130,20 +190,24 @@ var EditorTab = function () {
 
 $(document).ready(function () {
 
-    var EditorTabInst = new EditorTab();
+    var EditorTabInstance = new EditorTab();
     $(document).on('click', '.add-tab', function () {
-        EditorTabInst.onAddNewTab();
+        EditorTabInstance.onAddNewTab();
     });
 
-    $(document).on('click', '.tab-list .edit, .tab-list .filename', function () {
-        EditorTabInst.onEditExistingTabName($(this).attr('data-idx'));
+    $(document).on('click', '.tab-list .edit', function () {
+        EditorTabInstance.onEditExistingTabName($(this).attr('data-idx'));
+    });
+
+    $(document).on('dblclick', '.tab-list .filename', function () {
+        EditorTabInstance.onEditExistingTabName($(this).attr('data-idx'));
     });
 
     $(document).on('click', '.tab-list .close', function () {
-        EditorTabInst.onCloseExistingTab($(this).attr('data-idx'));
+        EditorTabInstance.onCloseExistingTab($(this).attr('data-idx'));
     });
 
-    if (EditorTabInst.getContentContainer().children().length === 0) {
-        EditorTabInst.onAddNewTab();
+    if (EditorTabInstance.getContentContainer().children().length === 0) {
+        EditorTabInstance.onAddNewTab();
     }
 });
