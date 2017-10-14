@@ -1,0 +1,40 @@
+{
+  "dark": {
+    "monokai": "Monokai",
+    "ambiance": "Ambiance",
+    "chaos": "Chaos",
+    "clouds_midnight": "Clouds Midnight",
+    "cobalt": "Cobalt",
+    "gruvbox": "Gruvbox",
+    "gob": "Green On Black",
+    "idle_fingers": "Idle Fingers",
+    "kr_theme": "KrTheme",
+    "merbivore": "Merbivore",
+    "merbivore_soft": "Merbivore Soft",
+    "mono_industrial": "Mono Industrial",
+    "pastel_on_dark": "Pastel On Dark",
+    "solarized_dark": "Solarized Dark",
+    "terminal": "Terminal",
+    "tomorrow_night": "Tomorrow Night",
+    "tomorrow_night_blue": "Tomorrow Night Blue",
+    "tomorrow_night_eighties": "Tomorrow Night 80s",
+    "twilight": "Twilight",
+    "vibrant_ink": "Vibrant Ink"
+  },
+  "light": {
+    "chrome": "Chrome",
+    "clouds": "Clouds",
+    "crimson_editor": "Crimson Editor",
+    "dawn": "Dawn",
+    "eclipse": "Eclipse",
+    "github": "Github",
+    "iplastic": "IPlastic",
+    "solarized_light": "Solarized Light",
+    "textmate": "TextMate",
+    "tomorrow": "Tomorrow",
+    "xcode": "xCode",
+    "kuroir": "Kuroir",
+    "katzenmilch": "KatzenMilch",
+    "sqlserver": "SQL Server"
+  }
+}
