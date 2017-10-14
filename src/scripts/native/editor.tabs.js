@@ -3,6 +3,7 @@ var EditorTab = function () {
     this.aceEditors           = [];
     this.currIdx              = null;
     this.lastIdx              = null;
+    this.lastCopy             = '';
     this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
     this.navTabIconHtml       = '<i class="icon"></i>';
     this.newFileDropdownEntry = '<a class="dropdown-item add-tab" href="#"></a>';
@@ -11,13 +12,14 @@ var EditorTab = function () {
     this.undefinedFileExt     = 'text';
     this.undefinedFileIcon    = 'icon-html';
 
+
     /************************************************************************************************************
      * Public Methods
      ************************************************************************************************************/
     this.bootAceEditor = function (idx) {
-        idx = (typeof idx === typeof undefined) ? 1 : idx;
-
+        var that      = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
+
         aceEditor.setTheme('../ace/theme/monokai');
         aceEditor.$blockScrolling = Infinity;
         aceEditor.setOptions({
@@ -25,7 +27,11 @@ var EditorTab = function () {
             enableSnippets: true,
             enableLiveAutocompletion: true
         });
-        this.aceEditors[idx] = aceEditor;
+        aceEditor.__idx = idx;
+        aceEditor.on("copy", function (txt) {
+            that.lastCopy = txt;
+        });
+        this.aceEditors.push(aceEditor);
         this.setAceEditorTemplate(idx);
         this.setAceEditorMode(idx);
         this.setAceTabIcon(idx);
@@ -35,7 +41,7 @@ var EditorTab = function () {
 
     this.setAceEditorTemplate = function (idx) {
         var ext       = this._getFileNameExtension(idx);
-        var aceEditor = this.aceEditors[idx];
+        var aceEditor = this.getAceAtIdx(idx);
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
             $.get('/src/html/templates/' + ext + '.tpl', function (data) {
                 aceEditor.setValue(data);
@@ -47,7 +53,7 @@ var EditorTab = function () {
         var that = this;
         this._getMode(idx).then(function (data) {
             data = JSON.parse(data);
-            that.aceEditors[idx].getSession().setMode('../ace/mode/' + data.mode);
+            that.getAceAtIdx(idx).getSession().setMode('../ace/mode/' + data.mode);
         });
     };
 
@@ -69,6 +75,20 @@ var EditorTab = function () {
         });
 
         return deferred.promise();
+    };
+
+    this.getFocusedAce = function () {
+        return this.getAceAtIdx(this.currIdx);
+    };
+
+    this.getAceAtIdx = function (idx) {
+        var el = undefined;
+        this.aceEditors.forEach(function (_el) {
+            if (_el.__idx === idx) {
+                el = _el;
+            }
+        });
+        return el;
     };
 
     this.getNavContainer = function () {

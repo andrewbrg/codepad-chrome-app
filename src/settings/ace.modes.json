@@ -24,6 +24,11 @@
     "mode": "php",
     "name": "PHP"
   },
+  "phtml": {
+    "icon": "icon-php-alt",
+    "mode": "php",
+    "name": "PHTML"
+  },
   "sh": {
     "icon": "icon-script-alt",
     "mode": "sh",

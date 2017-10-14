@@ -22,7 +22,7 @@ var ModalLoader = function () {
         var $el      = $(el);
         var deferred = $.Deferred();
 
-        if ($el.hasClass('editor-theme')) {
+        if ($el.hasClass('theme')) {
             $.get('/src/html/modals/editor/theme.html').done(function (data) {
                 deferred.resolve(data);
             });
