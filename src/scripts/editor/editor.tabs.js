@@ -1,12 +1,11 @@
-var EditorTab;
-EditorTab = function () {
-
+var EditorTab = function () {
     this.idx             = 0;
+    this.aceEditors      = [];
     this.currIdx         = null;
     this.lastIdx         = null;
-    this.newTabNameTxt   = 'Untitled';
     this.navCloseBtnHtml = '<span class="fa fa-close text-white close"></span>';
-    this.navEditBtnHtml  = '<span class="fa fa-pencil text-white edit pull-right"></span>';
+    this.defaultFileName = 'untitled';
+    this.defaultFileExt  = 'html';
 
     /******************************************************
      *** Public Methods
@@ -16,10 +15,11 @@ EditorTab = function () {
         editorMode = (typeof editorMode === typeof undefined) ? 'javascript' : editorMode;
 
         var aceEditor = ace.edit('codepad-editor-' + idx);
-        var aceMode   = ace.require('ace/mode/' + editorMode).Mode;
-        aceEditor.setTheme("ace/theme/monokai");
+        var aceMode   = ace.require('../ace/mode/' + editorMode).Mode;
+        aceEditor.setTheme('../ace/theme/monokai');
         aceEditor.session.setMode(new aceMode());
 
+        this.aceEditors[idx] = aceEditor;
         return aceEditor;
     };
 
@@ -60,8 +60,7 @@ EditorTab = function () {
         obj.nav          = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab">' +
-            '<span class="filename">' + this.newTabNameTxt + ' ' + this.idx + '</span>' +
-            this.navEditBtnHtml +
+            '<span class="filename">' + this.defaultFileName + '_' + this.idx + '.' + this.defaultFileExt + '</span>' +
             this.navCloseBtnHtml +
             '</a>' +
             '</li>'
@@ -72,7 +71,7 @@ EditorTab = function () {
             '</div>'
         );
 
-        obj.nav.find('.edit').attr('data-idx', this.idx);
+        obj.nav.find('.filename').attr('data-idx', this.idx);
         obj.nav.find('.close').attr('data-idx', this.idx);
         return obj;
     };
@@ -110,6 +109,8 @@ EditorTab = function () {
         $filename.attr('contenteditable', 'true').focus().one('focusout', function () {
             $(this).removeAttr('contenteditable');
             $children.css('visibility', 'visible');
+
+            console.log($(this).html());
         });
     };
 
@@ -134,7 +135,7 @@ $(document).ready(function () {
         EditorTabInst.onAddNewTab();
     });
 
-    $(document).on('click', '.tab-list .edit', function () {
+    $(document).on('click', '.tab-list .edit, .tab-list .filename', function () {
         EditorTabInst.onEditExistingTabName($(this).attr('data-idx'));
     });
 

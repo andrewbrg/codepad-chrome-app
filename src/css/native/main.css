@@ -72,7 +72,7 @@ header {
     padding: 4px 50px;
     color: #dfdfdf;
     opacity: 0.5;
-    background: rgba(0, 0, 0, 0.22);
+    background-color: rgba(0, 0, 0, 0.22);
     border-bottom: 2px solid rgba(255, 255, 255, 0.18);
 }
 
@@ -90,12 +90,17 @@ header {
 }
 
 .tab-list li a .edit {
-    display: none;
     font-size: 0.8em;
     margin: 5px 0 0 4px;
 }
 
-.tab-list li a:hover .edit {
+.tab-list li a .edit,
+.tab-list li a .close {
+    display: none
+}
+
+.tab-list li a:hover .edit,
+.tab-list li a:hover .close {
     display: inline-flex;
 }
 
