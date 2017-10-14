@@ -20,7 +20,12 @@ var EditorTab = function () {
         var aceEditor = ace.edit('codepad-editor-' + idx);
         aceEditor.setTheme('../ace/theme/monokai');
         aceEditor.$blockScrolling = Infinity;
-        this.aceEditors[idx]      = aceEditor;
+        aceEditor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true
+        });
+        this.aceEditors[idx] = aceEditor;
         this.setAceEditorTemplate(idx);
         this.setAceEditorMode(idx);
         this.setAceTabIcon(idx);
@@ -248,7 +253,7 @@ $(document).ready(function () {
         $.each(data, function (i, v) {
             EditorTabInstance.getAddFileDdContainer().append(
                 $(EditorTabInstance.newFileDropdownEntry)
-                    .attr('data-type', v.mode)
+                    .attr('data-type', i)
                     .append($(EditorTabInstance.navTabIconHtml).addClass(v.icon))
                     .append(v.name)
             );

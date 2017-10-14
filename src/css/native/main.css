@@ -30,12 +30,6 @@ header {
 /************************************* End **************************************/
 
 /************************************* Editor ***********************************/
-.nav-tabs {
-    width: 100%;
-    border: none;
-    min-height: 29px;
-}
-
 .tab-content,
 .tab-pane,
 .editor {
@@ -46,11 +40,59 @@ header {
 
 .editor {
     font-family: 'Roboto Mono', monospace;
-    font-size: 17px !important;
+    font-size: 1.35rem !important;
 }
 
 .ace_gutter-cell {
-    font-size: 15px !important;
+    font-size: 1.1rem !important;
+}
+
+.ace_tooltip.ace_doc-tooltip,
+.ace_editor.ace_autocomplete {
+    background-color: rgb(52, 58, 64) !important;
+    color: rgb(154, 157, 160) !important;
+    font-size: 1.1rem !important;
+    -webkit-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
+    -moz-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
+    border-radius: .25rem !important;
+    border: 2px solid rgba(255, 255, 255, 0.18) !important;
+    opacity: 0.9 !important;
+}
+
+.ace_tooltip.ace_doc-tooltip {
+    border: none !important;
+}
+
+.ace_tooltip.ace_doc-tooltip hr {
+    margin-top: 0.2rem !important;
+    margin-bottom: 0.2rem !important;
+    border: 0 !important;
+    border-top: 1px solid rgba(255, 255, 255, .1) !important;
+}
+
+.ace_editor.ace_autocomplete .ace_completion-highlight {
+    color: rgba(0, 123, 255, .9) !important;
+}
+
+.ace_editor.ace_autocomplete .ace_scroller {
+    padding: 0.2rem 0.5rem !important;
+}
+
+.ace_editor.ace_autocomplete .ace_content .ace_line.ace_selected {
+    color: #dfdfdf !important;
+}
+
+.ace_editor.ace_autocomplete .ace_marker-layer .ace_line-hover,
+.ace_editor.ace_autocomplete .ace_marker-layer .ace_active-line {
+    background-color: rgba(0, 0, 0, 0.28) !important;
+    color: #dfdfdf !important;
+    border: none !important;
+}
+
+.ace_tooltip.ace_doc-tooltip {
+    padding: 10px;
+    background-color: rgba(0, 0, 0, 0.28) !important;
 }
 
 /************************************* End *************************************/
@@ -62,6 +104,12 @@ header {
 
 *[contenteditable]:focus {
     color: rgba(0, 123, 255, .9);
+}
+
+.nav-tabs {
+    width: 100%;
+    border: none;
+    min-height: 29px;
 }
 
 .tab-list li a {

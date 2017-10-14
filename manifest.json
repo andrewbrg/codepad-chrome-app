@@ -2,11 +2,11 @@
   "version": "1.0.0",
   "manifest_version": 2,
   "name": "Code Pad",
-  "description": "A JavaScript editor for Chrome OS",
+  "description": "An awesome, feature rich, multi-language IDE crafted for Chrome OS",
   "app": {
     "background": {
       "scripts": [
-        "src/scripts/native/main.js"
+        "src/scripts/native/app.js"
       ]
     }
   },
@@ -17,7 +17,7 @@
     }
   ],
   "web_accessible_resources": [
-    "src/html/templates/*"
+    "src/html/*"
   ],
   "permissions": [
     "http://fonts.gstatic.com/",

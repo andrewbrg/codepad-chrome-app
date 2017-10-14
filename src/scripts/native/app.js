@@ -1,5 +1,5 @@
 chrome.app.runtime.onLaunched.addListener(function () {
-    chrome.app.window.create('src/html/main.html',
+    chrome.app.window.create('src/html/app.html',
         {
             innerBounds: {width: 1024, height: 768},
             resizable: true,
@@ -13,7 +13,7 @@ chrome.app.runtime.onLaunched.addListener(function () {
 });
 
 chrome.app.runtime.onRestarted.addListener(function () {
-    chrome.app.window.create('src/html/main.html',
+    chrome.app.window.create('src/html/app.html',
         {
             innerBounds: {width: 1024, height: 768},
             resizable: true,
