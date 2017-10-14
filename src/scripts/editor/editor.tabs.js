@@ -1,22 +1,23 @@
 var EditorTab = function () {
-    this.idx               = 0;
-    this.aceEditors        = [];
-    this.currIdx           = null;
-    this.lastIdx           = null;
-    this.navCloseBtnHtml   = '<span class="fa fa-close text-white close"></span>';
-    this.navTabIconHtml    = '<i class="icon"></i>';
-    this.defaultFileName   = 'untitled';
-    this.defaultFileExt    = 'js';
-    this.undefinedFileExt  = 'text';
-    this.undefinedFileIcon = 'icon-html';
+    this.idx                  = 0;
+    this.aceEditors           = [];
+    this.currIdx              = null;
+    this.lastIdx              = null;
+    this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
+    this.navTabIconHtml       = '<i class="icon"></i>';
+    this.newFileDropdownEntry = '<a class="dropdown-item add-tab" href="#"></a>';
+    this.defaultFileName      = 'untitled';
+    this.defaultFileExt       = 'js';
+    this.undefinedFileExt     = 'text';
+    this.undefinedFileIcon    = 'icon-html';
 
     /******************************************************
      *** Public Methods
      ******************************************************/
     this.bootAceEditor = function (idx) {
-        idx           = (typeof idx === typeof undefined) ? 1 : idx;
-        var aceEditor = ace.edit('codepad-editor-' + idx);
+        idx = (typeof idx === typeof undefined) ? 1 : idx;
 
+        var aceEditor = ace.edit('codepad-editor-' + idx);
         aceEditor.setTheme('../ace/theme/monokai');
         aceEditor.$blockScrolling = Infinity;
         this.aceEditors[idx]      = aceEditor;
@@ -56,12 +57,25 @@ var EditorTab = function () {
         });
     };
 
+    this.getAceModes = function () {
+        var deferred = $.Deferred();
+        $.get('/src/scripts/editor/modes.json').done(function (data) {
+            deferred.resolve(data);
+        });
+
+        return deferred.promise();
+    };
+
     this.getNavContainer = function () {
         return $(document).find('.tab-list').first();
     };
 
     this.getContentContainer = function () {
         return $(document).find('.tab-content').first();
+    };
+
+    this.getAddFileDdContainer = function () {
+        return $(document).find('.add-file-dropdown').first();
     };
 
     this.getNavElement = function (idx) {
@@ -83,17 +97,19 @@ var EditorTab = function () {
     /******************************************************
      *** Private Methods
      ******************************************************/
-    this._makeNewTabObj = function () {
+    this._makeNewTabObj = function (type) {
         this.idx++;
 
-        var obj          = {};
+        var obj = {};
+        type    = (typeof type === typeof undefined) ? this.defaultFileExt : type;
+
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
-        obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + this.defaultFileExt;
+        obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + type;
         obj.nav          = $(
             '<li>' +
-            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab" class="ext-' + this.defaultFileExt + '">' +
+            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab" class="ext-' + type + '">' +
             '<span class="filename">' + obj.fileName + '</span>' +
             this.navCloseBtnHtml +
             '</a>' +
@@ -139,20 +155,11 @@ var EditorTab = function () {
         return this.undefinedFileExt;
     };
 
-    this._getModes = function () {
-        var deferred = $.Deferred();
-        $.get('/src/scripts/editor/modes.json').done(function (data) {
-            deferred.resolve(data);
-        });
-
-        return deferred.promise();
-    };
-
     this._getMode = function (idx) {
         var deferred = $.Deferred();
         var that     = this;
 
-        this._getModes().then(function (data) {
+        this.getAceModes().then(function (data) {
             data    = JSON.parse(data);
             var ext = that._getFileNameExtension(idx);
             if (typeof ext === typeof undefined) {
@@ -173,8 +180,8 @@ var EditorTab = function () {
     /******************************************************
      *** Event callbacks
      ******************************************************/
-    this.onAddNewTab = function () {
-        var obj = this._makeNewTabObj();
+    this.onAddNewTab = function (type) {
+        var obj = this._makeNewTabObj(type);
         this.getNavContainer().append(obj.nav);
         this.getContentContainer().append(obj.content);
         this.bootAceEditor(obj.idx);
@@ -219,7 +226,8 @@ $(document).ready(function () {
 
     var EditorTabInstance = new EditorTab();
     $(document).on('click', '.add-tab', function () {
-        EditorTabInstance.onAddNewTab();
+        var type = $(this).attr('data-type');
+        EditorTabInstance.onAddNewTab(type);
     });
 
     $(document).on('click', '.tab-list .edit', function () {
@@ -232,6 +240,19 @@ $(document).ready(function () {
 
     $(document).on('click', '.tab-list .close', function () {
         EditorTabInstance.onCloseExistingTab($(this).attr('data-idx'));
+    });
+
+    EditorTabInstance.getAceModes().done(function (data) {
+        data = JSON.parse(data);
+        EditorTabInstance.getAddFileDdContainer().html('');
+        $.each(data, function (i, v) {
+            EditorTabInstance.getAddFileDdContainer().append(
+                $(EditorTabInstance.newFileDropdownEntry)
+                    .attr('data-type', v.mode)
+                    .append($(EditorTabInstance.navTabIconHtml).addClass(v.icon))
+                    .append(v.name)
+            );
+        });
     });
 
     if (EditorTabInstance.getContentContainer().children().length === 0) {

@@ -115,17 +115,13 @@ header {
     color: rgba(0, 123, 255, .7);
 }
 
-.add-tab {
+.add-file-container button {
     display: inline-block;
     margin: 0 1rem;
 }
 
 .tab-content {
     background: #343a40;
-}
-
-.tab-list li a.ext-php {
-
 }
 
 /************************************* End *************************************/

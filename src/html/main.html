@@ -105,10 +105,12 @@
                         <i class="fa fa-cog"></i>&nbsp;Editor
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item editor-theme" href="#" data-toggle="modal" data-target=".modal-sm-container">
+                        <a class="dropdown-item editor-theme" href="#" data-toggle="modal"
+                           data-target=".modal-sm-container">
                             <i class="fa fa-magic"></i>&nbsp;Theme
                         </a>
-                        <a class="dropdown-item editor-font" href="#" data-toggle="modal" data-target=".modal-sm-container">
+                        <a class="dropdown-item editor-font" href="#" data-toggle="modal"
+                           data-target=".modal-sm-container">
                             <i class="fa fa-font"></i>&nbsp;Font face
                         </a>
                     </div>
@@ -118,11 +120,17 @@
     </nav>
 
     <!-- Code navigation tabs -->
-    <div class="nav-tabs bg-dark text-white">
-        <button type="button" class="btn btn-outline-secondary btn-sm pull-right add-tab" data-toggle="tooltip"
-                title="Add file">
-            <i class="fa fa-plus"></i>
-        </button>
+    <div class="nav-tabs bg-dark text-white add-file-container">
+        <div class="dropdown pull-right" data-toggle="tooltip" title="Add file">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                <i class="fa fa-plus"></i>
+            </button>
+            <div class="dropdown-menu add-file-dropdown"></div>
+        </div>
         <ul class="nav tab-list" role="tablist"></ul>
     </div>
 </header>
