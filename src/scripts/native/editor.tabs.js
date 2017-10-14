@@ -6,7 +6,7 @@ EditorTab = function () {
     this.lastIdx         = null;
     this.newTabNameTxt   = 'Untitled';
     this.navCloseBtnHtml = '<span class="fa fa-close text-white close"></span>';
-    this.navEditBtnHtml  = '<span class="fa fa-pencil text-white edit"></span>';
+    this.navEditBtnHtml  = '<span class="fa fa-pencil text-white edit pull-right"></span>';
 
     /******************************************************
      *** Public Methods
@@ -105,11 +105,11 @@ EditorTab = function () {
     this.onEditExistingTabName = function (idx) {
         var $el       = this.getNavElement(idx);
         var $filename = $el.find(".filename").first();
-        var $children = $filename.siblings().hide();
+        var $children = $filename.siblings().css('visibility', 'hidden');
 
-        $filename.attr('contenteditable', 'true').one('focusout', function () {
+        $filename.attr('contenteditable', 'true').focus().one('focusout', function () {
             $(this).removeAttr('contenteditable');
-            $children.show();
+            $children.css('visibility', 'visible');
         });
     };
 

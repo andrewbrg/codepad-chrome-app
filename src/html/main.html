@@ -2,73 +2,72 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta content="initial-scale=1, shrink-to-fit=no, width=device-width" name="viewport">
 
     <!------------------------------------------------------------------------------------------------------------------
     - https://getbootstrap.com/docs/4.0/getting-started/introduction/
     - https://github.com/ajaxorg/ace
     - https://github.com/jonmiles/bootstrap-treeview/
+    - http://mdbootstrap.com/
     ------------------------------------------------------------------------------------------------------------------->
-
     <link rel="stylesheet" href="/src/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/src/css/bootstrap-treeview.css"/>
     <link rel="stylesheet" href="/src/css/font-awesome.min.css"/>
-
     <link rel="stylesheet" href="/src/css/native/main.css"/>
 </head>
 <body>
 
-<!--Navbar-->
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <div class="navbar-brand">
-        <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-folder-open-o"></i></button>
+<header>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <button class="btn btn-outline-secondary" type="submit"><i class="fa fa-folder-open-o"></i></button>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        File
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item file-new" href="#"><i class="fa fa-file-o"></i> New</a>
+                        <a class="dropdown-item file-open" href="#"><i class="fa fa-folder-o"></i> Open</a>
+                        <a class="dropdown-item file-save" href="#"><i class="fa fa-save"></i> Save</a>
+                        <a class="dropdown-item file-save-as" href="#"><i class="fa fa-save"></i> Save As</a>
+                    </div>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Settings</a>
+                </li>
+
+
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+            </form>
+        </div>
+    </nav>
+
+    <!-- Nav tabs -->
+    <div class="nav-tabs bg-dark text-white">
+        <button type="button" class="btn btn-outline-secondary btn-sm pull-right add-tab">
+            <i class="fa fa-plus"></i>
+        </button>
+        <ul class="nav tab-list" role="tablist"></ul>
     </div>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+</header>
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false">
-                    File
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item file-new" href="#"><i class="fa fa-file-o"></i> New</a>
-                    <a class="dropdown-item file-open" href="#"><i class="fa fa-folder-o"></i> Open</a>
-                    <a class="dropdown-item file-save" href="#"><i class="fa fa-save"></i> Save</a>
-                    <a class="dropdown-item file-save-as" href="#"><i class="fa fa-save"></i> Save As</a>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">Settings</a>
-            </li>
-
-
-        </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-        </form>
-    </div>
-</nav>
-
-
-<!-- Nav tabs -->
-<div class="nav-tabs bg-dark text-white">
-    <button type="button" class="btn btn-sm btn-outline-primary pull-right add-tab"><i class="fa fa-plus"></i></button>
-    <ul class="nav tab-list" role="tablist">
-
-    </ul>
-</div>
 
 <!-- Nav tab panes -->
-<div class="tab-content">
-
-</div>
+<div class="tab-content"></div>
 
 
 <!-- Bootstrap -->

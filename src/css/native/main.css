@@ -12,8 +12,13 @@ html, body {
     font-size: 14px;
 }
 
+header {
+    box-shadow: 0 1px 2px #222;
+}
+
 .btn {
     cursor: pointer;
+    box-shadow: none;
 }
 
 /************************************* Navbar ***********************************/
@@ -52,38 +57,46 @@ html, body {
 
 /************************************* Tabs ************************************/
 *[contenteditable] {
-    border: solid 1px lightgreen;
-    padding: 5px;
+    color: rgba(0, 123, 255, .5);
 }
 
-.tab-list {
-    padding: 0.1rem;
-}
-
-.tab-list li {
-    padding: 4px 12px;
+*[contenteditable]:focus {
+    color: rgba(0, 123, 255, .9);
 }
 
 .tab-list li a {
+    position: relative;
     display: inline-block;
+    cursor: pointer;
     text-decoration: none;
+    padding: 4px 50px;
+    color: #dfdfdf;
+    opacity: 0.5;
+    background: rgba(0, 0, 0, 0.22);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+}
+
+.tab-list li a:hover,
+.tab-list li a.active {
+    opacity: 1;
+    background-color: rgba(0, 0, 0, 0.28);
+    border-bottom: 2px solid rgba(0, 123, 255, .5);
 }
 
 .tab-list li a .close {
-    text-shadow: none;
+    position: absolute;
+    top: 7px;
+    right: 10px;
 }
 
-.tab-list li span:first-child {
-    padding: 0 6px 0 0;
-}
-
-.tab-list li span.fa.fa-pencil {
-    margin: -1px 0 0 0;
+.tab-list li a .edit {
+    display: none;
     font-size: 0.8em;
+    margin: 5px 0 0 4px;
 }
 
-.tab-list li span.fa.fa-close {
-    margin: 4px 0 0 5px;
+.tab-list li a:hover .edit {
+    display: inline-flex;
 }
 
 .add-tab {
@@ -91,15 +104,8 @@ html, body {
     margin: 0 1rem;
 }
 
-.tab-list li a span {
-    opacity: 0.5;
-}
-
-.tab-list li a.active span,
-.tab-list li a:hover span {
-    opacity: 1;
-    text-decoration: none;
-    cursor: pointer;
+.tab-content {
+    background: #343a40;
 }
 
 /************************************* End *************************************/
