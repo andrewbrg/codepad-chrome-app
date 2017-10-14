@@ -230,6 +230,8 @@ var EditorTab = function () {
 $(document).ready(function () {
 
     var EditorTabInstance = new EditorTab();
+    var $contentContainer = EditorTabInstance.getContentContainer();
+
     $(document).on('click', '.add-tab', function () {
         var type = $(this).attr('data-type');
         EditorTabInstance.onAddNewTab(type);
@@ -263,4 +265,9 @@ $(document).ready(function () {
     if (EditorTabInstance.getContentContainer().children().length === 0) {
         EditorTabInstance.onAddNewTab();
     }
+
+    var $header = $('header');
+    $(window).on('resize', function () {
+        $contentContainer.css('top', Math.ceil($header.height()) + 'px');
+    }).resize();
 });
