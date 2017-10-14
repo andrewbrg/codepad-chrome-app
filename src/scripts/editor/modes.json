@@ -1,0 +1,37 @@
+{
+  "js": {
+    "icon": "icon-javascript-alt",
+    "mode": "javascript",
+    "name": "JavaScript"
+  },
+  "css": {
+    "icon": "icon-css3-alt",
+    "mode": "css",
+    "name": "CSS3"
+  },
+  "html": {
+    "icon": "icon-html5-alt",
+    "mode": "html",
+    "name": "HTML5"
+  },
+  "xml": {
+    "icon": "icon-html",
+    "mode": "xml",
+    "name": "XML"
+  },
+  "php": {
+    "icon": "icon-php-alt",
+    "mode": "php",
+    "name": "PHP"
+  },
+  "sh": {
+    "icon": "icon-script-alt",
+    "mode": "sh",
+    "name": "Bash"
+  },
+  "sql": {
+    "icon": "icon-database",
+    "mode": "sql",
+    "name": "SQL"
+  }
+}

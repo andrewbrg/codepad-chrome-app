@@ -104,6 +104,17 @@ header {
     display: inline-flex;
 }
 
+.tab-list li a .icon {
+    position: absolute;
+    font-size: 1.3em;
+    left: 8px;
+    top: 3px;
+}
+
+.tab-list li a.active .icon {
+    color: rgba(0, 123, 255, .7);
+}
+
 .add-tab {
     display: inline-block;
     margin: 0 1rem;
@@ -111,6 +122,10 @@ header {
 
 .tab-content {
     background: #343a40;
+}
+
+.tab-list li a.ext-php {
+
 }
 
 /************************************* End *************************************/

@@ -1,12 +1,14 @@
 var EditorTab = function () {
-    this.idx              = 0;
-    this.aceEditors       = [];
-    this.currIdx          = null;
-    this.lastIdx          = null;
-    this.navCloseBtnHtml  = '<span class="fa fa-close text-white close"></span>';
-    this.defaultFileName  = 'untitled';
-    this.defaultFileExt   = 'php';
-    this.undefinedFileExt = 'text';
+    this.idx               = 0;
+    this.aceEditors        = [];
+    this.currIdx           = null;
+    this.lastIdx           = null;
+    this.navCloseBtnHtml   = '<span class="fa fa-close text-white close"></span>';
+    this.navTabIconHtml    = '<i class="icon"></i>';
+    this.defaultFileName   = 'untitled';
+    this.defaultFileExt    = 'js';
+    this.undefinedFileExt  = 'text';
+    this.undefinedFileIcon = 'icon-html';
 
     /******************************************************
      *** Public Methods
@@ -20,6 +22,7 @@ var EditorTab = function () {
         this.aceEditors[idx]      = aceEditor;
         this.setAceEditorTemplate(idx);
         this.setAceEditorMode(idx);
+        this.setAceTabIcon(idx);
 
         return aceEditor;
     };
@@ -36,8 +39,20 @@ var EditorTab = function () {
 
     this.setAceEditorMode = function (idx) {
         var that = this;
-        this._mapExtensionToAceMode(idx).then(function (mode) {
-            that.aceEditors[idx].getSession().setMode('../ace/mode/' + mode);
+        this._getMode(idx).then(function (data) {
+            data = JSON.parse(data);
+            that.aceEditors[idx].getSession().setMode('../ace/mode/' + data.mode);
+        });
+    };
+
+    this.setAceTabIcon = function (idx) {
+        var that = this;
+        this._getMode(idx).then(function (data) {
+            data    = JSON.parse(data);
+            var $el = that.getNavElement(idx).find('[role="tab"]').first();
+            $el.find('.icon').remove();
+            $el.append(that.navTabIconHtml);
+            $el.find('.icon').addClass(data.icon);
         });
     };
 
@@ -78,7 +93,7 @@ var EditorTab = function () {
         obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + this.defaultFileExt;
         obj.nav          = $(
             '<li>' +
-            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab">' +
+            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab" class="ext-' + this.defaultFileExt + '">' +
             '<span class="filename">' + obj.fileName + '</span>' +
             this.navCloseBtnHtml +
             '</a>' +
@@ -124,21 +139,32 @@ var EditorTab = function () {
         return this.undefinedFileExt;
     };
 
-    this._mapExtensionToAceMode = function (idx) {
-        var that     = this;
+    this._getModes = function () {
         var deferred = $.Deferred();
+        $.get('/src/scripts/editor/modes.json').done(function (data) {
+            deferred.resolve(data);
+        });
 
-        $.get('/src/scripts/editor/modes.map.json').done(function (data) {
+        return deferred.promise();
+    };
+
+    this._getMode = function (idx) {
+        var deferred = $.Deferred();
+        var that     = this;
+
+        this._getModes().then(function (data) {
             data    = JSON.parse(data);
             var ext = that._getFileNameExtension(idx);
             if (typeof ext === typeof undefined) {
-                deferred.resolve(that.undefinedFileExt);
+                deferred.resolve(JSON.stringify({
+                    "icon": that.undefinedFileIcon,
+                    "mode": that.undefinedFileExt,
+                    "name": "Text"
+                }));
             }
             if (data.hasOwnProperty(ext)) {
-                deferred.resolve(data[ext]);
+                deferred.resolve(JSON.stringify(data[ext]));
             }
-
-            deferred.resolve(ext);
         });
 
         return deferred.promise();
@@ -170,6 +196,7 @@ var EditorTab = function () {
             $(this).removeAttr('contenteditable');
             that.setAceEditorTemplate(idx);
             that.setAceEditorMode(idx);
+            that.setAceTabIcon(idx);
             $siblings.css('visibility', 'visible');
         });
     };
