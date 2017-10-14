@@ -11,9 +11,9 @@ var EditorTab = function () {
     this.undefinedFileExt     = 'text';
     this.undefinedFileIcon    = 'icon-html';
 
-    /******************************************************
-     *** Public Methods
-     ******************************************************/
+    /************************************************************************************************************
+     * Public Methods
+     ************************************************************************************************************/
     this.bootAceEditor = function (idx) {
         idx = (typeof idx === typeof undefined) ? 1 : idx;
 
@@ -59,7 +59,7 @@ var EditorTab = function () {
 
     this.getAceModes = function () {
         var deferred = $.Deferred();
-        $.get('/src/scripts/editor/modes.json').done(function (data) {
+        $.get('/src/settings/ace.modes.json').done(function (data) {
             deferred.resolve(data);
         });
 
@@ -94,9 +94,9 @@ var EditorTab = function () {
         return this.getContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
     };
 
-    /******************************************************
-     *** Private Methods
-     ******************************************************/
+    /************************************************************************************************************
+     * Private Methods
+     ************************************************************************************************************/
     this._makeNewTabObj = function (type) {
         this.idx++;
 
@@ -177,9 +177,9 @@ var EditorTab = function () {
         return deferred.promise();
     };
 
-    /******************************************************
-     *** Event callbacks
-     ******************************************************/
+    /************************************************************************************************************
+     * Event Callbacks
+     ************************************************************************************************************/
     this.onAddNewTab = function (type) {
         var obj = this._makeNewTabObj(type);
         this.getNavContainer().append(obj.nav);
