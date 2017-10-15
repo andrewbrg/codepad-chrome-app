@@ -1,47 +1,23 @@
 $(document).ready(function () {
-    $(document).on('change', 'input[type="checkbox"]', function () {
-        if (
-            typeof window.EditorTabInstance === typeof undefined ||
-            typeof window.EditorTabInstance.aceEditors === typeof undefined
-        ) {
-            return false;
-        }
 
-        var $that = $(this);
-        window.EditorTabInstance.aceEditors.forEach(function (el) {
-            switch ($that.attr('name')) {
-                case 'chk-word-wrap':
-                    el.getSession().setUseWrapMode($that.prop('checked'));
-                    break;
-                case 'chk-active-line':
-                    el.setHighlightActiveLine($that.prop('checked'));
-                    break;
-                case 'chk-print-margin':
-                    el.setShowPrintMargin($that.prop('checked'));
-                    break;
-            }
-        });
-    });
-
-
-    $(document).on('click', '.action.copy', function () {
-        var ace = window.EditorTabInstance.getFocusedAce();
+    $(document).on('click', '.action-copy', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getFocusedAce().execCommand('copy');
+            window.EditorTabInstance.getCurrentAceEditor().execCommand('copy');
         }
     });
 
-    $(document).on('click', '.action.paste', function () {
-        var ace = window.EditorTabInstance.getFocusedAce();
+    $(document).on('click', '.action-paste', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getFocusedAce().execCommand('paste');
+            window.EditorTabInstance.getCurrentAceEditor().execCommand('paste');
         }
     });
 
-    $(document).on('click', '.action.cut', function () {
-        var ace = window.EditorTabInstance.getFocusedAce();
+    $(document).on('click', '.action-cut', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getFocusedAce().execCommand('cut');
+            window.EditorTabInstance.getCurrentAceEditor().execCommand('cut');
         }
     });
 });
