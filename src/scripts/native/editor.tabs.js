@@ -16,30 +16,44 @@ var EditorTab = function () {
     /// PUBLIC Related to Ace Editor
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this.init = function () {
+
+        this._populateAddTabDropDown();
+        if (this.getNumTabs() === 0) {
+            EditorTabInstance.onAddNewTab();
+        }
+    };
+
     this.bootAceEditor = function (idx) {
 
         if (typeof idx === typeof undefined) {
             return;
         }
 
+        idx           = parseInt(idx);
         var aceEditor = ace.edit('codepad-editor-' + idx);
+
         aceEditor.setTheme('../ace/theme/monokai');
         aceEditor.$blockScrolling = Infinity;
         aceEditor.setOptions({
-            enableBasicAutocompletion: true,
             enableSnippets: true,
-            enableLiveAutocompletion: true
+            enableLiveAutocompletion: true,
+            enableBasicAutocompletion: true
         });
-        aceEditor.__idx = idx;
-        this.aceEditors.push(aceEditor);
+
+        this.aceEditors.push({"idx": idx, "ace": aceEditor});
         this.setAceEditorTemplate(idx);
         this.setAceEditorMode(idx);
-        this.setNavTabIcon(idx);
+        this._populateNavTabIcon(idx);
     };
 
+
     this.setAceEditorTemplate = function (idx) {
+
+        idx           = parseInt(idx);
         var ext       = this._getTabFileExtension(idx);
         var aceEditor = this.getAceEditorAtIdx(idx);
+
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
             $.get('/src/html/templates/' + ext + '.tpl', function (data) {
                 aceEditor.setValue(data);
@@ -48,7 +62,10 @@ var EditorTab = function () {
     };
 
     this.setAceEditorMode = function (idx) {
+
         var that = this;
+        idx      = parseInt(idx);
+
         this._getTabMode(idx).then(function (data) {
             data = JSON.parse(data);
             that.getAceEditorAtIdx(idx).getSession().setMode('../ace/mode/' + data.mode);
@@ -56,7 +73,9 @@ var EditorTab = function () {
     };
 
     this.getAllAceEditorModes = function () {
+
         var deferred = $.Deferred();
+
         $.get('/src/settings/ace.modes.json').done(function (data) {
             deferred.resolve(data);
         });
@@ -69,13 +88,21 @@ var EditorTab = function () {
     };
 
     this.getAceEditorAtIdx = function (idx) {
-        var el = undefined;
-        this.aceEditors.forEach(function (_el) {
-            if (_el.__idx === idx) {
-                el = _el;
+
+        var ace = undefined;
+        idx     = parseInt(idx);
+
+        this.aceEditors.forEach(function (el) {
+            console.log(el.idx);
+
+            if (el.idx === idx) {
+                ace = el.ace;
+
+                return false;
             }
         });
-        return el;
+
+        return ace;
     };
 
 
@@ -92,34 +119,27 @@ var EditorTab = function () {
     };
 
     this.getTabNavElement = function (idx) {
+
         if (typeof idx === typeof undefined) {
             return undefined;
         }
-
         return this.getTabsNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
     };
 
     this.getTabContentElement = function (idx) {
+
         if (typeof idx === typeof undefined) {
             return undefined;
         }
-
         return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
+    };
+
+    this.getNumTabs = function () {
+        return parseInt(this.getTabsNavContainer().children().length);
     };
 
     this.getAddTabDropDownContainer = function () {
         return $(document).find('.add-tab-dropdown').first();
-    };
-
-    this.setNavTabIcon = function (idx) {
-        var that = this;
-        this._getTabMode(idx).then(function (data) {
-            data    = JSON.parse(data);
-            var $el = that.getTabNavElement(idx).find('[role="tab"]').first();
-            $el.find('.icon').remove();
-            $el.append(that.navTabIconHtml);
-            $el.find('.icon').addClass(data.icon);
-        });
     };
 
 
@@ -128,10 +148,13 @@ var EditorTab = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this._getNewTabObject = function (fileExt) {
+
         this.idx++;
 
         var obj = {};
-        fileExt = (typeof fileExt === typeof undefined) ? this.defaultFileExt : fileExt;
+        fileExt = (typeof fileExt === typeof undefined)
+            ? this.defaultFileExt
+            : fileExt;
 
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
@@ -139,7 +162,7 @@ var EditorTab = function () {
         obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + fileExt;
         obj.nav          = $(
             '<li>' +
-            '<a href="#' + obj.contentId + '" role="tab" data-toggle="tab" class="ext-' + fileExt + '">' +
+            '<a href="#' + obj.contentId + '" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
             '<span class="filename">' + obj.fileName + '</span>' +
             this.navCloseBtnHtml +
             '</a>' +
@@ -157,24 +180,28 @@ var EditorTab = function () {
     };
 
     this._giveTabFocus = function (idx) {
-        this.previousIdx = this.currentIdx;
-        if (this.getTabsNavContainer().children().length === 0) {
+
+        idx              = parseInt(idx);
+        this.previousIdx = parseInt(this.currentIdx);
+
+        if (this.getNumTabs() === 0) {
             this.currentIdx = null;
             return false;
         }
 
-        var $el = this.getTabNavElement(idx);
-        if (typeof $el === typeof undefined) {
-            this.getTabsNavContainer().children().first();
-        }
+        var $el = (typeof this.getTabNavElement(idx) === typeof undefined)
+            ? this.getTabsNavContainer().children().first()
+            : this.getTabNavElement(idx);
 
-        $el.find('*[role="tab"]').first().tab('show');
-        this.currentIdx = idx;
+        $el.find('*[data-toggle="tab"]').first().tab('show');
+        this.currentIdx = parseInt(idx);
 
         return true;
     };
 
     this._getTabFileExtension = function (idx) {
+
+        idx       = parseInt(idx);
         var $el   = this.getTabNavElement(idx);
         var regEx = /(?:\.([^.]+))?$/;
 
@@ -187,8 +214,10 @@ var EditorTab = function () {
     };
 
     this._getTabMode = function (idx) {
-        var deferred = $.Deferred();
+
         var that     = this;
+        var deferred = $.Deferred();
+        idx          = parseInt(idx);
 
         this.getAllAceEditorModes().then(function (data) {
             data    = JSON.parse(data);
@@ -208,11 +237,44 @@ var EditorTab = function () {
         return deferred.promise();
     };
 
+    this._populateAddTabDropDown = function () {
+
+        var that = this;
+
+        this.getAllAceEditorModes().done(function (data) {
+            data = JSON.parse(data);
+            that.getAddTabDropDownContainer().html('');
+            $.each(data, function (i, v) {
+                that.getAddTabDropDownContainer().append(
+                    $(that.newFileDropdownEntry)
+                        .attr('data-type', i)
+                        .append($(that.navTabIconHtml).addClass(v.icon))
+                        .append(v.name)
+                );
+            });
+        });
+    };
+
+    this._populateNavTabIcon = function (idx) {
+
+        var that = this;
+
+        idx = parseInt(idx);
+        this._getTabMode(idx).then(function (data) {
+            data    = JSON.parse(data);
+            var $el = that.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
+            $el.find('.icon').remove();
+            $el.append(that.navTabIconHtml);
+            $el.find('.icon').addClass(data.icon);
+        });
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Callbacks related to Tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.onAddNewTab = function (type) {
+
         var obj = this._getNewTabObject(type);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
@@ -221,11 +283,13 @@ var EditorTab = function () {
     };
 
     this.onEditTabName = function (idx) {
+
         if (typeof idx === typeof undefined) {
             return false;
         }
 
         var that      = this;
+        idx           = parseInt(idx);
         var $el       = this.getTabNavElement(idx);
         var $fileName = $el.find('.filename').first();
         var $siblings = $fileName.siblings().css('visibility', 'hidden');
@@ -234,16 +298,18 @@ var EditorTab = function () {
             $(this).removeAttr('contenteditable');
             that.setAceEditorTemplate(idx);
             that.setAceEditorMode(idx);
-            that.setNavTabIcon(idx);
+            that._populateNavTabIcon(idx);
             $siblings.css('visibility', 'visible');
         });
     };
 
     this.onCloseTab = function (idx) {
+
         if (typeof idx === typeof undefined) {
             return false;
         }
 
+        idx = parseInt(idx);
         this.getTabNavElement(idx).remove();
         this.getTabContentElement(idx).remove();
         this._giveTabFocus(this.previousIdx);
@@ -258,45 +324,33 @@ var EditorTab = function () {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function () {
 
+    // New instance of window editor
     window.EditorTabInstance = new EditorTab();
-    var $contentContainer    = EditorTabInstance.getTabsContentContainer();
+    window.EditorTabInstance.init();
 
-    $(document).on('click', '.action-add-tab', function () {
-        var type = $(this).attr('data-type');
-        EditorTabInstance.onAddNewTab(type);
-    });
-
+    // Edit tab name
     $(document).on('click', '.tab-list .edit', function () {
-        EditorTabInstance.onEditTabName($(this).attr('data-idx'));
+        window.EditorTabInstance.onEditTabName($(this).attr('data-idx'));
     });
-
     $(document).on('dblclick', '.tab-list .filename', function () {
-        EditorTabInstance.onEditTabName($(this).attr('data-idx'));
+        window.EditorTabInstance.onEditTabName($(this).attr('data-idx'));
     });
 
+    // Close tab
     $(document).on('click', '.tab-list .close', function () {
-        EditorTabInstance.onCloseTab($(this).attr('data-idx'));
+        window.EditorTabInstance.onCloseTab($(this).attr('data-idx'));
     });
 
-    EditorTabInstance.getAllAceEditorModes().done(function (data) {
-        data = JSON.parse(data);
-        EditorTabInstance.getAddTabDropDownContainer().html('');
-        $.each(data, function (i, v) {
-            EditorTabInstance.getAddTabDropDownContainer().append(
-                $(EditorTabInstance.newFileDropdownEntry)
-                    .attr('data-type', i)
-                    .append($(EditorTabInstance.navTabIconHtml).addClass(v.icon))
-                    .append(v.name)
-            );
-        });
-    });
-
-    if (EditorTabInstance.getTabsContentContainer().children().length === 0) {
-        EditorTabInstance.onAddNewTab();
-    }
-
-    var $header = $('header');
+    // Handle resize of window (keep editor under navigation)
+    var $header           = $('header');
+    var $contentContainer = window.EditorTabInstance.getTabsContentContainer();
     $(window).on('resize', function () {
         $contentContainer.css('top', Math.ceil($header.height()) + 'px');
     }).resize();
+
+    // Maintain correct record of the current and previous idx
+    $(document).on('shown.bs.tab', '*[data-toggle="tab"]', function (e) {
+        window.EditorTabInstance.previousIdx = parseInt($(e.relatedTarget).attr('data-idx'));
+        window.EditorTabInstance.currentIdx  = parseInt($(e.target).attr('data-idx'));
+    });
 });

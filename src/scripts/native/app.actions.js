@@ -1,23 +1,34 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Initialisation actions performed by application
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function () {
 
+    // Add new tab (editor)
+    $(document).on('click', '.action-add-tab', function () {
+        window.EditorTabInstance.onAddNewTab($(this).attr('data-type'));
+    });
+
+    // Perform copy on current active editor
     $(document).on('click', '.action-copy', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getCurrentAceEditor().execCommand('copy');
+            ace.execCommand('copy');
         }
     });
 
+    // Perform paste to current active editor
     $(document).on('click', '.action-paste', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getCurrentAceEditor().execCommand('paste');
+            ace.execCommand('paste');
         }
     });
 
+    // Perform cut on current active editor
     $(document).on('click', '.action-cut', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            window.EditorTabInstance.getCurrentAceEditor().execCommand('cut');
+            ace.execCommand('cut');
         }
     });
 });
