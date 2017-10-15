@@ -19,8 +19,8 @@ $(document).ready(function () {
     // Perform paste to current active editor
     $(document).on('click', '.action-paste', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
-        if (typeof ace !== typeof undefined) {
-            ace.execCommand('paste');
+        if (typeof ace !== typeof undefined && window.EditorTabInstance.aceClipboard.length > 0) {
+            ace.execCommand('paste', window.EditorTabInstance.aceClipboard);
         }
     });
 
@@ -28,7 +28,32 @@ $(document).ready(function () {
     $(document).on('click', '.action-cut', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
+            ace.execCommand('copy');
             ace.execCommand('cut');
+        }
+    });
+
+    // Perform search on current active editor
+    $(document).on('click', '.action-search', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('find');
+        }
+    });
+
+    // Perform undo on current active editor
+    $(document).on('click', '.action-undo', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.undo();
+        }
+    });
+
+    // Perform redo on current active editor
+    $(document).on('click', '.action-redo', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.redo();
         }
     });
 });

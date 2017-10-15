@@ -3,6 +3,7 @@ var EditorTab = function () {
     this.currentIdx           = null;
     this.previousIdx          = null;
     this.aceEditors           = [];
+    this.aceClipboard         = '';
     this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
     this.navTabIconHtml       = '<i class="icon"></i>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -27,10 +28,11 @@ var EditorTab = function () {
     this.bootAceEditor = function (idx) {
 
         if (typeof idx === typeof undefined) {
-            return;
+            return false;
         }
 
         idx           = parseInt(idx);
+        var that      = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         aceEditor.setTheme('../ace/theme/monokai');
@@ -39,6 +41,11 @@ var EditorTab = function () {
             enableSnippets: true,
             enableLiveAutocompletion: true,
             enableBasicAutocompletion: true
+        });
+
+        // Maintain a central clipboard
+        aceEditor.on('copy', function (e) {
+            that.aceClipboard = e;
         });
 
         this.aceEditors.push({"idx": idx, "ace": aceEditor});
@@ -93,8 +100,6 @@ var EditorTab = function () {
         idx     = parseInt(idx);
 
         this.aceEditors.forEach(function (el) {
-            console.log(el.idx);
-
             if (el.idx === idx) {
                 ace = el.ace;
 
@@ -280,6 +285,10 @@ var EditorTab = function () {
         this.getTabsContentContainer().append(obj.content);
         this.bootAceEditor(obj.idx);
         this._giveTabFocus(obj.idx);
+
+        $(window).trigger('resize');
+
+        return true;
     };
 
     this.onEditTabName = function (idx) {
@@ -301,6 +310,8 @@ var EditorTab = function () {
             that._populateNavTabIcon(idx);
             $siblings.css('visibility', 'visible');
         });
+
+        $(window).trigger('resize');
     };
 
     this.onCloseTab = function (idx) {
@@ -313,6 +324,8 @@ var EditorTab = function () {
         this.getTabNavElement(idx).remove();
         this.getTabContentElement(idx).remove();
         this._giveTabFocus(this.previousIdx);
+
+        $(window).trigger('resize');
 
         return true;
     };
