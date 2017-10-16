@@ -127,55 +127,21 @@
                         &nbsp;Editor
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item modal-theme" href="#" data-toggle="modal"
-                           data-target=".modal-sm-container">
+                        <a class="dropdown-item modal-theme" href="#"
+                           data-toggle="modal"
+                           data-target=".modal-lg-container"
+                           data-title="Configure the IDE theme">
                             <i class="fa fa-magic"></i>
-                            &nbsp;Theme
+                            &nbsp;Appearance & fonts
                         </a>
-                        <a class="dropdown-item modal-font" href="#" data-toggle="modal"
-                           data-target=".modal-sm-container">
-                            <i class="fa fa-font"></i>
-                            &nbsp;Font
+
+                        <a class="dropdown-item modal-theme" href="#"
+                           data-toggle="modal"
+                           data-target=".modal-lg-container"
+                           data-title="Configure the editor">
+                            <i class="fa fa-cogs"></i>
+                            &nbsp;IDE preferences
                         </a>
-                        <div class="dropdown-divider"></div>
-                        <div class="dropdown-item">
-                            <i class="fa fa-level-down"></i>
-                            &nbsp;Word wrap
-                            <div class="switch pull-right">
-                                <input id="chk-word-wrap"
-                                       name="chk-word-wrap"
-                                       class="cmn-toggle cmn-toggle-round-flat"
-                                       type="checkbox">
-                                <label for="chk-word-wrap"></label>
-                            </div>
-                            <span class="clearfix"></span>
-                        </div>
-
-                        <div class="dropdown-item">
-                            <i class="fa fa-font"></i>
-                            &nbsp;Active line
-                            <div class="switch pull-right">
-                                <input id="chk-active-line"
-                                       name="chk-active-line"
-                                       class="cmn-toggle cmn-toggle-round-flat"
-                                       type="checkbox">
-                                <label for="chk-active-line"></label>
-                            </div>
-                            <span class="clearfix"></span>
-                        </div>
-
-                        <div class="dropdown-item">
-                            <i class="fa fa-font"></i>
-                            &nbsp;Print margin
-                            <div class="switch pull-right">
-                                <input id="chk-print-margin"
-                                       name="chk-print-margin"
-                                       class="cmn-toggle cmn-toggle-round-flat"
-                                       type="checkbox">
-                                <label for="chk-print-margin"></label>
-                            </div>
-                            <span class="clearfix"></span>
-                        </div>
                     </div>
                 </li>
             </ul>
@@ -202,10 +168,52 @@
 <div class="tab-content"></div>
 
 <!-- Modals -->
-<div class="modal fade modal-sm-container" tabindex="-1" role="dialog" aria-labelledby="modalDialog"
+<div class="modal fade modal-sm-container" tabindex="-1" role="dialog"
      aria-hidden="true">
     <div class="modal-dialog modal-sm">
-        <div class="modal-content bg-dark text-white"></div>
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-md-container" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-lg-container" tabindex="-1" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+        </div>
     </div>
 </div>
 

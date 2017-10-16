@@ -17,10 +17,10 @@ $(document).ready(function () {
                     el.getSession().setUseWrapMode($that.prop('checked'));
                     break;
                 case 'chk-active-line':
-                    el.setHighlightActiveLine($that.prop('checked'));
+                    el.getSession().setHighlightActiveLine($that.prop('checked'));
                     break;
                 case 'chk-print-margin':
-                    el.setShowPrintMargin($that.prop('checked'));
+                    el.getSession().setShowPrintMargin($that.prop('checked'));
                     break;
             }
         });
