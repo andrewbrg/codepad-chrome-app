@@ -1,23 +1,38 @@
 {
-  "js": {
-    "icon": "icon-javascript-alt",
-    "mode": "javascript",
-    "name": "JavaScript"
+  "sh": {
+    "icon": "icon-script-alt",
+    "mode": "sh",
+    "name": "Bash"
+  },
+  "cpp": {
+    "icon": "icon-c",
+    "mode": "c_cpp",
+    "name": "C++"
   },
   "css": {
     "icon": "icon-css3-alt",
     "mode": "css",
     "name": "CSS3"
   },
+  "go": {
+    "icon": "icon-go",
+    "mode": "golang",
+    "name": "Go Lang"
+  },
   "html": {
     "icon": "icon-html5-alt",
     "mode": "html",
     "name": "HTML5"
   },
-  "xml": {
-    "icon": "icon-html",
-    "mode": "xml",
-    "name": "XML"
+  "js": {
+    "icon": "icon-javascript-alt",
+    "mode": "javascript",
+    "name": "JavaScript"
+  },
+  "pl": {
+    "icon": "icon-perl",
+    "mode": "perl",
+    "name": "Perl"
   },
   "php": {
     "icon": "icon-php-alt",
@@ -29,14 +44,39 @@
     "mode": "php",
     "name": "PHTML"
   },
-  "sh": {
-    "icon": "icon-script-alt",
-    "mode": "sh",
-    "name": "Bash"
+  "py": {
+    "icon": "icon-python",
+    "mode": "python",
+    "name": "Python"
+  },
+  "rb": {
+    "icon": "icon-ruby",
+    "mode": "ruby",
+    "name": "Ruby"
+  },
+  "rc": {
+    "icon": "icon-rust",
+    "mode": "rust",
+    "name": "Rust"
+  },
+  "sass": {
+    "icon": "icon-sass",
+    "mode": "sass",
+    "name": "Sass"
+  },
+  "scala": {
+    "icon": "icon-scala",
+    "mode": "scala",
+    "name": "Scala"
   },
   "sql": {
     "icon": "icon-database",
     "mode": "sql",
     "name": "SQL"
+  },
+  "xml": {
+    "icon": "icon-html",
+    "mode": "xml",
+    "name": "XML"
   }
 }

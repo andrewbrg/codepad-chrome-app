@@ -64,6 +64,7 @@ var EditorTab = function () {
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
             $.get('/src/html/templates/' + ext + '.tpl', function (data) {
                 aceEditor.setValue(data);
+                aceEditor.clearSelection();
             });
         }
     };
