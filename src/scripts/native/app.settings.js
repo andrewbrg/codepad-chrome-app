@@ -3,59 +3,69 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $(document).ready(function () {
     $(document).on('change', 'input[type="checkbox"]', function () {
-        if (
-            typeof window.EditorTabInstance === typeof undefined ||
-            typeof window.EditorTabInstance.aceEditors === typeof undefined
-        ) {
+        if (typeof window.EditorTabInstance === typeof undefined ||
+            typeof window.EditorTabInstance.aceEditors === typeof undefined) {
             return false;
         }
 
-        var $that = $(this);
-        window.EditorTabInstance.aceEditors.forEach(function (aceEditor) {
+        var $that    = $(this);
+        var value    = $that.val();
+        var attrName = $that.attr('name');
+        var checked  = $that.prop('checked');
 
-            if (typeof aceEditor !== typeof undefined) {
+        window.EditorTabInstance.aceEditors.forEach(function (editor) {
 
-                aceEditor      = aceEditor.ace;
-                var aceSession = aceEditor.getSession();
+            if (typeof editor === typeof undefined) {
+                return;
+            }
 
-                switch ($that.attr('name')) {
-                    case 'chk-highlightLine':
-                        aceSession.setHighlightActiveLine($that.prop('checked'));
-                        break;
-                    case 'chk-hideGutter':
-                        aceSession.setShowGutter(!$that.prop('checked'));
-                        break;
-                    case 'chk-showWhitespace':
-                        aceSession.setDisplayIndentGuides($that.prop('checked'));
-                        break;
-                    case 'chk-indentation':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-useTabs':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-wordWrap':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-wrapLimit':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-showMargin':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-lineEndings':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-scrollPastEnd':
-                        aceSession.setDisplayIndentGuides($that.prop('checked'));
-                        break;
-                    case 'chk-trimTrailingWhitespace':
-                        aceSession.setShowPrintMargin($that.prop('checked'));
-                        break;
-                    case 'chk-trimEmptyLines':
-                        aceSession.trimTrailingSpace($that.prop('checked'));
-                        break;
-                }
+            var ace = editor.ace;
+            switch (attrName) {
+
+                case 'chk-highlightActiveLine':
+                    ace.setHighlightActiveLine(checked);
+                    break;
+
+                case 'chk-hideGutter':
+                    ace.renderer.setShowGutter(!checked);
+                    break;
+
+                case 'chk-showInvisibles':
+                    ace.renderer.setShowInvisibles(checked);
+                    break;
+
+                case 'chk-displayIndentGuides':
+                    ace.renderer.setDisplayIndentGuides(checked);
+                    break;
+
+
+                case 'chk-indentation':
+                    ace.setShowPrintMargin(value);
+                    break;
+                case 'chk-useTabs':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-wordWrap':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-wrapLimit':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-showMargin':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-lineEndings':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-scrollPastEnd':
+                    ace.setDisplayIndentGuides(checked);
+                    break;
+                case 'chk-trimTrailingWhitespace':
+                    ace.setShowPrintMargin(checked);
+                    break;
+                case 'chk-trimEmptyLines':
+                    ace.trimTrailingSpace(checked);
+                    break;
             }
         });
     });
