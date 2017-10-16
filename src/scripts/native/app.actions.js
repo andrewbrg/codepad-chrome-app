@@ -28,7 +28,6 @@ $(document).ready(function () {
     $(document).on('click', '.action-cut', function () {
         var ace = window.EditorTabInstance.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            ace.execCommand('copy');
             ace.execCommand('cut');
         }
     });

@@ -43,9 +43,12 @@ var EditorTab = function () {
             enableBasicAutocompletion: true
         });
 
-        // Maintain a central clipboard
+        // Maintain a centralised clipboard
         aceEditor.on('copy', function (e) {
             that.aceClipboard = e;
+        });
+        aceEditor.on('cut', function () {
+            that.aceClipboard = aceEditor.getSelectedText();
         });
 
         this.aceEditors.push({"idx": idx, "ace": aceEditor});

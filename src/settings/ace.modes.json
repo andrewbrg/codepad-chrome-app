@@ -17,7 +17,7 @@
   "go": {
     "icon": "icon-go",
     "mode": "golang",
-    "name": "Go Lang"
+    "name": "GoLang"
   },
   "html": {
     "icon": "icon-html5-alt",
