@@ -22,43 +22,55 @@ $(document).ready(function () {
             var ace = editor.ace;
             switch (attrName) {
 
+                case 'sel-selectionStyle':
+                    ace.setOption('selectionStyle', value);
+                    break;
+
+                case 'sel-cursorStyle':
+                    ace.setOption('cursorStyle', value);
+                    break;
+
                 case 'chk-highlightActiveLine':
-                    ace.setHighlightActiveLine(checked);
+                    ace.setOption('highlightActiveLine', checked);
                     break;
 
                 case 'chk-showGutter':
-                    ace.renderer.setShowGutter(checked);
+                    ace.setOption('showGutter', checked);
                     break;
 
                 case 'chk-showInvisibles':
-                    ace.renderer.setShowInvisibles(checked);
+                    ace.setOption('showInvisibles', checked);
                     break;
 
                 case 'chk-displayIndentGuides':
-                    ace.renderer.setDisplayIndentGuides(checked);
+                    ace.setOption('displayIndentGuides', checked);
                     break;
 
+                case 'chk-tabSize':
+                    ace.setOption('tabSize', value);
+                    break;
 
-                case 'chk-indentation':
-                    ace.setShowPrintMargin(value);
+                case 'chk-useSoftTabs':
+                    ace.setOption('tabSize', checked);
                     break;
-                case 'chk-useTabs':
-                    ace.setShowPrintMargin(checked);
+
+                case 'chk-wrapBehavioursEnabled':
+                    ace.setOption('wrapBehavioursEnabled', checked);
                     break;
-                case 'chk-wordWrap':
-                    ace.setShowPrintMargin(checked);
+
+                case 'chk-wrap':
+                    ace.setOption('wrap', value);
                     break;
-                case 'chk-wrapLimit':
-                    ace.setShowPrintMargin(checked);
+
+                case 'chk-showShowPrintMargin':
+                    ace.setOption('showPrintMargin', checked);
                     break;
-                case 'chk-showMargin':
-                    ace.setShowPrintMargin(checked);
-                    break;
+                    
                 case 'chk-lineEndings':
                     ace.setShowPrintMargin(checked);
                     break;
                 case 'chk-scrollPastEnd':
-                    ace.setDisplayIndentGuides(checked);
+                    ace.setOption('scrollPastEnd', checked);
                     break;
                 case 'chk-trimTrailingWhitespace':
                     ace.setShowPrintMargin(checked);

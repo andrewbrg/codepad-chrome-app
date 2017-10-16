@@ -1,7 +1,38 @@
 <div class="container-fluid">
     <form>
         <div class="row">
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="sel-selectionStyle">
+                        <strong>Cursor Style</strong><br/>
+                        <span>Set the style of cursor you prefer</span>
+                    </label>
+                    <select id="sel-selectionStyle"
+                            name="sel-selectionStyle">
+                        <option value="line">Line</option>
+                        <option value="text">Text</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="sel-cursorStyle">
+                        <strong>Cursor Style</strong><br/>
+                        <span>Set the style of cursor you prefer</span>
+                    </label>
+                    <select id="sel-cursorStyle"
+                            name="sel-cursorStyle">
+                        <option value="ace">Ace</option>
+                        <option value="slim">Slim</option>
+                        <option value="smooth">Smooth</option>
+                        <option value="wide">Wide</option>
+                    </select>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-highlightActiveLine">
                         <strong>Show highlighted line</strong><br/>
@@ -16,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-showGutter">
                         <strong>Show line numbering</strong><br/>
@@ -32,7 +63,8 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-showInvisibles">
                         <strong>Show invisible characters</strong><br/>
@@ -47,7 +79,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-displayIndentGuides">
                         <strong>Show indentation guides</strong><br/>
@@ -64,8 +96,7 @@
             </div>
 
 
-
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-showWhitespace">
                         <strong>Show whitespace characters</strong><br/>
@@ -80,87 +111,87 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="num-indentation">
-                        <strong>Indentation size</strong><br/>
-                        <span>The number of spaces to use to indent text with</span>
+                    <label for="chk-showShowPrintMargin">
+                        <strong>Show print margin</strong><br/>
+                        <span>Display the print margin</span>
                     </label>
                     <div class="switch">
-                        <input id="num-indentation"
-                               name="num-indentation"
-                               type="number"
-                               min="1"
-                               max="10"
-                               value="2"/>
+                        <input id="chk-showShowPrintMargin"
+                               name="chk-showShowPrintMargin"
+                               class="cmn-toggle cmn-toggle-round-flat"
+                               type="checkbox"/>
+                        <label for="chk-showShowPrintMargin"></label>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-useTabs">
-                        <strong>Indent with tabs</strong><br/>
-                        <span>Use tabs to indent text with instead of spaces</span>
+                    <label for="chk-useSoftTabs">
+                        <strong>Use soft tabs</strong><br/>
+                        <span>Use soft tabs for indentation instead of standard tabs</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-useTabs"
-                               name="chk-useTabs"
+                        <input id="chk-useSoftTabs"
+                               name="chk-useSoftTabs"
                                class="cmn-toggle cmn-toggle-round-flat"
                                type="checkbox"/>
-                        <label for="chk-useTabs"></label>
+                        <label for="chk-useSoftTabs"></label>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-wordWrap">
+                    <label for="num-tabSize">
+                        <strong>Tab size</strong><br/>
+                        <span>The number of columns to use when indenting text</span>
+                    </label>
+                    <input id="num-tabSize"
+                           name="num-tabSize"
+                           type="number"
+                           min="1"
+                           max="10"
+                           value="2"/>
+                </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="chk-wrapBehavioursEnabled">
                         <strong>Enable wordwrap</strong><br/>
                         <span>The number of spaces to use to indent text with</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-wordWrap"
-                               name="chk-wordWrap"
+                        <input id="chk-wrapBehavioursEnabled"
+                               name="chk-wrapBehavioursEnabled"
                                class="cmn-toggle cmn-toggle-round-flat"
                                type="checkbox"/>
-                        <label for="chk-wordWrap"></label>
+                        <label for="chk-wrapBehavioursEnabled"></label>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="num-wrapLimit">
+                    <label for="num-wrap">
                         <strong>Wrap limit</strong><br/>
                         <span>Set to the number of characters you want or (0) for full window</span>
                     </label>
-                    <div class="switch">
-                        <input id="num-wrapLimit"
-                               name="num-wrapLimit"
-                               type="number"
-                               min="0"
-                               max="900"
-                               value="0"/>
-                    </div>
+                    <input id="num-wrap"
+                           name="num-wrap"
+                           type="number"
+                           min="0"
+                           max="900"
+                           value="0"/>
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-showMargin">
-                        <strong>Show margin</strong><br/>
-                        <span>Whether to display the margin</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-showMargin"
-                               name="chk-showMargin"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-showMargin"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-12">
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-lineEndings">
                         <strong>Line endings</strong><br/>
@@ -176,7 +207,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-scrollPastEnd">
                         <strong>Scroll over edge</strong><br/>
@@ -191,7 +222,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-trimTrailingWhitespace">
                         <strong>Trim whitespace</strong><br/>
@@ -207,7 +238,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-sm-12">
+            <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-trimEmptyLines">
                         <strong>Trim empty lines</strong><br/>

@@ -36,11 +36,19 @@ var EditorTab = function () {
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         aceEditor.setTheme('../ace/theme/monokai');
-        aceEditor.$blockScrolling = Infinity;
         aceEditor.setOptions({
             enableSnippets: true,
             enableLiveAutocompletion: true,
             enableBasicAutocompletion: true
+        });
+        aceEditor.$blockScrolling = 'Infinity';
+
+        // Custom commands
+        aceEditor.commands.addCommand({
+            name: '_save',
+            bindKey: {win: 'Ctrl-s', mac: 'ctrl-s'},
+            exec: function () {
+            }
         });
 
         // Maintain a centralised clipboard

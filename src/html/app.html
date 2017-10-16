@@ -6,8 +6,7 @@
 
     <!------------------------------------------------------------------------------------------------------------------
     - https://getbootstrap.com/docs/4.0/getting-started/introduction/
-    - https://github.com/ajaxorg/ace
-    - https://ace.c9.io/api/editor.html
+    - https://github.com/ajaxorg/ace https://github.com/ajaxorg/ace/wiki https://ace.c9.io/api/editor.html
     - https://github.com/jonmiles/bootstrap-treeview/
     - http://fizzed.com/oss/font-mfizz
     ------------------------------------------------------------------------------------------------------------------->
@@ -106,6 +105,19 @@
                             <span class="navbar-help pull-right">(ctrl+v)</span>
                             <span class="clearfix"></span>
                         </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item action-fold-all" href="#">
+                            <i class="fa fa-expand"></i>
+                            &nbsp;Fold all
+                            <span class="navbar-help pull-right">(alt+0)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-unfold-all" href="#">
+                            <i class="fa fa-compress"></i>
+                            &nbsp;Un-fold all
+                            <span class="navbar-help pull-right">(alt+shift+0)</span>
+                            <span class="clearfix"></span>
+                        </a>
                     </div>
                 </li>
 
@@ -129,16 +141,14 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item modal-appearance" href="#"
                            data-toggle="modal"
-                           data-target=".modal-lg-container"
-                           data-title="Configure the IDE theme">
+                           data-target=".modal-lg-container">
                             <i class="fa fa-magic"></i>
                             &nbsp;Appearance & fonts
                         </a>
 
                         <a class="dropdown-item modal-ide-settings" href="#"
                            data-toggle="modal"
-                           data-target=".modal-lg-container"
-                           data-title="Configure the editor">
+                           data-target=".modal-lg-container">
                             <i class="fa fa-cogs"></i>
                             &nbsp;IDE preferences
                         </a>
@@ -173,7 +183,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"><i class="fa fa-close"></i></span>
                 </button>
@@ -192,7 +202,7 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"><i class="fa fa-close"></i></span>
                 </button>
@@ -207,7 +217,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true"><i class="fa fa-close"></i></span>
                 </button>
@@ -225,6 +235,8 @@
 
 <!-- Ace editor -->
 <script src="/src/scripts/ace/ace.js"></script>
+<script src="/src/scripts/ace/ext-modelist.js"></script>
+<script src="/src/scripts/ace/ext-beautify.js"></script>
 <script src="/src/scripts/ace/ext-language_tools.js"></script>
 
 <!-- Tree -->

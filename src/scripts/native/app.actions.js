@@ -55,4 +55,20 @@ $(document).ready(function () {
             ace.redo();
         }
     });
+
+    // Perform fold all current active editor
+    $(document).on('click', '.action-fold-all', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('foldAll');
+        }
+    });
+
+    // Perform unfold all current active editor
+    $(document).on('click', '.action-unfold-all', function () {
+        var ace = window.EditorTabInstance.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('unFoldAll');
+        }
+    });
 });

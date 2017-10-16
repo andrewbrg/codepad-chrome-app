@@ -21,15 +21,6 @@ var ModalLoader = function () {
         return dt.replace(/[^a-zA-Z0-9\-]/g, '');
     };
 
-    this._getModalTitle = function (el) {
-
-        var attr = $(el).attr('data-title');
-
-        return (typeof attr !== typeof undefined && attr !== false)
-            ? attr
-            : '';
-    };
-
     this._getModalContent = function (el) {
 
         var $el      = $(el);
@@ -38,16 +29,17 @@ var ModalLoader = function () {
         if ($el.hasClass('modal-appearance')) {
             $.get('/src/html/modals/editor/appearance.html').done(function (data) {
                 deferred.resolve(data);
-                return deferred.promise();
+
             });
         }
 
         if ($el.hasClass('modal-ide-settings')) {
             $.get('/src/html/modals/editor/ide.settings.html').done(function (data) {
                 deferred.resolve(data);
-                return deferred.promise();
             });
         }
+
+        return deferred.promise();
     };
 
 
@@ -56,7 +48,6 @@ var ModalLoader = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     this.onShowBs = function (el) {
 
-        var that = this;
         var $el  = $(el);
         var $mc  = this.getModalContainer($el);
 
@@ -65,13 +56,19 @@ var ModalLoader = function () {
         }
 
         this._getModalContent($el).done(function (data) {
-            $mc.find('.modal-content').first().find('.modal-title').first().html(that._getModalTitle($el));
-            $mc.find('.modal-content').first().find('.modal-body').first().html(data);
+            var $modalContent = $mc.find('.modal-content').first();
+            $modalContent.find('.modal-title').first().html($el.html());
+            $modalContent.find('.modal-body').first().html(data);
         });
     };
 
     this.onHideBs = function (el) {
 
+        var $el           = $(el);
+        var $modalContent = $el.find('.modal-content').first();
+
+        $modalContent.find('.modal-title').first().html('');
+        $modalContent.find('.modal-body').first().html('');
     };
 };
 
@@ -88,7 +85,8 @@ $(document).ready(function () {
         ModalLoaderInstance.onShowBs(e.relatedTarget);
     });
 
+    // Remove the template from the modal after closing it
     $(document).on('hide.bs.modal', '.modal', function (e) {
-        ModalLoaderInstance.onHideBs(e.relatedTarget);
+        ModalLoaderInstance.onHideBs(e.currentTarget);
     });
 });
