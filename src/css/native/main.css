@@ -306,8 +306,16 @@ input.cmn-toggle-round-flat:checked + label:after {
     max-width: 80% !important;
 }
 
+.modal-header {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.18);
+}
+
 .modal-body {
-    background: #2b2e31;
+    background: rgba(0, 0, 0, 0.28);
+}
+
+.modal-body label span {
+    opacity: 0.8;
 }
 
 /************************************* End *************************************/
