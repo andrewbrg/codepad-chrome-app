@@ -35,13 +35,19 @@ var ModalLoader = function () {
         var $el      = $(el);
         var deferred = $.Deferred();
 
-        if ($el.hasClass('modal-theme')) {
-            $.get('/src/html/modals/editor/theme.html').done(function (data) {
+        if ($el.hasClass('modal-appearance')) {
+            $.get('/src/html/modals/editor/appearance.html').done(function (data) {
                 deferred.resolve(data);
+                return deferred.promise();
             });
         }
 
-        return deferred.promise();
+        if ($el.hasClass('modal-ide-settings')) {
+            $.get('/src/html/modals/editor/ide.settings.html').done(function (data) {
+                deferred.resolve(data);
+                return deferred.promise();
+            });
+        }
     };
 
 

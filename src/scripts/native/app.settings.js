@@ -26,8 +26,8 @@ $(document).ready(function () {
                     ace.setHighlightActiveLine(checked);
                     break;
 
-                case 'chk-hideGutter':
-                    ace.renderer.setShowGutter(!checked);
+                case 'chk-showGutter':
+                    ace.renderer.setShowGutter(checked);
                     break;
 
                 case 'chk-showInvisibles':
