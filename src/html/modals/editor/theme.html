@@ -56,7 +56,6 @@
                     <div class="switch">
                         <input id="num-indentation"
                                name="num-indentation"
-                               class="cmn-toggle cmn-toggle-round-flat"
                                type="number"
                                min="1"
                                max="10"
@@ -83,7 +82,7 @@
             <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-wordWrap">
-                        <strong>Enable word wrapping</strong><br/>
+                        <strong>Enable wordwrap</strong><br/>
                         The number of spaces to use to indent text with
                     </label>
                     <div class="switch">
@@ -92,6 +91,23 @@
                                class="cmn-toggle cmn-toggle-round-flat"
                                type="checkbox"/>
                         <label for="chk-wordWrap"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="chk-wrapLimit">
+                        <strong>Wrap limit</strong><br/>
+                        Set to the number of characters you want or (0) for full window
+                    </label>
+                    <div class="switch">
+                        <input id="num-wrapLimit"
+                               name="num-wrapLimit"
+                               type="number"
+                               min="0"
+                               max="900"
+                               value="0"/>
                     </div>
                 </div>
             </div>
@@ -114,7 +130,7 @@
             <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                     <label for="chk-lineEndings">
-                        <strong>Line endings</strong><br />
+                        <strong>Line endings</strong><br/>
                         The number of spaces to use to indent text with
                     </label>
                     <div class="switch">
@@ -127,6 +143,52 @@
                 </div>
             </div>
 
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="chk-scrollPastEnd">
+                        <strong>Scroll over edge</strong><br/>
+                        Allow the editor to scroll past the end of a document
+                    </label>
+                    <div class="switch">
+                        <input id="chk-scrollPastEnd"
+                               name="chk-scrollPastEnd"
+                               class="cmn-toggle cmn-toggle-round-flat"
+                               type="checkbox"/>
+                        <label for="chk-scrollPastEnd"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="chk-trimTrailingWhitespace">
+                        <strong>Trim whitespace</strong><br/>
+                        Trim excess trailing whitespace at the end of a document upon saving
+                    </label>
+                    <div class="switch">
+                        <input id="chk-trimTrailingWhitespace"
+                               name="chk-trimTrailingWhitespace"
+                               class="cmn-toggle cmn-toggle-round-flat"
+                               type="checkbox"/>
+                        <label for="chk-trimTrailingWhitespace"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label for="chk-trimEmptyLines">
+                        <strong>Trim empty lines</strong><br/>
+                        Should trim whitespace also truncate empty lines?
+                    </label>
+                    <div class="switch">
+                        <input id="chk-trimEmptyLines"
+                               name="chk-trimEmptyLines"
+                               class="cmn-toggle cmn-toggle-round-flat"
+                               type="checkbox"/>
+                        <label for="chk-trimEmptyLines"></label>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>

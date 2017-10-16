@@ -41,14 +41,14 @@ header {
 
 input.cmn-toggle-round-flat + label {
     padding: 2px;
-    width: 40px;
-    height: 20px;
+    width: 60px;
+    height: 30px;
     background-color: #dddddd;
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    -ms-border-radius: 20px;
-    -o-border-radius: 20px;
-    border-radius: 20px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    border-radius: 30px;
     -webkit-transition: background 0.4s;
     -moz-transition: background 0.4s;
     -o-transition: background 0.4s;
@@ -67,11 +67,11 @@ input.cmn-toggle-round-flat + label:before {
     bottom: 2px;
     right: 2px;
     background-color: #fff;
-    -webkit-border-radius: 60px;
-    -moz-border-radius: 60px;
-    -ms-border-radius: 60px;
-    -o-border-radius: 60px;
-    border-radius: 60px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    -ms-border-radius: 30px;
+    -o-border-radius: 30px;
+    border-radius: 30px;
     -webkit-transition: background 0.4s;
     -moz-transition: background 0.4s;
     -o-transition: background 0.4s;
@@ -82,13 +82,13 @@ input.cmn-toggle-round-flat + label:after {
     top: 4px;
     left: 4px;
     bottom: 4px;
-    width: 12px;
+    width: 22px;
     background-color: #dddddd;
-    -webkit-border-radius: 12px;
-    -moz-border-radius: 12px;
-    -ms-border-radius: 12px;
-    -o-border-radius: 12px;
-    border-radius: 12px;
+    -webkit-border-radius: 22px;
+    -moz-border-radius: 22px;
+    -ms-border-radius: 22px;
+    -o-border-radius: 22px;
+    border-radius: 22px;
     -webkit-transition: margin 0.4s, background 0.4s;
     -moz-transition: margin 0.4s, background 0.4s;
     -o-transition: margin 0.4s, background 0.4s;
@@ -100,7 +100,7 @@ input.cmn-toggle-round-flat:checked + label {
 }
 
 input.cmn-toggle-round-flat:checked + label:after {
-    margin-left: 20px;
+    margin-left: 30px;
     background-color: #8ce196;
 }
 
@@ -141,7 +141,7 @@ input.cmn-toggle-round-flat:checked + label:after {
 
 /************************************* End **************************************/
 
-/************************************* Editor ***********************************/
+/************************************* Ace Editor ***********************************/
 .tab-content,
 .tab-pane,
 .editor {
@@ -297,6 +297,17 @@ input.cmn-toggle-round-flat:checked + label:after {
 
 .tab-content {
     background: #343a40;
+}
+
+/************************************* End *************************************/
+
+/************************************ Modals ***********************************/
+.modal-lg {
+    max-width: 80% !important;
+}
+
+.modal-body {
+    background: #2b2e31;
 }
 
 /************************************* End *************************************/
