@@ -22,12 +22,13 @@ var FontsHandler = function () {
         xhr.responseType       = "blob";
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
+                $('head').find('.' + font.replace(/ /g, '')).remove();
                 $('<style>').text("@font-face {\
                     font-family: '" + font + "';\
                     font-style: normal;\
                     font-weight: 400;\
                     src: '" + window.URL.createObjectURL(xhr.response) + "' format('woff2');\
-                }").addClass(font).prependTo('head');
+                }").addClass(font.replace(/ /g, '')).prependTo('head');
             }
         };
         xhr.send();
