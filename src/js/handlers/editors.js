@@ -1,4 +1,4 @@
-var EditorTab = function () {
+var EditorsHandler = function () {
     this.idx                  = 0;
     this.currentIdx           = null;
     this.previousIdx          = null;
@@ -21,7 +21,7 @@ var EditorTab = function () {
 
         this._populateAddTabDropDown();
         if (this.getNumTabs() === 0) {
-            EditorTabInstance.onAddNewTab();
+            this.onAddNewTab();
         }
     };
 
@@ -122,6 +122,10 @@ var EditorTab = function () {
         return ace;
     };
 
+    this.getAllAceEditors = function () {
+        return this.aceEditors;
+    };
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// PUBLIC Related to Tabs
@@ -186,7 +190,7 @@ var EditorTab = function () {
             '</li>'
         );
         obj.content      = $(
-            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
+            '<div class="tab-pane fade" data-idx="' + this.idx + '">' +
             '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
             '</div>'
         );
@@ -342,40 +346,3 @@ var EditorTab = function () {
         return true;
     };
 };
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Initialisation
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$(document).ready(function () {
-
-    // New instance of window editor
-    window.EditorTabInstance = new EditorTab();
-    window.EditorTabInstance.init();
-
-    // Edit tab name
-    $(document).on('click', '.tab-list .edit', function () {
-        window.EditorTabInstance.onEditTabName($(this).attr('data-idx'));
-    });
-    $(document).on('dblclick', '.tab-list .filename', function () {
-        window.EditorTabInstance.onEditTabName($(this).attr('data-idx'));
-    });
-
-    // Close tab
-    $(document).on('click', '.tab-list .close', function () {
-        window.EditorTabInstance.onCloseTab($(this).attr('data-idx'));
-    });
-
-    // Handle resize of window (keep editor under navigation)
-    var $header           = $('header');
-    var $contentContainer = window.EditorTabInstance.getTabsContentContainer();
-    $(window).on('resize', function () {
-        $contentContainer.css('top', Math.ceil($header.height()) + 'px');
-    }).resize();
-
-    // Maintain correct record of the current and previous idx
-    $(document).on('shown.bs.tab', '*[data-toggle="tab"]', function (e) {
-        window.EditorTabInstance.previousIdx = parseInt($(e.relatedTarget).attr('data-idx'));
-        window.EditorTabInstance.currentIdx  = parseInt($(e.target).attr('data-idx'));
-    });
-});

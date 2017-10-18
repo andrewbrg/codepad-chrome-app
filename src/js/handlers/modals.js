@@ -1,4 +1,4 @@
-var ModalLoader = function () {
+var ModalsHandler = function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public methods
@@ -71,22 +71,3 @@ var ModalLoader = function () {
         $modalContent.find('.modal-body').first().html('');
     };
 };
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// Initialisation of modals
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-$(document).ready(function () {
-
-    // Initialise the modal controller
-    var ModalLoaderInstance = new ModalLoader();
-
-    // Push the template into the modal before showing it
-    $(document).on('show.bs.modal', '.modal', function (e) {
-        ModalLoaderInstance.onShowBs(e.relatedTarget);
-    });
-
-    // Remove the template from the modal after closing it
-    $(document).on('hide.bs.modal', '.modal', function (e) {
-        ModalLoaderInstance.onHideBs(e.currentTarget);
-    });
-});
