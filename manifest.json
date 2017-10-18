@@ -6,7 +6,7 @@
   "app": {
     "background": {
       "scripts": [
-        "src/scripts/native/app.js"
+        "src/js/app.js"
       ]
     }
   },

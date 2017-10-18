@@ -35,7 +35,7 @@ var EditorTab = function () {
         var that      = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
-        aceEditor.setTheme('../ace/theme/monokai');
+        aceEditor.setTheme('ace/theme/monokai');
         aceEditor.setOptions({
             enableSnippets: true,
             enableLiveAutocompletion: true,
