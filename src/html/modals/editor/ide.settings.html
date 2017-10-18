@@ -4,252 +4,190 @@
 
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="sel-selectionStyle">
-                        <strong>Cursor Style</strong><br/>
-                        <span>Set the style of cursor you prefer</span>
+                    <label>
+                        <strong>Selection style</strong><br/>
+                        <span>Indicate how selections should occur</span>
                     </label>
-                    <select id="sel-selectionStyle"
-                            name="sel-selectionStyle">
-                        <option value="line">Line</option>
-                        <option value="text">Text</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="sel-cursorStyle">
-                        <strong>Cursor Style</strong><br/>
-                        <span>Set the style of cursor you prefer</span>
-                    </label>
-                    <select id="sel-cursorStyle"
-                            name="sel-cursorStyle">
-                        <option value="ace">Ace</option>
-                        <option value="slim">Slim</option>
-                        <option value="smooth">Smooth</option>
-                        <option value="wide">Wide</option>
-                    </select>
-                </div>
-            </div>
-
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-highlightActiveLine">
-                        <strong>Show highlighted line</strong><br/>
-                        <span>Enable a highlight on the current active line within the editor</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-highlightActiveLine"
-                               name="chk-highlightActiveLine"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-highlightActiveLine"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-showGutter">
-                        <strong>Show line numbering</strong><br/>
-                        <span>Show the line numbering gutter on the left-hand side of the editor</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-showGutter"
-                               name="chk-showGutter"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-showGutter"></label>
+                    <div>
+                        <select data-option="selectionStyle">
+                            <option value="line">Line</option>
+                            <option value="text">Text</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-showInvisibles">
-                        <strong>Show invisible characters</strong><br/>
-                        <span>Display 'helper' symbols to highlight invisible characters <i>(spaces, tabs, returns, etc.)</i></span>
+                    <label>
+                        <strong>Cursor style</strong><br/>
+                        <span>Indicate the cursor style</span>
                     </label>
-                    <div class="switch">
-                        <input id="chk-showInvisibles"
-                               name="chk-showInvisibles"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-showInvisibles"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-displayIndentGuides">
-                        <strong>Show indentation guides</strong><br/>
-                        <span>Display vertical 'helper' indentation guides to mark indentation spacing</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-displayIndentGuides"
-                               name="chk-displayIndentGuides"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-displayIndentGuides"></label>
+                    <div>
+                        <select data-option="cursorStyle">
+                            <option value="ace">Ace</option>
+                            <option value="slim">Slim</option>
+                            <option value="smooth">Smooth</option>
+                            <option value="wide">Wide</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-showWhitespace">
-                        <strong>Show whitespace characters</strong><br/>
-                        <span>Display whitespace characters <i>(spaces, tabs, returns, etc.)</i></span>
+                    <label>
+                        <strong>Highlight active line</strong><br/>
+                        <span>Highlight the current active line</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-showWhitespace"
-                               name="chk-showWhitespace"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-showWhitespace"></label>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-showShowPrintMargin">
-                        <strong>Show print margin</strong><br/>
-                        <span>Display the print margin</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-showShowPrintMargin"
-                               name="chk-showShowPrintMargin"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-showShowPrintMargin"></label>
+                        <input id="highlightActiveLine" data-option="highlightActiveLine" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="highlightActiveLine"></label>
                     </div>
                 </div>
             </div>
 
-
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-useSoftTabs">
-                        <strong>Use soft tabs</strong><br/>
-                        <span>Use soft tabs for indentation instead of standard tabs</span>
+                    <label>
+                        <strong>Line numbering</strong><br/>
+                        <span>Display line numbers in the editor</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-useSoftTabs"
-                               name="chk-useSoftTabs"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-useSoftTabs"></label>
+                        <input id="showGutter" data-option="showGutter" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="showGutter"></label>
                     </div>
                 </div>
             </div>
+
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="num-tabSize">
+                    <label>
+                        <strong>Invisible characters</strong><br/>
+                        <span>Display helper symbols for tabs, spaces etc.</span>
+                    </label>
+                    <div class="switch">
+                        <input id="showInvisibles" data-option="showInvisibles" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="showInvisibles"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>
+                        <strong>Indentation guides</strong><br/>
+                        <span>Display vertical indentation guides in the editor</span>
+                    </label>
+                    <div class="switch">
+                        <input id="displayIndentGuides" data-option="displayIndentGuides" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="displayIndentGuides"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>
+                        <strong>Soft tabs</strong><br/>
+                        <span>Soft tabs instead of standard tabs</span>
+                    </label>
+                    <div class="switch">
+                        <input id="useSoftTabs" data-option="useSoftTabs" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="useSoftTabs"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>
                         <strong>Tab size</strong><br/>
-                        <span>The number of columns to use when indenting text</span>
+                        <span>#No. of columns per tab</span>
                     </label>
-                    <input id="num-tabSize"
-                           name="num-tabSize"
-                           type="number"
-                           min="1"
-                           max="10"
-                           value="2"/>
-                </div>
-            </div>
-
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-wrapBehavioursEnabled">
-                        <strong>Enable wordwrap</strong><br/>
-                        <span>The number of spaces to use to indent text with</span>
-                    </label>
-                    <div class="switch">
-                        <input id="chk-wrapBehavioursEnabled"
-                               name="chk-wrapBehavioursEnabled"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-wrapBehavioursEnabled"></label>
+                    <div>
+                        <input data-option="tabSize" type="number" min="1" max="10" value="2"/>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="num-wrap">
-                        <strong>Wrap limit</strong><br/>
-                        <span>Set to the number of characters you want or (0) for full window</span>
-                    </label>
-                    <input id="num-wrap"
-                           name="num-wrap"
-                           type="number"
-                           min="0"
-                           max="900"
-                           value="0"/>
-                </div>
-            </div>
-
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label for="chk-lineEndings">
-                        <strong>Line endings</strong><br/>
-                        <span>The number of spaces to use to indent text with</span>
+                    <label>
+                        <strong>Word wrap</strong><br/>
+                        <span>Enable word wrapping on long lines</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-lineEndings"
-                               name="chk-lineEndings"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-lineEndings"></label>
+                        <input id="wrapBehavioursEnabled" data-option="wrapBehavioursEnabled" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="wrapBehavioursEnabled"></label>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-scrollPastEnd">
-                        <strong>Scroll over edge</strong><br/>
-                        <span>Allow the editor to scroll past the end of a document</span>
+                    <label>
+                        <strong>Word wrap limit</strong><br/>
+                        <span>#No. of characters per line before wrapping</span>
                     </label>
-                    <div class="switch">
-                        <input id="chk-scrollPastEnd"
-                               name="chk-scrollPastEnd"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-scrollPastEnd"></label>
+                    <div>
+                        <input data-option="wrap" type="number" min="0" max="900" value="0"/>
                     </div>
                 </div>
             </div>
+
+
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-trimTrailingWhitespace">
+                    <label>
+                        <strong>Newline format</strong><br/>
+                        <span>Format to use on new lines</span>
+                    </label>
+                    <div class="switch">
+                        <select data-option="newLineMode">
+                            <option value="unix">Unix</option>
+                            <option value="windows">Windows</option>
+                            <option value="auto">Auto</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>
+                        <strong>Allow over-scroll</strong><br/>
+                        <span>Scroll past the end of a document</span>
+                    </label>
+                    <div class="switch">
+                        <input id="scrollPastEnd" data-option="scrollPastEnd" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="scrollPastEnd"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="form-group">
+                    <label>
                         <strong>Trim whitespace</strong><br/>
-                        <span>Trim excess trailing whitespace at the end of a document upon saving</span>
+                        <span>Remove excess whitespace upon saving</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-trimTrailingWhitespace"
-                               name="chk-trimTrailingWhitespace"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-trimTrailingWhitespace"></label>
+                        <input id="trimTrailingWhitespace" data-option="trimTrailingWhitespace" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="trimTrailingWhitespace"></label>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="form-group">
-                    <label for="chk-trimEmptyLines">
+                    <label>
                         <strong>Trim empty lines</strong><br/>
-                        <span>Should trim whitespace also truncate empty lines?</span>
+                        <span>Remove empty lines upon saving</span>
                     </label>
                     <div class="switch">
-                        <input id="chk-trimEmptyLines"
-                               name="chk-trimEmptyLines"
-                               class="cmn-toggle cmn-toggle-round-flat"
-                               type="checkbox"/>
-                        <label for="chk-trimEmptyLines"></label>
+                        <input id="trimEmptyLines" data-option="trimEmptyLines" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <label for="trimEmptyLines"></label>
                     </div>
                 </div>
             </div>

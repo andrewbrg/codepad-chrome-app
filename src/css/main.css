@@ -22,13 +22,13 @@ header {
 }
 
 /************************************* Toggle ***********************************/
-.cmn-toggle {
+.cmn-tgl {
     position: absolute;
     margin-left: -9999px;
     visibility: hidden;
 }
 
-.cmn-toggle + label {
+.cmn-tgl + label {
     display: block;
     position: relative;
     cursor: pointer;
@@ -39,7 +39,7 @@ header {
     user-select: none;
 }
 
-input.cmn-toggle-round-flat + label {
+input.cmn-tgl-rnd-flt + label {
     padding: 2px;
     width: 60px;
     height: 30px;
@@ -55,13 +55,13 @@ input.cmn-toggle-round-flat + label {
     transition: background 0.4s;
 }
 
-input.cmn-toggle-round-flat + label:before, input.cmn-toggle-round-flat + label:after {
+input.cmn-tgl-rnd-flt + label:before, input.cmn-tgl-rnd-flt + label:after {
     display: block;
     position: absolute;
     content: "";
 }
 
-input.cmn-toggle-round-flat + label:before {
+input.cmn-tgl-rnd-flt + label:before {
     top: 2px;
     left: 2px;
     bottom: 2px;
@@ -78,7 +78,7 @@ input.cmn-toggle-round-flat + label:before {
     transition: background 0.4s;
 }
 
-input.cmn-toggle-round-flat + label:after {
+input.cmn-tgl-rnd-flt + label:after {
     top: 4px;
     left: 4px;
     bottom: 4px;
@@ -95,11 +95,11 @@ input.cmn-toggle-round-flat + label:after {
     transition: margin 0.4s, background 0.4s;
 }
 
-input.cmn-toggle-round-flat:checked + label {
+input.cmn-tgl-rnd-flt:checked + label {
     background-color: rgba(0, 123, 255, .7);
 }
 
-input.cmn-toggle-round-flat:checked + label:after {
+input.cmn-tgl-rnd-flt:checked + label:after {
     margin-left: 30px;
     background-color: rgba(0, 123, 255, .7);
 }
