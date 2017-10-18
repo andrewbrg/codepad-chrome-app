@@ -181,7 +181,8 @@ var EditorsHandler = function () {
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.fileName     = this.defaultFileName + '_' + this.idx + '.' + fileExt;
-        obj.nav          = $(
+
+        obj.nav = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
             '<span class="filename">' + obj.fileName + '</span>' +
@@ -189,8 +190,9 @@ var EditorsHandler = function () {
             '</a>' +
             '</li>'
         );
-        obj.content      = $(
-            '<div class="tab-pane fade" data-idx="' + this.idx + '">' +
+
+        obj.content = $(
+            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
             '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
             '</div>'
         );
