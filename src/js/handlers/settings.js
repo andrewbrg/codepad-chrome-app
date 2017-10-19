@@ -1,6 +1,6 @@
 var SettingsHandler = function () {
 
-    this.save = function (key, value) {
+    this.set = function (key, value) {
 
         if (
             (typeof key === typeof undefined || !key) ||
@@ -17,14 +17,59 @@ var SettingsHandler = function () {
         return this;
     };
 
-    this.load = function (key) {
+    this.get = function (key) {
+
+        var deferred = $.Deferred();
 
         if (typeof key === typeof undefined || !key) {
-            return this;
+            deferred.resolve(undefined);
+        }
+        else {
+            chrome.storage.sync.get(key, function (obj) {
+                deferred.resolve(obj[key]);
+            });
         }
 
-        chrome.storage.sync.get(key);
+        return deferred.promise();
+    };
 
-        return this;
+    this.applyIdeSettingsToView = function (editor) {
+
+        var that = this;
+
+        $(document).find('input[data-option], select[data-option]').each(function (i, v) {
+
+            var $v  = $(v);
+            var key = $v.attr('data-option');
+
+            that.get(key).then(function (val) {
+
+                if (typeof $v === typeof undefined) {
+                    return false;
+                }
+
+                if (typeof val === typeof undefined && typeof editor !== typeof undefined) {
+                    val = editor.getOption(key);
+                    that.set(key, val);
+                }
+
+                if (typeof $v.attr('type') !== typeof undefined) {
+                    switch ($v.attr('type')) {
+                        case 'checkbox':
+                            if (typeof val === 'boolean') {
+                                $v.prop('checked', val);
+                            }
+                            break;
+
+                        case 'number':
+                            $v.val(val);
+                            break;
+                    }
+                }
+                else if ($v.is('select')) {
+                    $v.val(val);
+                }
+            });
+        });
     };
 };

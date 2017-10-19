@@ -44,7 +44,7 @@ $(document).ready(function () {
     var Settings = new SettingsHandler();
 
     Editors.init();
-    Fonts.loadFont('Roboto Mono').loadFont('Open Sans');
+    Fonts.load(['Roboto Mono', 'Open Sans']);
 
     var $header                  = $('header');
     var $editorsContentContainer = Editors.getTabsContentContainer();
@@ -89,7 +89,9 @@ $(document).ready(function () {
 
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
-        Modals.onShowBs(e.relatedTarget);
+        Modals.onShowBs(e.relatedTarget, function () {
+            Settings.applyIdeSettingsToView(Editors.getCurrentAceEditor());
+        });
     });
 
     // Remove the template from the modal after closing it
@@ -203,7 +205,7 @@ $(document).ready(function () {
 
             editor.ace.setOption(key, val);
             editor.ace.$blockScrolling = 'Infinity';
-            Settings.save(key, val);
+            Settings.set(key, val);
         });
     });
 

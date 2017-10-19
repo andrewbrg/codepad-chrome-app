@@ -9,7 +9,7 @@
                         <span>Indicate how selections should occur</span>
                     </label>
                     <div>
-                        <select data-option="selectionStyle">
+                        <select data-toggle="ideSetting" data-option="selectionStyle">
                             <option value="line">Line</option>
                             <option value="text">Text</option>
                         </select>
@@ -24,7 +24,7 @@
                         <span>Indicate the cursor style</span>
                     </label>
                     <div>
-                        <select data-option="cursorStyle">
+                        <select data-toggle="ideSetting" data-option="cursorStyle">
                             <option value="ace">Ace</option>
                             <option value="slim">Slim</option>
                             <option value="smooth">Smooth</option>
@@ -41,7 +41,7 @@
                         <span>Highlight the current active line</span>
                     </label>
                     <div class="switch">
-                        <input id="highlightActiveLine" data-option="highlightActiveLine" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="highlightActiveLine" data-toggle="ideSetting" data-option="highlightActiveLine" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="highlightActiveLine"></label>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                         <span>Display line numbers in the editor</span>
                     </label>
                     <div class="switch">
-                        <input id="showGutter" data-option="showGutter" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="showGutter" data-toggle="ideSetting" data-option="showGutter" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="showGutter"></label>
                     </div>
                 </div>
@@ -67,7 +67,7 @@
                         <span>Display helper symbols for tabs, spaces etc.</span>
                     </label>
                     <div class="switch">
-                        <input id="showInvisibles" data-option="showInvisibles" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="showInvisibles" data-toggle="ideSetting" data-option="showInvisibles" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="showInvisibles"></label>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                         <span>Display vertical indentation guides in the editor</span>
                     </label>
                     <div class="switch">
-                        <input id="displayIndentGuides" data-option="displayIndentGuides" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="displayIndentGuides" data-toggle="ideSetting" data-option="displayIndentGuides" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="displayIndentGuides"></label>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                         <span>Soft tabs instead of standard tabs</span>
                     </label>
                     <div class="switch">
-                        <input id="useSoftTabs" data-option="useSoftTabs" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="useSoftTabs" data-toggle="ideSetting" data-option="useSoftTabs" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="useSoftTabs"></label>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                         <span>#No. of columns per tab</span>
                     </label>
                     <div>
-                        <input data-option="tabSize" type="number" min="1" max="10" value="2"/>
+                        <input data-toggle="ideSetting" data-option="tabSize" type="number" min="1" max="10" value="2"/>
                     </div>
                 </div>
             </div>
@@ -118,7 +118,7 @@
                         <span>Enable word wrapping on long lines</span>
                     </label>
                     <div class="switch">
-                        <input id="wrapBehavioursEnabled" data-option="wrapBehavioursEnabled" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="wrapBehavioursEnabled" data-toggle="ideSetting" data-option="wrapBehavioursEnabled" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="wrapBehavioursEnabled"></label>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                         <span>#No. of characters per line before wrapping</span>
                     </label>
                     <div>
-                        <input data-option="wrap" type="number" min="0" max="900" value="0"/>
+                        <input data-toggle="ideSetting" data-option="wrap" type="number" min="0" max="900" value="0"/>
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
                         <span>Format to use on new lines</span>
                     </label>
                     <div class="switch">
-                        <select data-option="newLineMode">
+                        <select data-toggle="ideSetting" data-option="newLineMode">
                             <option value="unix">Unix</option>
                             <option value="windows">Windows</option>
                             <option value="auto">Auto</option>
@@ -160,34 +160,8 @@
                         <span>Scroll past the end of a document</span>
                     </label>
                     <div class="switch">
-                        <input id="scrollPastEnd" data-option="scrollPastEnd" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
+                        <input id="scrollPastEnd" data-toggle="ideSetting" data-option="scrollPastEnd" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
                         <label for="scrollPastEnd"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Trim whitespace</strong><br/>
-                        <span>Remove excess whitespace upon saving</span>
-                    </label>
-                    <div class="switch">
-                        <input id="trimTrailingWhitespace" data-option="trimTrailingWhitespace" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
-                        <label for="trimTrailingWhitespace"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Trim empty lines</strong><br/>
-                        <span>Remove empty lines upon saving</span>
-                    </label>
-                    <div class="switch">
-                        <input id="trimEmptyLines" data-option="trimEmptyLines" class="cmn-tgl cmn-tgl-rnd-flt" type="checkbox"/>
-                        <label for="trimEmptyLines"></label>
                     </div>
                 </div>
             </div>
