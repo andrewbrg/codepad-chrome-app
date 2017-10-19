@@ -183,30 +183,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $(document).on('change', 'input[data-option], select[data-option]', function () {
-
-        var $that = $(this);
-
-        if (typeof Editors === typeof undefined ||
-            typeof Editors.aceEditors === typeof undefined) {
-            return false;
-        }
-
-        Editors.getAllAceEditors().forEach(function (editor) {
-
-            if (typeof editor === typeof undefined) {
-                return false;
-            }
-
-            var val = $that.attr('type') === 'checkbox'
-                ? $that.prop('checked')
-                : $that.val();
-
-            var key = $that.attr('data-option').toString();
-
-            editor.ace.setOption(key, val);
-            editor.ace.$blockScrolling = 'Infinity';
-            Settings.set(key, val);
-        });
+        Settings.applyIdeSettingsToEditors(Editors);
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
