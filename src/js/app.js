@@ -41,13 +41,11 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     var Editors     = new EditorsHandler();
     var Modals      = new ModalsHandler();
-    var Fonts       = new FontsHandler();
     var IdeSettings = new IdeSettingsHandler();
 
     Editors.init();
     IdeSettings.init(Editors);
 
-    Fonts.load(['Roboto Mono', 'Open Sans']);
     var $header                  = $('header');
     var $editorsContentContainer = Editors.getTabsContentContainer();
 

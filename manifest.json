@@ -6,7 +6,7 @@
   "app": {
     "background": {
       "scripts": [
-        "src/js/app.js"
+        "/src/js/app.js"
       ]
     }
   },
@@ -16,12 +16,7 @@
       "default_title": "Open file"
     }
   ],
-  "web_accessible_resources": [
-    "src/html/*"
-  ],
   "permissions": [
-    "http://fonts.gstatic.com/",
-    "https://fonts.gstatic.com/",
     "fileSystem",
     "storage"
   ]

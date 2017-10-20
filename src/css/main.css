@@ -116,7 +116,7 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 /*******************************************************************************/
 .navbar {
     padding: 0 1rem;
-    z-index: 999;
+    position: relative;
 }
 
 .navbar .navbar-brand .btn {
@@ -244,6 +244,7 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     width: 100%;
     border: none;
     min-height: 29px;
+    position: relative;
 }
 
 .tab-list li a {
@@ -299,7 +300,8 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 
 .add-file-container button {
     display: inline-block;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
+    padding: 0.3rem 0.5rem 0.25rem 0.5rem;
 }
 
 .tab-content {
@@ -357,7 +359,6 @@ select:focus {
     border-bottom: 1px dashed rgb(56, 61, 65);
     padding: 0 0 0.4rem 0;
 }
-
 
 .dropdown-menu {
     background-color: #262a2e;
