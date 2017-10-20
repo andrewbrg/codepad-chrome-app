@@ -85,8 +85,11 @@ $(document).ready(function () {
     // New ace editor
     $(window).on('_ace.new', function (e, idx) {
         IdeSettings.fetchAll().then(function (settings) {
-            Editors.getAceEditorAtIdx(idx).setOptions(settings);
-            console.log();
+            if (typeof settings !== typeof undefined) {
+                var editor = Editors.getAceEditorAtIdx(idx);
+                editor.setOptions(settings);
+                editor.$blockScrolling = Infinity;
+            }
         });
     });
 

@@ -101,8 +101,8 @@ var IdeSettingsHandler = function () {
         return this._fetch();
     };
 
-    this.flushAll = function () {
-        return this._fetch();
+    this.flushAllPersistent = function () {
+        chrome.storage.sync.clear();
     };
 
     this.persistAndApply = function (el) {

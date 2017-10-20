@@ -115,7 +115,7 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 /************************************* Navbar **********************************/
 /*******************************************************************************/
 .navbar {
-    padding: .2rem 1rem;
+    padding: 0 1rem;
     z-index: 999;
 }
 
@@ -144,6 +144,24 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 
 .toggle-handle {
     background-color: #ffffff;
+}
+
+.navbar .dropdown-menu {
+    background-color: #262a2e;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dropdown-item {
+    color: rgba(255, 255, 255, .5);
+}
+
+.dropdown-item:hover {
+    background-color: #1b1d21;
+    color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /*******************************************************************************/
