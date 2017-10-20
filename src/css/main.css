@@ -343,12 +343,26 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     opacity: 0.8;
 }
 
+.modal-backdrop.show {
+    opacity: .3;
+}
+
+/*******************************************************************************/
+/********************************* Form inputs *********************************/
+/*******************************************************************************/
 input[type="text"], select {
     background: transparent;
     border: none;
-    border-bottom: 2px solid;
+    border-bottom: 1px solid #ccc;
     width: 100%;
     font-family: inherit;
     font-size: 1.2em;
     color: #ccc;
+}
+
+input[type="text"]:hover,
+input[type="text"]:focus,
+select:hover,
+select:focus {
+    border-bottom: 2px solid rgba(0, 123, 255, .7);
 }

@@ -1,6 +1,6 @@
 (function () {
-    $(document).on('change', '.range-slider-range', function () {
+    $(document).on('input', '.range-slider-range', function () {
         var $this = $(this);
-        $this.closest('.range-slider').find('.range-slider-value').html($this.val());
+        $this.attr('title', $this.val());
     });
 })();

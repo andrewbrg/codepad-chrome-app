@@ -124,7 +124,7 @@ $(document).ready(function () {
     /// Settings
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $(document).on('change', '[data-toggle="ide-setting"]', function () {
+    $(document).on('input change', '[data-action="ide-setting"]', function () {
         IdeSettings.persistAndApply($(this));
     });
 

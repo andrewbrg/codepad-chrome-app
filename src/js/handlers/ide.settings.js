@@ -126,7 +126,7 @@ var IdeSettingsHandler = function () {
 
         var that = this;
 
-        $(document).find('[data-toggle="ide-setting"][data-option]').each(function (i, v) {
+        $(document).find('[data-action="ide-setting"][data-option]').each(function (i, v) {
 
             var $el  = $(v);
             var type = $el.attr('type');
@@ -143,6 +143,7 @@ var IdeSettingsHandler = function () {
                     case undefined:
                     case 'text':
                     case 'number':
+                    case 'range':
                         $el.val(val);
                         break;
 
