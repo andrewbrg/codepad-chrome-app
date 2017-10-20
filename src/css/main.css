@@ -157,11 +157,6 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     height: 100%;
 }
 
-.editor {
-    font-family: 'Roboto Mono', monospace;
-    font-size: 1.25rem !important;
-}
-
 .ace_gutter-cell {
     font-size: 1.1rem !important;
 }

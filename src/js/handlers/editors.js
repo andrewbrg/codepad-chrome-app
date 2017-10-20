@@ -10,6 +10,7 @@ var EditorsHandler = function () {
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
     this.defaultFileName      = 'untitled';
     this.defaultFileExt       = 'js';
+    this.defaultFont          = 'Roboto Mono';
     this.undefinedFileExt     = 'text';
     this.undefinedFileIcon    = 'icon-html';
 
@@ -30,6 +31,7 @@ var EditorsHandler = function () {
 
         aceEditor.setTheme('ace/theme/monokai');
         aceEditor.setOptions({
+            fontFamily: this.defaultFont,
             enableSnippets: true,
             enableLiveAutocompletion: true,
             enableBasicAutocompletion: true
