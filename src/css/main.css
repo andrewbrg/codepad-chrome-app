@@ -342,3 +342,13 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 .modal-body label span {
     opacity: 0.8;
 }
+
+input[type="text"], select {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid;
+    width: 100%;
+    font-family: inherit;
+    font-size: 1.2em;
+    color: #ccc;
+}
