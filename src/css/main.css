@@ -50,7 +50,7 @@ input.cmn-tgl-rnd-flt + label {
     padding: 2px;
     width: 60px;
     height: 30px;
-    background-color: #dddddd;
+    background-color: #cccccc;
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
     -ms-border-radius: 30px;
@@ -90,7 +90,7 @@ input.cmn-tgl-rnd-flt + label:after {
     left: 4px;
     bottom: 4px;
     width: 22px;
-    background-color: #dddddd;
+    background-color: #cccccc;
     -webkit-border-radius: 22px;
     -moz-border-radius: 22px;
     -ms-border-radius: 22px;
@@ -327,14 +327,6 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 /*******************************************************************************/
 /************************************ Modals ***********************************/
 /*******************************************************************************/
-body.modal-open .outer-container {
-    -webkit-filter: blur(4px);
-    -moz-filter: blur(4px);
-    -o-filter: blur(4px);
-    -ms-filter: blur(4px);
-    filter: blur(4px);
-}
-
 .modal-lg {
     max-width: 80% !important;
 }
