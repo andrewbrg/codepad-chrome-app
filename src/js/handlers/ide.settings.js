@@ -22,7 +22,6 @@ var IdeSettingsHandler = function () {
 
             obj[that.parentKey][key] = val;
             chrome.storage.sync.set(obj);
-            console.log('Saving: ' + key + ' with ' + val);
         });
     };
 

@@ -17,6 +17,15 @@
 }
 
 @font-face {
+    font-family: 'Cousine';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Cousine Regular'), local('Cousine-Regular'),
+    url('/src/fonts/0IpceuvDvCegpU9Mz8MQ_g.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+@font-face {
     font-family: 'Cutive Mono';
     font-style: normal;
     font-weight: 400;
@@ -26,11 +35,47 @@
 }
 
 @font-face {
+    font-family: 'Droid Sans Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Droid Sans Mono Regular'), local('DroidSansMono-Regular'),
+    url('/src/fonts/ns-m2xQYezAtqh7ai59hJYdJ2JT0J65PSe7wdxAnx_I.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+@font-face {
     font-family: 'Dekko';
     font-style: normal;
     font-weight: 400;
     src: local('Dekko'),
     url('/src/fonts/65sfRS5PD_z7ZcEP48_P-g.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+@font-face {
+    font-family: 'Fira Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Fira Mono Regular'), local('FiraMono-Regular'),
+    url('/src/fonts/SlRWfq1zeqXiYWAN-lnG-ltXRa8TVwTICgirnJhmVJw.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+@font-face {
+    font-family: 'Nova Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('NovaMono'),
+    url('/src/fonts/pN6VVBY03b9QLz-7i6Kl0VtXRa8TVwTICgirnJhmVJw.woff2') format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
+}
+
+@font-face {
+    font-family: 'PT Mono';
+    font-style: normal;
+    font-weight: 400;
+    src: local('PT Mono'), local('PTMono-Regular'),
+    url('/src/fonts/h6kfiL-5Ady2K9sB3hOqcw.woff2') format('woff2');
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215;
 }
 
