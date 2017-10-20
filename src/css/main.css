@@ -1,5 +1,7 @@
 * {
     outline: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
@@ -265,6 +267,9 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     position: absolute;
     top: 7px;
     right: 10px;
+    font-size: 1em;
+    text-shadow: none;
+    font-weight: 100;
 }
 
 .tab-list li a .edit {
