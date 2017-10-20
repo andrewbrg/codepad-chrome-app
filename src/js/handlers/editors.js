@@ -1,10 +1,10 @@
 var EditorsHandler = function () {
+
     this.idx                  = 0;
     this.currentIdx           = null;
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
-    this.settingHandler       = undefined;
     this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
     this.navTabIconHtml       = '<i class="icon"></i>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -15,19 +15,10 @@ var EditorsHandler = function () {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// PUBLIC Related to Ace Editor
+    /// Private Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function () {
-
-        this.settingHandler = new SettingsHandler();
-        this._populateAddTabDropDown();
-        if (this.getNumTabs() === 0) {
-            this.onAddNewTab();
-        }
-    };
-
-    this.bootAceEditor = function (idx) {
+    this._bootAceEditor = function (idx) {
 
         if (typeof idx === typeof undefined) {
             return false;
@@ -43,7 +34,6 @@ var EditorsHandler = function () {
             enableLiveAutocompletion: true,
             enableBasicAutocompletion: true
         });
-        aceEditor.$blockScrolling = 'Infinity';
 
         // Custom commands
         aceEditor.commands.addCommand({
@@ -61,6 +51,7 @@ var EditorsHandler = function () {
             that.aceClipboard = aceEditor.getSelectedText();
         });
 
+        aceEditor.$blockScrolling = 'Infinity';
         this.aceEditors.push({"idx": idx, "ace": aceEditor});
         this.setAceEditorTemplate(idx);
         this.setAceEditorMode(idx);
@@ -68,128 +59,8 @@ var EditorsHandler = function () {
     };
 
 
-    this.setAceEditorTemplate = function (idx) {
-
-        idx           = parseInt(idx);
-        var ext       = this._getTabFileExtension(idx);
-        var aceEditor = this.getAceEditorAtIdx(idx);
-
-        if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
-            $.get('/src/html/templates/' + ext + '.tpl', function (data) {
-                aceEditor.setValue(data);
-                aceEditor.clearSelection();
-            });
-        }
-    };
-
-    this.setAceEditorMode = function (idx) {
-
-        var that = this;
-        idx      = parseInt(idx);
-
-        this._getTabMode(idx).then(function (data) {
-            data = JSON.parse(data);
-            that.getAceEditorAtIdx(idx).getSession().setMode('../ace/mode/' + data.mode);
-        });
-    };
-
-    this.getAllAceEditorModes = function () {
-
-        var deferred = $.Deferred();
-
-        $.get('/src/settings/ace.modes.json').done(function (data) {
-            deferred.resolve(data);
-        });
-
-        return deferred.promise();
-    };
-
-    this.getCurrentAceEditor = function () {
-        return this.getAceEditorAtIdx(this.currentIdx);
-    };
-
-    this.getAceEditorAtIdx = function (idx) {
-
-        var ace = undefined;
-        idx     = parseInt(idx);
-
-        this.aceEditors.forEach(function (el) {
-            if (el.idx === idx) {
-                ace = el.ace;
-
-                return false;
-            }
-        });
-
-        return ace;
-    };
-
-    this.getAllAceEditors = function () {
-        return this.aceEditors;
-    };
-
-    this.applySetting = function (key, val) {
-
-        var that = this;
-
-        if (typeof key === typeof undefined || typeof val === typeof undefined) {
-            return false;
-        }
-
-        this.getAllAceEditors().forEach(function (editor) {
-
-            if (typeof editor === typeof undefined) {
-                return false;
-            }
-
-            key = key.toString();
-
-            that.ace.setOption(key, val);
-            that.ace.$blockScrolling = 'Infinity';
-            that.settingHandler.set(key, val)
-        });
-    };
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// PUBLIC Related to Tabs
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    this.getTabsNavContainer = function () {
-        return $(document).find('.tab-list').first();
-    };
-
-    this.getTabsContentContainer = function () {
-        return $(document).find('.tab-content').first();
-    };
-
-    this.getTabNavElement = function (idx) {
-
-        if (typeof idx === typeof undefined) {
-            return undefined;
-        }
-        return this.getTabsNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
-    };
-
-    this.getTabContentElement = function (idx) {
-
-        if (typeof idx === typeof undefined) {
-            return undefined;
-        }
-        return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
-    };
-
-    this.getNumTabs = function () {
-        return parseInt(this.getTabsNavContainer().children().length);
-    };
-
-    this.getAddTabDropDownContainer = function () {
-        return $(document).find('.add-tab-dropdown').first();
-    };
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// PRIVATE Related to Tabs
+    /// Private tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this._getNewTabObject = function (fileExt) {
@@ -316,8 +187,117 @@ var EditorsHandler = function () {
         });
     };
 
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Public Event Callbacks related to Tabs
+    /// Public Ace
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    this.init = function () {
+
+        this._populateAddTabDropDown();
+    };
+
+
+    this.setAceEditorTemplate = function (idx) {
+
+        idx           = parseInt(idx);
+        var ext       = this._getTabFileExtension(idx);
+        var aceEditor = this.getAceEditorAtIdx(idx);
+
+        if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
+            $.get('/src/html/templates/' + ext + '.tpl', function (data) {
+                aceEditor.setValue(data);
+                aceEditor.clearSelection();
+            });
+        }
+    };
+
+    this.setAceEditorMode = function (idx) {
+
+        var that = this;
+        idx      = parseInt(idx);
+
+        this._getTabMode(idx).then(function (data) {
+            data = JSON.parse(data);
+            that.getAceEditorAtIdx(idx).getSession().setMode('../ace/mode/' + data.mode);
+        });
+    };
+
+    this.getAllAceEditorModes = function () {
+
+        var deferred = $.Deferred();
+
+        $.get('/src/settings/ace.modes.json').done(function (data) {
+            deferred.resolve(data);
+        });
+
+        return deferred.promise();
+    };
+
+    this.getCurrentAceEditor = function () {
+        return this.getAceEditorAtIdx(this.currentIdx);
+    };
+
+    this.getAceEditorAtIdx = function (idx) {
+
+        var ace = undefined;
+        idx     = parseInt(idx);
+
+        this.aceEditors.forEach(function (el) {
+            if (el.idx === idx) {
+                ace = el.ace;
+
+                return false;
+            }
+        });
+
+        return ace;
+    };
+
+    this.getAllAceEditors = function () {
+        return this.aceEditors;
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public tabs
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    this.getTabsNavContainer = function () {
+        return $(document).find('.tab-list').first();
+    };
+
+    this.getTabsContentContainer = function () {
+        return $(document).find('.tab-content').first();
+    };
+
+    this.getTabNavElement = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return undefined;
+        }
+        return this.getTabsNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
+    };
+
+    this.getTabContentElement = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return undefined;
+        }
+        return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
+    };
+
+    this.getNumTabs = function () {
+        return parseInt(this.getTabsNavContainer().children().length);
+    };
+
+    this.getAddTabDropDownContainer = function () {
+        return $(document).find('.add-tab-dropdown').first();
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public Event Callbacks
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.onAddNewTab = function (type) {
@@ -325,11 +305,10 @@ var EditorsHandler = function () {
         var obj = this._getNewTabObject(type);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
-        this.bootAceEditor(obj.idx);
+        this._bootAceEditor(obj.idx);
         this._giveTabFocus(obj.idx);
 
-        $(window).trigger('resize');
-
+        $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
         return true;
     };
 

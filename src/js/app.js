@@ -33,18 +33,21 @@
     });
 })();
 
+
 $(document).ready(function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Globals
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    var Editors = new EditorsHandler();
-    var Modals  = new ModalsHandler();
-    var Fonts   = new FontsHandler();
+    var Editors     = new EditorsHandler();
+    var Modals      = new ModalsHandler();
+    var Fonts       = new FontsHandler();
+    var IdeSettings = new IdeSettingsHandler();
 
     Editors.init();
-    Fonts.load(['Roboto Mono', 'Open Sans']);
+    IdeSettings.init(Editors);
 
+    Fonts.load(['Roboto Mono', 'Open Sans']);
     var $header                  = $('header');
     var $editorsContentContainer = Editors.getTabsContentContainer();
 
@@ -68,16 +71,29 @@ $(document).ready(function () {
         Editors.onCloseTab($(this).attr('data-idx'));
     });
 
-    // Handle resize of window (keep editor under navigation)
-    $(window).on('resize', function () {
-        $editorsContentContainer.css('top', Math.ceil($header.height()) + 'px');
-    }).resize();
-
     // Maintain correct record of the current and previous idx
     $(document).on('shown.bs.tab', '*[data-toggle="tab"]', function (e) {
         Editors.previousIdx = parseInt($(e.relatedTarget).attr('data-idx'));
         Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
     });
+
+    // Handle resize of window (keep editor under navigation)
+    $(window).on('resize', function () {
+        $editorsContentContainer.css('top', Math.ceil($header.height()) + 'px');
+    }).resize();
+
+    // New ace editor
+    $(window).on('_ace.new', function (e, idx) {
+        IdeSettings.fetchAll().then(function (settings) {
+            Editors.getAceEditorAtIdx(idx).setOptions(settings);
+            console.log();
+        });
+    });
+
+    // Add new tab
+    if (Editors.getNumTabs() === 0) {
+        Editors.onAddNewTab();
+    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,23 +105,7 @@ $(document).ready(function () {
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
         Modals.onShowBs(e.relatedTarget, function () {
-            $(document).find('[data-toggle="ide-setting"]').each(function (i, v) {
-
-                var $v = $(v);
-                if (typeof $v.attr('data-option') === undefined) {
-                    return false;
-                }
-
-                var val = Editors.settingHandler.get($v.attr('data-option'));
-
-                if (typeof $this.attr('type') !== undefined && $this.attr('type') === 'checkbox') {
-                    $v.prop('checked', val);
-                }
-                else {
-                    $v.val(val);
-                }
-
-            });
+            IdeSettings.decorateView();
         });
     });
 
@@ -122,15 +122,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $(document).on('change', '[data-toggle="ide-setting"]', function () {
-
-        var $this = $(this);
-
-        var key = $this.attr('data-option');
-        var val = typeof $this.attr('type') !== undefined && $this.attr('type') === 'checkbox'
-            ? $this.prop('checked')
-            : $this.val();
-
-        Editors.applySetting(key, val);
+        IdeSettings.persistAndApply($(this));
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
