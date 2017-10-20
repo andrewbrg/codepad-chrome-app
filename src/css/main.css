@@ -146,24 +146,6 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     background-color: #ffffff;
 }
 
-.navbar .dropdown-menu {
-    background-color: #262a2e;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.dropdown-item {
-    color: rgba(255, 255, 255, .5);
-}
-
-.dropdown-item:hover {
-    background-color: #1b1d21;
-    color: rgba(255, 255, 255, 1);
-}
-
-.dropdown-divider {
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
-}
-
 /*******************************************************************************/
 /*********************************** Ace Editor ********************************/
 /*******************************************************************************/
@@ -348,16 +330,16 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 }
 
 /*******************************************************************************/
-/********************************* Form inputs *********************************/
+/************************************ Forms ************************************/
 /*******************************************************************************/
 input[type="text"], select {
     background: transparent;
     border: none;
-    border-bottom: 1px solid #ccc;
     width: 100%;
     font-family: inherit;
     font-size: 1.2em;
     color: #ccc;
+    height: 36px;
 }
 
 input[type="text"]:hover,
@@ -365,4 +347,32 @@ input[type="text"]:focus,
 select:hover,
 select:focus {
     border-bottom: 2px solid rgba(0, 123, 255, .7);
+}
+
+/*******************************************************************************/
+/********************************** Drop down **********************************/
+/*******************************************************************************/
+.form-group {
+    margin: 0.8rem 0;
+    border-bottom: 1px dashed rgb(56, 61, 65);
+    padding: 0 0 0.4rem 0;
+}
+
+
+.dropdown-menu {
+    background-color: #262a2e;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.dropdown-item {
+    color: rgba(255, 255, 255, .5);
+}
+
+.dropdown-item:hover {
+    background-color: #1b1d21;
+    color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-divider {
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
 }

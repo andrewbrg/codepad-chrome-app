@@ -1,5 +1,7 @@
 .range-slider {
     width: 100%;
+    height: 36px;
+    padding: 7px 0 0 0;
 }
 
 .range-slider-range {
