@@ -32,36 +32,13 @@ var SettingsHandler = function () {
 
         return deferred.promise();
     };
-
-    this.applyIdeSettingsToEditors = function (Editors) {
+    
+    this.applyIdeSettingsToView = function (Editors) {
 
         if (typeof Editors === typeof undefined ||
             typeof Editors.getAllAceEditors() === typeof undefined) {
             return false;
         }
-
-        var that = this;
-
-        Editors.getAllAceEditors().forEach(function (editor) {
-
-            if (typeof editor === typeof undefined) {
-                return false;
-            }
-
-            var val = $that.attr('type') === 'checkbox'
-                ? $that.prop('checked')
-                : $that.val();
-
-            var key = $that.attr('data-option').toString();
-
-            editor.ace.setOption(key, val);
-            editor.ace.$blockScrolling = 'Infinity';
-            that.set(key, val);
-        });
-
-    };
-
-    this.applyIdeSettingsToView = function (Editors) {
 
         var that = this;
 

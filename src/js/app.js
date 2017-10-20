@@ -38,10 +38,9 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Globals
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    var Editors  = new EditorsHandler();
-    var Modals   = new ModalsHandler();
-    var Fonts    = new FontsHandler();
-    var Settings = new SettingsHandler();
+    var Editors = new EditorsHandler();
+    var Modals  = new ModalsHandler();
+    var Fonts   = new FontsHandler();
 
     Editors.init();
     Fonts.load(['Roboto Mono', 'Open Sans']);
@@ -90,13 +89,48 @@ $(document).ready(function () {
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
         Modals.onShowBs(e.relatedTarget, function () {
-            Settings.applyIdeSettingsToView(Editors.getCurrentAceEditor());
+            $(document).find('[data-toggle="ide-setting"]').each(function (i, v) {
+
+                var $v = $(v);
+                if (typeof $v.attr('data-option') === undefined) {
+                    return false;
+                }
+
+                var val = Editors.settingHandler.get($v.attr('data-option'));
+
+                if (typeof $this.attr('type') !== undefined && $this.attr('type') === 'checkbox') {
+                    $v.prop('checked', val);
+                }
+                else {
+                    $v.val(val);
+                }
+
+            });
         });
     });
 
     // Remove the template from the modal after closing it
     $(document).on('hide.bs.modal', '.modal', function (e) {
         Modals.onHideBs(e.currentTarget);
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Settings
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    $(document).on('change', '[data-toggle="ide-setting"]', function () {
+
+        var $this = $(this);
+
+        var key = $this.attr('data-option');
+        var val = typeof $this.attr('type') !== undefined && $this.attr('type') === 'checkbox'
+            ? $this.prop('checked')
+            : $this.val();
+
+        Editors.applySetting(key, val);
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,17 +207,6 @@ $(document).ready(function () {
         if (typeof ace !== typeof undefined) {
             ace.execCommand('unFoldAll');
         }
-    });
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Settings
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    $(document).on('change', 'input[data-option], select[data-option]', function () {
-        Settings.applyIdeSettingsToEditors(Editors);
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

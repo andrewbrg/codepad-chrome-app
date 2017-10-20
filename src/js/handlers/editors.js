@@ -4,6 +4,7 @@ var EditorsHandler = function () {
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
+    this.settingHandler       = undefined;
     this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
     this.navTabIconHtml       = '<i class="icon"></i>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -19,6 +20,7 @@ var EditorsHandler = function () {
 
     this.init = function () {
 
+        this.settingHandler = new SettingsHandler();
         this._populateAddTabDropDown();
         if (this.getNumTabs() === 0) {
             this.onAddNewTab();
@@ -124,6 +126,28 @@ var EditorsHandler = function () {
 
     this.getAllAceEditors = function () {
         return this.aceEditors;
+    };
+
+    this.applySetting = function (key, val) {
+
+        var that = this;
+
+        if (typeof key === typeof undefined || typeof val === typeof undefined) {
+            return false;
+        }
+
+        this.getAllAceEditors().forEach(function (editor) {
+
+            if (typeof editor === typeof undefined) {
+                return false;
+            }
+
+            key = key.toString();
+
+            that.ace.setOption(key, val);
+            that.ace.$blockScrolling = 'Infinity';
+            that.settingHandler.set(key, val)
+        });
     };
 
 
