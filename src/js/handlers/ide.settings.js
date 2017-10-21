@@ -84,7 +84,7 @@ var IdeSettingsHandler = function () {
     };
 
 
-    this._setOptionInView = function (el) {
+    this._populateViewSetting = function (el) {
 
         var $el  = $(el);
         var type = $el.attr('type');
@@ -152,9 +152,10 @@ var IdeSettingsHandler = function () {
 
     this.decorateView = function () {
 
-        var that     = this;
-        var fontOpts = '';
-        var themeOps = '';
+        var that         = this;
+        var fontOpts     = '';
+        var themeOps     = '';
+        var fontSizeOpts = '';
 
         $(document).find('[data-action="ide-setting"][data-option]').each(function (i, v) {
 
@@ -163,8 +164,7 @@ var IdeSettingsHandler = function () {
 
             if (key === 'theme') {
                 $.get('/src/settings/ace.themes.json', function (data) {
-                    data = JSON.parse(data);
-                    $.each(data, function (i1, v1) {
+                    $.each(JSON.parse(data), function (i1, v1) {
                         themeOps += '<optgroup label="' + i1 + '">';
                         $.each(v1, function (i2, v2) {
                             themeOps += '<option value="' + i2 + '">' + v2 + '</option>';
@@ -172,13 +172,21 @@ var IdeSettingsHandler = function () {
                         themeOps += '</optgroup>';
                     });
                     $el.html(themeOps);
-                    that._setOptionInView($el);
+                    that._populateViewSetting($el);
+                });
+            }
+            else if (key === 'fontSize') {
+                $.get('/src/settings/ace.font.sizes.json', function (data) {
+                    $.each(JSON.parse(data), function (i1, v1) {
+                        fontSizeOpts += '<option value="' + i1 + '">' + v1 + '</option>';
+                    });
+                    $el.html(fontSizeOpts);
+                    that._populateViewSetting($el);
                 });
             }
             else if (key === 'fontFamily') {
                 $.get('/src/settings/ace.fonts.json', function (data) {
-                    data = JSON.parse(data);
-                    $.each(data, function (i1, v1) {
+                    $.each(JSON.parse(data), function (i1, v1) {
                         fontOpts += '<optgroup label="' + i1 + '">';
                         $.each(v1, function (i2, v2) {
                             fontOpts += '<option value="' + i2 + '">' + v2 + '</option>';
@@ -186,12 +194,14 @@ var IdeSettingsHandler = function () {
                         fontOpts += '</optgroup>';
                     });
                     $el.html(fontOpts);
-                    that._setOptionInView($el);
+                    that._populateViewSetting($el);
                 });
             }
             else {
-                that._setOptionInView($el);
+                that._populateViewSetting($el);
             }
         });
+
+        $('select').select2().trigger('change.select2');
     };
 };
