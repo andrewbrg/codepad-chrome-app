@@ -84,6 +84,35 @@ var IdeSettingsHandler = function () {
     };
 
 
+    this._setOptionInView = function (el) {
+
+        var $el  = $(el);
+        var type = $el.attr('type');
+        var key  = $el.attr('data-option').toString();
+
+        this._fetch(key).then(function (val) {
+
+            if (typeof val === typeof undefined) {
+                return false;
+            }
+
+            switch (type) {
+
+                case undefined:
+                case 'text':
+                case 'number':
+                case 'range':
+                    $el.val(val);
+                    break;
+
+                case 'checkbox':
+                    $el.prop('checked', (typeof val === 'boolean') ? val : false);
+                    break;
+            }
+        });
+    };
+
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -123,34 +152,46 @@ var IdeSettingsHandler = function () {
 
     this.decorateView = function () {
 
-        var that = this;
+        var that     = this;
+        var fontOpts = '';
+        var themeOps = '';
 
         $(document).find('[data-action="ide-setting"][data-option]').each(function (i, v) {
 
-            var $el  = $(v);
-            var type = $el.attr('type');
-            var key  = $el.attr('data-option').toString();
+            var $el = $(v);
+            var key = $el.attr('data-option').toString();
 
-            that._fetch(key).then(function (val) {
-
-                if (typeof val === typeof undefined) {
-                    return false;
-                }
-
-                switch (type) {
-
-                    case undefined:
-                    case 'text':
-                    case 'number':
-                    case 'range':
-                        $el.val(val);
-                        break;
-
-                    case 'checkbox':
-                        $el.prop('checked', (typeof val === 'boolean') ? val : false);
-                        break;
-                }
-            });
+            if (key === 'theme') {
+                $.get('/src/settings/ace.themes.json', function (data) {
+                    data = JSON.parse(data);
+                    $.each(data, function (i1, v1) {
+                        themeOps += '<optgroup label="' + i1 + '">';
+                        $.each(v1, function (i2, v2) {
+                            themeOps += '<option value="' + i2 + '">' + v2 + '</option>';
+                        });
+                        themeOps += '</optgroup>';
+                    });
+                    $el.html(themeOps);
+                    that._setOptionInView($el);
+                });
+            }
+            else if (key === 'fontFamily') {
+                $.get('/src/settings/ace.fonts.json', function (data) {
+                    data = JSON.parse(data);
+                    $.each(data, function (i1, v1) {
+                        fontOpts += '<optgroup label="' + i1 + '">';
+                        $.each(v1, function (i2, v2) {
+                            fontOpts += '<option value="' + i2 + '">' + v2 + '</option>';
+                        });
+                        fontOpts += '</optgroup>';
+                    });
+                    $el.html(fontOpts);
+                    that._setOptionInView($el);
+                });
+            }
+            else {
+                that._setOptionInView($el);
+            }
         });
     };
 };
