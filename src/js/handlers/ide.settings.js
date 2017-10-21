@@ -109,6 +109,11 @@ var IdeSettingsHandler = function () {
                     $el.prop('checked', (typeof val === 'boolean') ? val : false);
                     break;
             }
+
+            if ($el.is('select')) {
+                $el.select2();
+                $el.trigger('change')
+            }
         });
     };
 
@@ -201,7 +206,5 @@ var IdeSettingsHandler = function () {
                 that._populateViewSetting($el);
             }
         });
-
-        $('select').select2().trigger('change.select2');
     };
 };
