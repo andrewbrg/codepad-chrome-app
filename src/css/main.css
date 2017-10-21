@@ -1,7 +1,5 @@
 * {
     outline: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 
 html, body {
@@ -12,6 +10,8 @@ html, body {
     font-family: 'Open Sans', sans-serif;
     font-size: 14px;
     background-color: rgb(52, 58, 64);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .outer-container {
