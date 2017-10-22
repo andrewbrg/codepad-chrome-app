@@ -103,6 +103,7 @@ var EditorsHandler = function () {
                 that._markNavTabClean(idx);
             }
         });
+
         aceEditor.commands.addCommand({
             name: '__open',
             bindKey: {win: 'ctrl-o', mac: 'ctrl-o'},
