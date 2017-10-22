@@ -146,6 +146,8 @@ $(document).ready(function () {
         Editors.onOpenFile();
     });
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Edit Actions
@@ -203,7 +205,8 @@ $(document).ready(function () {
     $(document).on('click', '.action-fold-all', function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            ace.execCommand('foldAll');
+            ace.focus();
+            ace.getSession().foldAll();
         }
     });
 
@@ -211,10 +214,25 @@ $(document).ready(function () {
     $(document).on('click', '.action-unfold-all', function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
-            ace.execCommand('unFoldAll');
+            ace.focus();
+            ace.getSession().unfold();
         }
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Status Bar Actions
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Perform unfold all current active editor
+    $(document).on('click', '.action-toggle-readonly', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            Editors.onToggleReadOnly();
+        }
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 });

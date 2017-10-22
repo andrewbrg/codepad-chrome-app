@@ -251,7 +251,7 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     float: right;
 }
 
-.ace_status-info span,
+.ace_status-info > span,
 .ace_status-indicator {;
     padding: 0 5px;
     border-left: 1px solid rgba(255, 255, 255, 0.08);

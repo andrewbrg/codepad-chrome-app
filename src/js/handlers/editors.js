@@ -46,8 +46,8 @@ var EditorsHandler = function () {
             return false;
         }
 
-        idx           = parseInt(idx);
-        var that      = this;
+        idx = parseInt(idx);
+
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace
@@ -65,27 +65,10 @@ var EditorsHandler = function () {
         var statusBar = new StatusBar(aceEditor, document.getElementById('status-bar-' + idx));
 
         // Build custom commands
-        aceEditor.commands.addCommand({
-            name: '_save',
-            bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
-            exec: function () {
-            }
-        });
-        aceEditor.commands.addCommand({
-            name: '__open',
-            bindKey: {win: 'ctrl-o', mac: 'ctrl-o'},
-            exec: function () {
-                that.onOpenFile();
-            }
-        });
+        this._bindAceCustomCommands(aceEditor, idx);
 
-        // Maintain a centralised clipboard
-        aceEditor.on('copy', function (e) {
-            that.aceClipboard = e;
-        });
-        aceEditor.on('cut', function () {
-            that.aceClipboard = aceEditor.getSelectedText();
-        });
+        // Build custom events
+        this._bindAceCustomEvents(aceEditor);
 
 
         // Initialise
@@ -102,6 +85,38 @@ var EditorsHandler = function () {
         this.setAceEditorMode(idx);
         this._populateNavTabIcon(idx);
         this._populateStatusBar(idx);
+    };
+
+    this._bindAceCustomCommands = function (aceEditor) {
+
+        var that = this;
+
+        aceEditor.commands.addCommand({
+            name: '_save',
+            bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
+            exec: function () {
+            }
+        });
+        aceEditor.commands.addCommand({
+            name: '__open',
+            bindKey: {win: 'ctrl-o', mac: 'ctrl-o'},
+            exec: function () {
+                that.onOpenFile();
+            }
+        });
+    };
+
+    this._bindAceCustomEvents = function (aceEditor) {
+
+        var that = this;
+
+        // Maintain a centralised clipboard
+        aceEditor.on('copy', function (e) {
+            that.aceClipboard = e;
+        });
+        aceEditor.on('cut', function () {
+            that.aceClipboard = aceEditor.getSelectedText();
+        });
     };
 
 
@@ -233,16 +248,22 @@ var EditorsHandler = function () {
 
     this._populateStatusBar = function (idx) {
 
-        idx         = parseInt(idx);
-        var $sbInfo = this.getTabContentElAtIdx(idx);
+        idx = parseInt(idx);
 
-        $sbInfo.find('.ace_status-info').remove();
+        var editor     = this.getAceEditorAtIdx(idx);
+        var $statusBar = this.getStatusBarContentElAtIdx(idx);
 
-        $sbInfo.append(
-            '<span class="ace_status-info">' +
-            '<span>' + this.getAceEditorAtIdx(idx).getOption('mode').split('/').pop() + '</span>' +
-            '<span>' + this.getAceEditorAtIdx(idx).getOption('newLineMode') + '</span>' +
-            '</span>'
+        var ro        = editor.getOption('readOnly');
+        var isRo      = typeof ro === typeof undefined ? false : ro;
+        var lockClass = isRo ? 'fa-lock' : 'fa-unlock';
+
+        $statusBar.find('.ace_status-info').remove();
+        $statusBar.append(
+            '<div class="ace_status-info">' +
+            '<span><a href="#" class="action-toggle-readonly"><i class="fa ' + lockClass + ' "></i></a></span>' +
+            '<span>' + editor.getOption('mode').split('/').pop() + '</span>' +
+            '<span>' + editor.getOption('newLineMode') + '</span>' +
+            '</div>'
         );
     };
 
@@ -332,6 +353,7 @@ var EditorsHandler = function () {
         return $(document).find('.tab-content').first();
     };
 
+
     this.getTabNavElAtIdx = function (idx) {
 
         if (typeof idx === typeof undefined) {
@@ -346,6 +368,16 @@ var EditorsHandler = function () {
             return undefined;
         }
         return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
+    };
+
+    this.getStatusBarContentElAtIdx = function (idx) {
+
+        var $tabContent = this.getTabContentElAtIdx(idx);
+        if (typeof $tabContent === typeof undefined) {
+            return undefined;
+        }
+
+        return $tabContent.find('.ace-status-bar').first();
     };
 
     this.getNumTabs = function () {
@@ -401,8 +433,6 @@ var EditorsHandler = function () {
             $(this).removeAttr('contenteditable');
             that.setAceEditorTemplate(idx);
             that.setAceEditorMode(idx);
-            that._populateNavTabIcon(idx);
-            that._populateStatusBar(idx);
             $siblings.css('visibility', 'visible');
         });
 
@@ -443,7 +473,7 @@ var EditorsHandler = function () {
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
-                    that._notify('danger', 'File Error', 'Whoops... ' + msg);
+                    that._notify('danger', 'Read Error', 'Whoops... ' + msg);
                 };
                 reader.onload  = function (e) {
                     that.onAddNewTab(fileExt, fileName, entry.path, e.target.result);
@@ -451,4 +481,20 @@ var EditorsHandler = function () {
             });
         });
     };
+
+    this.onToggleReadOnly = function () {
+
+        var aceEditor  = this.getCurrentAceEditor();
+        var isReadOnly = !aceEditor.getOption('readOnly');
+
+        aceEditor.setOption('readOnly', isReadOnly);
+
+        if (isReadOnly) {
+            this.getTabContentElAtIdx(this.currentIdx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
+        }
+        else {
+            this.getTabContentElAtIdx(this.currentIdx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+        }
+    };
+
 };
