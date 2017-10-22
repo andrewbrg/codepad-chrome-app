@@ -5,6 +5,7 @@ var EditorsHandler = function () {
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
+    this.aceCleanHashes       = [];
     this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab action-close-tab"></i>';
@@ -37,6 +38,15 @@ var EditorsHandler = function () {
                 offset: 10
             }
         );
+    };
+
+    this._getHash = function (input) {
+        var hash = 0, len = input.length;
+        for (var i = 0; i < len; i++) {
+            hash = ((hash << 5) - hash) + input.charCodeAt(i);
+            hash |= 0;
+        }
+        return hash;
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -290,21 +300,57 @@ var EditorsHandler = function () {
 
     this._markNavTabDirty = function (idx) {
 
-        idx     = parseInt(idx);
-        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+        idx = parseInt(idx);
 
+        if (this._isCleanAtIdx(idx)) {
+            this._markNavTabClean(idx);
+            return;
+        }
+
+        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
         $el.addClass('is-dirty').find('.dirty-tab').remove();
-        $el.append(
-            $(this.navDirtyBtnHtml).attr('data-idx', idx)
-        );
+        $el.append($(this.navDirtyBtnHtml).attr('data-idx', idx));
     };
 
     this._markNavTabClean = function (idx) {
 
-        idx     = parseInt(idx);
-        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+        idx = parseInt(idx);
 
+        var found = false;
+        var hash  = this._getHash(this.getAceEditorAtIdx(idx).getValue());
+
+        $.each(this.aceCleanHashes, function (i, v) {
+            if (v.idx === idx) {
+                v.hash = hash;
+                found  = true;
+            }
+        });
+
+        if (!found) {
+            this.aceCleanHashes.push({
+                "idx": idx,
+                "hash": hash
+            });
+        }
+
+        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
         $el.removeClass('is-dirty').find('.dirty-tab').remove();
+    };
+
+    this._isCleanAtIdx = function (idx) {
+
+        idx = parseInt(idx);
+
+        var isClean = false;
+        var hash    = this._getHash(this.getAceEditorAtIdx(idx).getValue());
+
+        $.each(this.aceCleanHashes, function (i, v) {
+            if (v.idx === idx && v.hash === hash) {
+                isClean = true;
+            }
+        });
+
+        return isClean;
     };
 
 
@@ -319,16 +365,18 @@ var EditorsHandler = function () {
 
     this.setAceEditorTemplate = function (idx) {
 
-        idx           = parseInt(idx);
+        idx = parseInt(idx);
+
+        var that      = this;
         var ext       = this._getTabFileExtension(idx);
         var aceEditor = this.getAceEditorAtIdx(idx);
-
-        var deferred = $.Deferred();
+        var deferred  = $.Deferred();
 
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
             $.get('/src/html/templates/' + ext + '.tpl', function (data) {
                 aceEditor.setValue(data);
                 aceEditor.clearSelection();
+                that._markNavTabClean(idx);
                 deferred.resolve();
             });
         }
@@ -338,10 +386,10 @@ var EditorsHandler = function () {
 
     this.setEditorContent = function (idx, content) {
 
-        idx           = parseInt(idx);
-        var aceEditor = this.getAceEditorAtIdx(idx);
+        idx = parseInt(idx);
 
-        var deferred = $.Deferred();
+        var aceEditor = this.getAceEditorAtIdx(idx);
+        var deferred  = $.Deferred();
 
         if (typeof content === typeof undefined) {
             this.setAceEditorTemplate(idx).then(function () {
@@ -351,6 +399,7 @@ var EditorsHandler = function () {
         else {
             aceEditor.setValue(content);
             aceEditor.clearSelection();
+            this._markNavTabClean(idx);
             deferred.resolve();
         }
 
