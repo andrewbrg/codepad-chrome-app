@@ -85,12 +85,6 @@ $(document).ready(function () {
         $tabsContentContainer.find('.editor').css('height', Math.ceil($tabsContentContainer.height() - statusBarHeight) + 'px');
     }).resize();
 
-    // Integrate with OS clipboard >= v63 (experimental)
-    if (typeof chrome.clipboard !== typeof undefined) {
-        chrome.clipboard.onClipboardDataChanged.addListener(function () {
-            Editors.aceClipboard = document.execCommand('paste');
-        });
-    }
 
     // Handle adding settings to new tabs
     $(window).on('_ace.new', function (e, idx) {

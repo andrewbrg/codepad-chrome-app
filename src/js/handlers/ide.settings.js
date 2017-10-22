@@ -134,6 +134,7 @@ var IdeSettingsHandler = function () {
         return this._fetch();
     };
 
+    // noinspection JSUnusedGlobalSymbols
     this.flushAllPersistent = function () {
         chrome.storage.sync.clear();
     };
