@@ -5,6 +5,7 @@ var EditorsHandler = function () {
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
+    this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab action-close-tab"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
@@ -48,8 +49,8 @@ var EditorsHandler = function () {
             return false;
         }
 
-        idx = parseInt(idx);
-
+        idx           = parseInt(idx);
+        var that      = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace
@@ -62,22 +63,23 @@ var EditorsHandler = function () {
             enableBasicAutocompletion: true
         });
 
-        // Add status bar
-        var StatusBar = ace.require("ace/ext/statusbar").StatusBar;
-        var statusBar = new StatusBar(aceEditor, document.getElementById('status-bar-' + idx));
+        // Push the editor into our records
+        this.aceEditors.push({
+            "idx": idx,
+            "ace": aceEditor,
+            "statusBar": new this.StatusBar(aceEditor, document.getElementById('status-bar-' + idx)),
+            "filePath": filePath
+        });
 
-        // Initialise
-        this.aceEditors.push({"idx": idx, "ace": aceEditor, "statusBar": statusBar, "filePath": filePath});
-        this.setEditorContent(idx, editorContent);
-        this.setAceEditorMode(idx);
-        this._populateNavTabIcon(idx);
-        this._populateStatusBar(idx);
+        // Configure
+        this.setEditorContent(idx, editorContent).then(function () {
 
-        // Build custom commands
-        this._bindAceCustomCommands(idx, aceEditor);
-
-        // Build custom events
-        this._bindAceCustomEvents(idx, aceEditor);
+            that._setAceEditorMode(idx);
+            that._populateNavTabIcon(idx);
+            that._populateStatusBar(idx);
+            that._bindAceCustomCommands(idx, aceEditor);
+            that._bindAceCustomEvents(idx, aceEditor);
+        });
     };
 
     this._bindAceCustomCommands = function (idx, aceEditor) {
@@ -115,6 +117,17 @@ var EditorsHandler = function () {
         });
         aceEditor.on('cut', function () {
             that.aceClipboard = aceEditor.getSelectedText();
+        });
+    };
+
+    this._setAceEditorMode = function (idx) {
+
+        var that = this;
+        idx      = parseInt(idx);
+
+        this._getTabMode(idx).then(function (data) {
+            that.getAceEditorAtIdx(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+            that._populateStatusBar(idx);
         });
     };
 
@@ -302,16 +315,17 @@ var EditorsHandler = function () {
         var ext       = this._getTabFileExtension(idx);
         var aceEditor = this.getAceEditorAtIdx(idx);
 
+        var deferred = $.Deferred();
+
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
-            try {
-                $.get('/src/html/templates/' + ext + '.tpl', function (data) {
-                    aceEditor.setValue(data);
-                    aceEditor.clearSelection();
-                });
-            }
-            catch (e) {
-            }
+            $.get('/src/html/templates/' + ext + '.tpl', function (data) {
+                aceEditor.setValue(data);
+                aceEditor.clearSelection();
+                deferred.resolve();
+            });
         }
+
+        return deferred.promise();
     };
 
     this.setEditorContent = function (idx, content) {
@@ -319,24 +333,20 @@ var EditorsHandler = function () {
         idx           = parseInt(idx);
         var aceEditor = this.getAceEditorAtIdx(idx);
 
+        var deferred = $.Deferred();
+
         if (typeof content === typeof undefined) {
-            this.setAceEditorTemplate(idx);
-            return;
+            this.setAceEditorTemplate(idx).then(function () {
+                deferred.resolve();
+            });
+        }
+        else {
+            aceEditor.setValue(content);
+            aceEditor.clearSelection();
+            deferred.resolve();
         }
 
-        aceEditor.setValue(content);
-        aceEditor.clearSelection();
-    };
-
-    this.setAceEditorMode = function (idx) {
-
-        var that = this;
-        idx      = parseInt(idx);
-
-        this._getTabMode(idx).then(function (data) {
-            that.getAceEditorAtIdx(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
-            that._populateStatusBar(idx);
-        });
+        return deferred.promise();
     };
 
     this.getAllAceEditorModes = function () {
@@ -466,7 +476,7 @@ var EditorsHandler = function () {
         $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
             $(this).removeAttr('contenteditable');
             that.setAceEditorTemplate(idx);
-            that.setAceEditorMode(idx);
+            that._setAceEditorMode(idx);
             $siblings.css('visibility', 'visible');
         });
 
