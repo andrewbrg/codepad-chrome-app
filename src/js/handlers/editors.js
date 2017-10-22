@@ -5,7 +5,6 @@ var EditorsHandler = function () {
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
-    this.aceFiles             = [];
     this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
     this.navTabIconHtml       = '<i class="icon"></i>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -23,7 +22,7 @@ var EditorsHandler = function () {
     this._notify = function (type, title, message) {
         $.notify(
             {
-                title: title,
+                title: '<strong>' + title + '</strong>',
                 message: message
             },
             {
@@ -65,11 +64,18 @@ var EditorsHandler = function () {
         var StatusBar = ace.require("ace/ext/statusbar").StatusBar;
         var statusBar = new StatusBar(aceEditor, document.getElementById('status-bar-' + idx));
 
-        // Custom commands
+        // Build custom commands
         aceEditor.commands.addCommand({
             name: '_save',
-            bindKey: {win: 'Ctrl-s', mac: 'ctrl-s'},
+            bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
+            }
+        });
+        aceEditor.commands.addCommand({
+            name: '__open',
+            bindKey: {win: 'ctrl-o', mac: 'ctrl-o'},
+            exec: function () {
+                that.onOpenFile();
             }
         });
 
@@ -80,8 +86,6 @@ var EditorsHandler = function () {
         aceEditor.on('cut', function () {
             that.aceClipboard = aceEditor.getSelectedText();
         });
-
-        // Set content
 
 
         // Initialise
@@ -258,10 +262,14 @@ var EditorsHandler = function () {
         var aceEditor = this.getAceEditorAtIdx(idx);
 
         if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
-            $.get('/src/html/templates/' + ext + '.tpl', function (data) {
-                aceEditor.setValue(data);
-                aceEditor.clearSelection();
-            });
+            try {
+                $.get('/src/html/templates/' + ext + '.tpl', function (data) {
+                    aceEditor.setValue(data);
+                    aceEditor.clearSelection();
+                });
+            }
+            catch (e) {
+            }
         }
     };
 
@@ -435,7 +443,7 @@ var EditorsHandler = function () {
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
-                    that._notify('danger', 'File error', 'Whoops... ' + msg);
+                    that._notify('danger', 'File Error', 'Whoops... ' + msg);
                 };
                 reader.onload  = function (e) {
                     that.onAddNewTab(fileExt, fileName, entry.path, e.target.result);

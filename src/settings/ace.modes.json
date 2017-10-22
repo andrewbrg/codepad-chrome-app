@@ -29,6 +29,11 @@
     "mode": "javascript",
     "name": "JavaScript"
   },
+  "md": {
+    "icon": "icon-html",
+    "mode": "markdown",
+    "name": "Markdown"
+  },
   "pl": {
     "icon": "icon-perl",
     "mode": "perl",
