@@ -147,7 +147,7 @@ var EditorsHandler = function () {
         obj.statusBarId  = 'status-bar-' + this.idx;
         obj.fileName     = fileName + '.' + fileExt;
 
-        obj.nav = $(
+        var $nav = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
             this.navFilenameHtml +
@@ -156,15 +156,23 @@ var EditorsHandler = function () {
             '</li>'
         );
 
-        obj.nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
-        obj.nav.find('.action-close-tab').attr('data-idx', this.idx);
+        $nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
+        $nav.find('.action-close-tab').attr('data-idx', this.idx);
 
-        obj.content = $(
-            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
-            '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
-            '<div class="ace-status-bar text-white bg-dark" id="' + obj.statusBarId + '"></div>' +
+        obj.nav = $nav;
+
+        var $content = $(
+            '<div class="tab-pane fade" data-idx="' + this.idx + '">' +
+            '<div class="editor"></div>' +
+            '<div class="ace-status-bar text-white bg-dark"></div>' +
             '</div>'
         );
+
+        $content.find('.editor').attr('id', obj.codeEditorId);
+        $content.find('.ace-status-bar').attr('id', obj.statusBarId);
+        $content.attr('id', obj.contentId);
+
+        obj.content = $content;
 
         return obj;
     };
@@ -547,5 +555,4 @@ var EditorsHandler = function () {
             this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
         }
     };
-
 };
