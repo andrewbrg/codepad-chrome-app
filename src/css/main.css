@@ -294,7 +294,8 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     border-bottom: 2px solid rgba(0, 123, 255, .5);
 }
 
-.tab-list li a .close {
+.tab-list li a .dirty-tab,
+.tab-list li a .action-close-tab {
     position: absolute;
     top: 7px;
     right: 10px;
@@ -303,18 +304,17 @@ input.cmn-tgl-rnd-flt:checked + label:after {
     font-weight: 100;
 }
 
-.tab-list li a .edit {
-    font-size: 0.8em;
-    margin: 5px 0 0 4px;
-}
-
-.tab-list li a .edit,
-.tab-list li a .close {
+.tab-list li a .action-close-tab {
     display: none
 }
 
-.tab-list li a:hover .edit,
-.tab-list li a:hover .close {
+.tab-list li a .dirty-tab {
+    display: inline-flex;
+    color: #f00000;
+    opacity: 1;
+}
+
+.tab-list li a:hover:not(.is-dirty) .action-close-tab {
     display: inline-flex;
 }
 

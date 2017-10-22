@@ -1,15 +1,24 @@
-<!------------------------------------------------------------------
---------------------------------------------------------------------
--- https://getbootstrap.com/docs/4.0/getting-started/introduction/
--- https://github.com/ajaxorg/ace
--- https://github.com/ajaxorg/ace/wiki
--- https://ace.c9.io/api/editor.html
--- https://github.com/jonmiles/bootstrap-treeview/
--- http://fizzed.com/oss/font-mfizz
--- https://github.com/mouse0270/bootstrap-notify
--- https://select2.org/
---------------------------------------------------------------------
--------------------------------------------------------------------->
+<!--
+######################################################################################
+######################################################################################
+##      ______          __        ____            __
+##     / ____/___  ____/ /__     / __ \____ _____/ /
+##    / /   / __ \/ __  / _ \   / /_/ / __ `/ __  /
+##   / /___/ /_/ / /_/ /  __/  / ____/ /_/ / /_/ /
+##   \____/\____/\__,_/\___/  /_/    \__,_/\__,_/
+##
+##  - https://getbootstrap.com/docs/4.0/getting-started/introduction/
+##  - https://github.com/ajaxorg/ace
+##  - https://github.com/ajaxorg/ace/wiki
+##  - https://ace.c9.io/api/editor.html
+##  - https://github.com/jonmiles/bootstrap-treeview/
+##  - http://fizzed.com/oss/font-mfizz
+##  - https://github.com/mouse0270/bootstrap-notify
+##  - https://select2.org/
+##
+######################################################################################
+######################################################################################
+-->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -37,7 +46,7 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="navbar-brand">
                 <button class="btn btn-outline-secondary" type="submit" data-toggle="tooltip" title="Open project"><i
-                        class="fa fa-folder-open-o"></i></button>
+                        class="fa fa-fw fa-folder-open-o"></i></button>
             </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,38 +58,38 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
-                            <i class="fa fa-file-text"></i>&nbsp;File
+                            <i class="fa fa-fw fa-file-text"></i>&nbsp;File
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item action-add-tab" href="#">
-                                <i class="fa fa-plus"></i>&nbsp;New
+                                <i class="fa fa-fw fa-plus"></i>&nbsp;New
                             </a>
                             <a class="dropdown-item action-save" href="#">
-                                <i class="fa fa-save"></i>&nbsp;Save
+                                <i class="fa fa-fw fa-save"></i>&nbsp;Save
                             </a>
                             <a class="dropdown-item action-save-as" href="#">
-                                <i class="fa fa-save"></i>&nbsp;Save as
+                                <i class="fa fa-fw fa-save"></i>&nbsp;Save as
                             </a>
                             <a class="dropdown-item action-save-all" href="#">
-                                <i class="fa fa-save"></i>&nbsp;Save all
+                                <i class="fa fa-fw fa-save"></i>&nbsp;Save all
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-file-open" href="#">
-                                <i class="fa fa-file-text"></i>&nbsp;Open file
+                                <i class="fa fa-fw fa-file-text"></i>&nbsp;Open file
                             </a>
                             <a class="dropdown-item action-project-open" href="#">
-                                <i class="fa fa-folder-open"></i>&nbsp;Open project
+                                <i class="fa fa-fw fa-folder-open"></i>&nbsp;Open project
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-toggle-readonly" href="#">
-                                <i class="fa fa-lock-alt"></i>&nbsp;Toggle read-only
+                                <i class="fa fa-fw fa-lock"></i>&nbsp;Toggle read-only
                             </a>
                             <a class="dropdown-item action-toggle-readonly-all" href="#">
-                                <i class="fa fa-lock-alt"></i>&nbsp;Toggle read-only all
+                                <i class="fa fa-fw fa-lock"></i>&nbsp;Toggle read-only all
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-exit" href="#">
-                                <i class="fa fa-sign-out"></i>&nbsp;Exit
+                                <i class="fa fa-fw fa-sign-out"></i>&nbsp;Exit
                             </a>
                         </div>
                     </li>
@@ -88,56 +97,56 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
-                            <i class="fa fa-edit"></i>&nbsp;Edit
+                            <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item action action-search" href="#">
-                                <i class="fa fa-search"></i>
+                                <i class="fa fa-fw fa-search"></i>
                                 &nbsp;Search
                                 <span class="navbar-help pull-right">(ctrl+f)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-undo" href="#">
-                                <i class="fa fa-reply"></i>
+                                <i class="fa fa-fw fa-reply"></i>
                                 &nbsp;Undo
                                 <span class="navbar-help pull-right">(ctrl+z)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <a class="dropdown-item action-redo" href="#">
-                                <i class="fa fa-share"></i>
+                                <i class="fa fa-fw fa-share"></i>
                                 &nbsp;Redo
                                 <span class="navbar-help pull-right">(ctrl+y)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-cut" href="#">
-                                <i class="fa fa-cut"></i>
+                                <i class="fa fa-fw fa-cut"></i>
                                 &nbsp;Cut
                                 <span class="navbar-help pull-right">(ctrl+x)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <a class="dropdown-item action-copy" href="#">
-                                <i class="fa fa-copy"></i>
+                                <i class="fa fa-fw fa-copy"></i>
                                 &nbsp;Copy
                                 <span class="navbar-help pull-right">(ctrl+c)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <a class="dropdown-item action-paste" href="#">
-                                <i class="fa fa-paste"></i>
+                                <i class="fa fa-fw fa-paste"></i>
                                 &nbsp;Paste
                                 <span class="navbar-help pull-right">(ctrl+v)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item action-fold-all" href="#">
-                                <i class="fa fa-expand"></i>
+                                <i class="fa fa-fw fa-expand"></i>
                                 &nbsp;Fold all
                                 <span class="navbar-help pull-right">(alt+0)</span>
                                 <span class="clearfix"></span>
                             </a>
                             <a class="dropdown-item action-unfold-all" href="#">
-                                <i class="fa fa-compress"></i>
+                                <i class="fa fa-fw fa-compress"></i>
                                 &nbsp;Un-fold all
                                 <span class="navbar-help pull-right">(alt+shift+0)</span>
                                 <span class="clearfix"></span>
@@ -148,7 +157,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
-                            <i class="fa fa-github"></i>
+                            <i class="fa fa-fw fa-github"></i>
                             &nbsp;Github
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
@@ -159,21 +168,21 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
                            aria-expanded="false">
-                            <i class="fa fa-cog"></i>
+                            <i class="fa fa-fw fa-cog"></i>
                             &nbsp;Editor
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item modal-appearance" href="#"
                                data-toggle="modal"
                                data-target=".modal-lg-container">
-                                <i class="fa fa-magic"></i>
+                                <i class="fa fa-fw fa-magic"></i>
                                 &nbsp;Appearance & fonts
                             </a>
 
                             <a class="dropdown-item modal-ide-settings" href="#"
                                data-toggle="modal"
                                data-target=".modal-lg-container">
-                                <i class="fa fa-cogs"></i>
+                                <i class="fa fa-fw fa-cogs"></i>
                                 &nbsp;IDE preferences
                             </a>
                         </div>
@@ -190,7 +199,7 @@
                         data-toggle="dropdown"
                         aria-haspopup="true"
                         aria-expanded="false">
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-fw fa-plus"></i>
                 </button>
                 <div class="dropdown-menu add-tab-dropdown"></div>
             </div>
@@ -210,7 +219,7 @@
             <div class="modal-header">
                 <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                    <span aria-hidden="true"><i class="fa fa-fw fa-close"></i></span>
                 </button>
             </div>
             <div class="modal-body"></div>
@@ -229,7 +238,7 @@
             <div class="modal-header">
                 <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                    <span aria-hidden="true"><i class="fa fa-fw fa-close"></i></span>
                 </button>
             </div>
             <div class="modal-body"></div>
@@ -244,7 +253,7 @@
             <div class="modal-header">
                 <h4 class="modal-title"></h4>
                 <button type="button" class="btn btn-sm btn-outline-secondary" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true"><i class="fa fa-close"></i></span>
+                    <span aria-hidden="true"><i class="fa fa-fw fa-close"></i></span>
                 </button>
             </div>
             <div class="modal-body"></div>

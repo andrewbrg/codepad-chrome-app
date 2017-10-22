@@ -5,8 +5,10 @@ var EditorsHandler = function () {
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceClipboard         = '';
-    this.navCloseBtnHtml      = '<span class="fa fa-close text-white close"></span>';
-    this.navTabIconHtml       = '<i class="icon"></i>';
+    this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-asterisk dirty-tab action-close-tab"></i>';
+    this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
+    this.navFilenameHtml      = '<span class="filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
     this.defaultFileName      = 'untitled';
     this.defaultFileExt       = 'js';
@@ -51,7 +53,7 @@ var EditorsHandler = function () {
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace
-        aceEditor.$blockScrolling = 'Infinity';
+        aceEditor.$blockScrolling = Infinity;
         aceEditor.setTheme('ace/theme/monokai');
         aceEditor.setOptions({
             fontFamily: this.defaultFont,
@@ -64,30 +66,21 @@ var EditorsHandler = function () {
         var StatusBar = ace.require("ace/ext/statusbar").StatusBar;
         var statusBar = new StatusBar(aceEditor, document.getElementById('status-bar-' + idx));
 
-        // Build custom commands
-        this._bindAceCustomCommands(aceEditor, idx);
-
-        // Build custom events
-        this._bindAceCustomEvents(aceEditor);
-
-
         // Initialise
         this.aceEditors.push({"idx": idx, "ace": aceEditor, "statusBar": statusBar, "filePath": filePath});
-
-        if (typeof editorContent !== typeof undefined) {
-            aceEditor.setValue(editorContent);
-            aceEditor.clearSelection();
-        }
-        else {
-            this.setAceEditorTemplate(idx);
-        }
-
+        this.setEditorContent(idx, editorContent);
         this.setAceEditorMode(idx);
         this._populateNavTabIcon(idx);
         this._populateStatusBar(idx);
+
+        // Build custom commands
+        this._bindAceCustomCommands(idx, aceEditor);
+
+        // Build custom events
+        this._bindAceCustomEvents(idx, aceEditor);
     };
 
-    this._bindAceCustomCommands = function (aceEditor) {
+    this._bindAceCustomCommands = function (idx, aceEditor) {
 
         var that = this;
 
@@ -95,6 +88,7 @@ var EditorsHandler = function () {
             name: '_save',
             bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
+                that._markNavTabClean(idx);
             }
         });
         aceEditor.commands.addCommand({
@@ -106,9 +100,14 @@ var EditorsHandler = function () {
         });
     };
 
-    this._bindAceCustomEvents = function (aceEditor) {
+    this._bindAceCustomEvents = function (idx, aceEditor) {
 
         var that = this;
+
+        // Detect changes in content
+        aceEditor.on('change', function () {
+            that._markNavTabDirty(idx);
+        });
 
         // Maintain a centralised clipboard
         aceEditor.on('copy', function (e) {
@@ -138,21 +137,26 @@ var EditorsHandler = function () {
         obj.nav = $(
             '<li>' +
             '<a href="#' + obj.contentId + '" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
-            '<span class="filename">' + obj.fileName + '</span>' +
+            this.navFilenameHtml +
             this.navCloseBtnHtml +
             '</a>' +
             '</li>'
         );
 
         obj.content = $(
-            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
-            '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
-            '<div class="ace-status-bar text-white bg-dark" id="' + obj.statusBarId + '"></div>' +
+            '<div class="tab-pane fade" data-idx="' + this.idx + '">' +
+            '<div class="editor"></div>' +
+            '<div class="ace-status-bar text-white bg-dark"></div>' +
             '</div>'
         );
 
-        obj.nav.find('.filename').attr('data-idx', this.idx);
-        obj.nav.find('.close').attr('data-idx', this.idx);
+        obj.nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
+        obj.nav.find('.action-close-tab').attr('data-idx', this.idx);
+
+        obj.content.find('.tab-pane').attr('id', obj.contentId);
+        obj.content.find('.editor').attr('id', obj.codeEditorId);
+        obj.content.find('.ace-status-bar').attr('id', obj.statusBarId);
+
         return obj;
     };
 
@@ -240,9 +244,9 @@ var EditorsHandler = function () {
         this._getTabMode(idx).then(function (data) {
             data    = JSON.parse(data);
             var $el = that.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
-            $el.find('.icon').remove();
+            $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);
-            $el.find('.icon').addClass(data.icon);
+            $el.find('.filetype-icon').addClass(data.icon);
         });
     };
 
@@ -267,12 +271,32 @@ var EditorsHandler = function () {
         );
     };
 
+    this._markNavTabDirty = function (idx) {
+
+        idx     = parseInt(idx);
+        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+
+        $el.addClass('is-dirty').find('.dirty-tab').remove();
+        $el.append(
+            $(this.navDirtyBtnHtml).attr('data-idx', idx)
+        );
+    };
+
+    this._markNavTabClean = function (idx) {
+
+        idx     = parseInt(idx);
+        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+
+        $el.removeClass('is-dirty').find('.dirty-tab').remove();
+    };
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.init = function () {
+
         this._populateAddTabDropDown();
     };
 
@@ -292,6 +316,20 @@ var EditorsHandler = function () {
             catch (e) {
             }
         }
+    };
+
+    this.setEditorContent = function (idx, content) {
+
+        idx           = parseInt(idx);
+        var aceEditor = this.getAceEditorAtIdx(idx);
+
+        if (typeof content === typeof undefined) {
+            this.setAceEditorTemplate(idx);
+            return;
+        }
+
+        aceEditor.setValue(content);
+        aceEditor.clearSelection();
     };
 
     this.setAceEditorMode = function (idx) {
@@ -400,7 +438,7 @@ var EditorsHandler = function () {
             : fileExt;
 
         fileName = (typeof fileName === typeof undefined)
-            ? this.defaultFileName + '_' + this.idx
+            ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
 
         filePath = (typeof filePath === typeof undefined)
