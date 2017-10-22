@@ -156,7 +156,15 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 .editor {
     position: relative;
     width: 100%;
+}
+
+.tab-content,
+.tab-pane {
     height: 100%;
+}
+
+.editor {
+    height: calc(100% - 20px);
 }
 
 .ace_gutter-cell {
@@ -224,6 +232,29 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 
 .ace_search .ace_button {
     color: #dfdfdf !important;
+}
+
+/*******************************************************************************/
+/********************************* Status bar **********************************/
+/*******************************************************************************/
+.ace-status-bar {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 20px;
+    z-index: 99;
+}
+
+.ace_status-info,
+.ace_status-indicator {
+    float: right;
+}
+
+.ace_status-info span,
+.ace_status-indicator {;
+    padding: 0 5px;
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /*******************************************************************************/
@@ -415,5 +446,5 @@ select:focus,
 }
 
 .dropdown-divider {
-    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }

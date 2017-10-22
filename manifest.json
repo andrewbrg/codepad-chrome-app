@@ -1,8 +1,9 @@
 {
   "version": "1.0.0",
   "manifest_version": 2,
+  "minimum_chrome_version": "31",
   "name": "Code Pad",
-  "description": "An awesome, feature rich, multi-language IDE crafted for Chrome OS",
+  "description": "An awesome multi-language IDE crafted for Chrome OS",
   "app": {
     "background": {
       "scripts": [
@@ -10,14 +11,21 @@
       ]
     }
   },
-  "file_browser_handlers": [
-    {
-      "id": "action-open-file",
-      "default_title": "Open file"
+  "file_handlers": {
+    "text": {
+      "types": [
+        "text/*"
+      ]
     }
-  ],
+  },
   "permissions": [
-    "fileSystem",
+    {
+      "fileSystem": [
+        "write",
+        "retainEntries",
+        "directory"
+      ]
+    },
     "storage"
   ]
 }

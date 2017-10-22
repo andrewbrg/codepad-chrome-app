@@ -46,9 +46,6 @@ $(document).ready(function () {
     Editors.init();
     IdeSettings.init(Editors);
 
-    var $header                  = $('header');
-    var $editorsContentContainer = Editors.getTabsContentContainer();
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -76,8 +73,13 @@ $(document).ready(function () {
     });
 
     // Handle resize of window (keep editor under navigation)
+    var $header               = $('header');
+    var $tabsContentContainer = Editors.getTabsContentContainer();
+    var statusBarHeight       = $tabsContentContainer.find('.ace-status-bar').first().height();
+
     $(window).on('resize', function () {
-        $editorsContentContainer.css('top', Math.ceil($header.height()) + 'px');
+        $tabsContentContainer.css('top', Math.ceil($header.height()) + 'px');
+        $tabsContentContainer.find('.editor').css('height', Math.ceil($tabsContentContainer.height() - statusBarHeight) + 'px');
     }).resize();
 
     // New ace editor
@@ -130,7 +132,7 @@ $(document).ready(function () {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Actions
+    /// File Actions
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Add new tab (editor)
@@ -138,29 +140,16 @@ $(document).ready(function () {
         Editors.onAddNewTab($(this).attr('data-type'));
     });
 
-    // Perform copy on current active editor
-    $(document).on('click', '.action-copy', function () {
-        var ace = Editors.getCurrentAceEditor();
-        if (typeof ace !== typeof undefined) {
-            ace.execCommand('copy');
-        }
+
+    // Open new file
+    $(document).on('click', '.action-file-open', function () {
+        Editors.onOpenFile();
     });
 
-    // Perform paste to current active editor
-    $(document).on('click', '.action-paste', function () {
-        var ace = Editors.getCurrentAceEditor();
-        if (typeof ace !== typeof undefined && Editors.aceClipboard.length > 0) {
-            ace.execCommand('paste', Editors.aceClipboard);
-        }
-    });
 
-    // Perform cut on current active editor
-    $(document).on('click', '.action-cut', function () {
-        var ace = Editors.getCurrentAceEditor();
-        if (typeof ace !== typeof undefined) {
-            ace.execCommand('cut');
-        }
-    });
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Edit Actions
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Perform search on current active editor
     $(document).on('click', '.action-search', function () {
@@ -183,6 +172,30 @@ $(document).ready(function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
             ace.redo();
+        }
+    });
+
+    // Perform cut on current active editor
+    $(document).on('click', '.action-cut', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('cut');
+        }
+    });
+
+    // Perform copy on current active editor
+    $(document).on('click', '.action-copy', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('copy');
+        }
+    });
+
+    // Perform paste to current active editor
+    $(document).on('click', '.action-paste', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined && Editors.aceClipboard.length > 0) {
+            ace.execCommand('paste', Editors.aceClipboard);
         }
     });
 
