@@ -1,5 +1,7 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Global runtime
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 (function () {
-
     var runtime = function (appWindow, isRestart) {
         appWindow.contentWindow.__MGA__bRestart = isRestart;
     };
@@ -33,12 +35,12 @@
     });
 })();
 
-
 $(document).ready(function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Globals
+    /// Globals and initializations
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     var Editors     = new EditorsHandler();
     var Modals      = new ModalsHandler();
     var IdeSettings = new IdeSettingsHandler();
@@ -140,10 +142,14 @@ $(document).ready(function () {
         Editors.onAddNewTab($(this).attr('data-type'));
     });
 
-
     // Open new file
     $(document).on('click', '.action-file-open', function () {
         Editors.onOpenFile();
+    });
+
+    // Close application
+    $(document).on('click', '.action-exit', function () {
+        chrome.app.window.AppWindow.close();
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,8 +232,16 @@ $(document).ready(function () {
     /// Status Bar Actions
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Perform unfold all current active editor
+    // Toggle read only mode on current active tab
     $(document).on('click', '.action-toggle-readonly', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            Editors.onToggleReadOnly(Editors.currentIdx);
+        }
+    });
+
+    // Toggle read only mode on all tabs
+    $(document).on('click', '.action-toggle-readonly-all', function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
             Editors.onToggleReadOnly();

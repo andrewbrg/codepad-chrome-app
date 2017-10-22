@@ -482,18 +482,25 @@ var EditorsHandler = function () {
         });
     };
 
-    this.onToggleReadOnly = function () {
+    this.onToggleReadOnly = function (idx) {
 
-        var aceEditor  = this.getCurrentAceEditor();
+        var that = this;
+        if (typeof idx === typeof undefined) {
+            $.each(this.getAllAceEditors(), function (i, v) {
+                that.onToggleReadOnly(v.idx);
+            });
+        }
+
+        var aceEditor  = this.getAceEditorAtIdx(idx);
         var isReadOnly = !aceEditor.getOption('readOnly');
 
         aceEditor.setOption('readOnly', isReadOnly);
 
         if (isReadOnly) {
-            this.getTabContentElAtIdx(this.currentIdx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
+            this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
         }
         else {
-            this.getTabContentElAtIdx(this.currentIdx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+            this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
         }
     };
 
