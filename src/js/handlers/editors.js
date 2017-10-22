@@ -6,7 +6,7 @@ var EditorsHandler = function () {
     this.aceEditors           = [];
     this.aceClipboard         = '';
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-asterisk dirty-tab action-close-tab"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab action-close-tab"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -143,19 +143,15 @@ var EditorsHandler = function () {
             '</li>'
         );
 
-        obj.content = $(
-            '<div class="tab-pane fade" data-idx="' + this.idx + '">' +
-            '<div class="editor"></div>' +
-            '<div class="ace-status-bar text-white bg-dark"></div>' +
-            '</div>'
-        );
-
         obj.nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
         obj.nav.find('.action-close-tab').attr('data-idx', this.idx);
 
-        obj.content.find('.tab-pane').attr('id', obj.contentId);
-        obj.content.find('.editor').attr('id', obj.codeEditorId);
-        obj.content.find('.ace-status-bar').attr('id', obj.statusBarId);
+        obj.content = $(
+            '<div class="tab-pane fade" id="' + obj.contentId + '" data-idx="' + this.idx + '">' +
+            '<div class="editor" id="' + obj.codeEditorId + '"></div>' +
+            '<div class="ace-status-bar text-white bg-dark" id="' + obj.statusBarId + '"></div>' +
+            '</div>'
+        );
 
         return obj;
     };
