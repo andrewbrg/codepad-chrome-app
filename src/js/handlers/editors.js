@@ -8,7 +8,7 @@ var EditorsHandler = function () {
     this.aceCleanHashes       = [];
     this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab action-close-tab"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab action-close-tab"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -97,7 +97,7 @@ var EditorsHandler = function () {
         var that = this;
 
         aceEditor.commands.addCommand({
-            name: '_save',
+            name: '__save',
             bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
                 that._markNavTabClean(idx);
@@ -109,6 +109,56 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-o', mac: 'ctrl-o'},
             exec: function () {
                 that.onOpenFile();
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__new',
+            bindKey: {win: 'ctrl-n', mac: 'ctrl-n'},
+            exec: function () {
+                that.onAddNewTab();
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__fullscreen',
+            bindKey: {win: 'ctrl-alt-f', mac: 'ctrl-alt-f'},
+            exec: function () {
+                chrome.app.window.current().fullscreen();
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__minimize',
+            bindKey: {win: 'ctrl-alt-[', mac: 'ctrl-alt-['},
+            exec: function () {
+                chrome.app.window.current().minimize();
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__maximize',
+            bindKey: {win: 'ctrl-alt-]', mac: 'ctrl-alt-]'},
+            exec: function () {
+                chrome.app.window.current().maximize();
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__fontDecrease',
+            bindKey: {win: 'ctrl-,', mac: 'ctrl-,'},
+            exec: function () {
+                var fontSize = parseInt(aceEditor.getOption('fontSize').replace(/[^0-9]/g, '')) - 1;
+                aceEditor.setOption('fontSize', fontSize + 'pt');
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__fontIncrease',
+            bindKey: {win: 'ctrl-.', mac: 'ctrl-.'},
+            exec: function () {
+                var fontSize = parseInt(aceEditor.getOption('fontSize').replace(/[^0-9]/g, '')) + 1;
+                aceEditor.setOption('fontSize', fontSize + 'pt');
             }
         });
     };
@@ -205,6 +255,8 @@ var EditorsHandler = function () {
         $el.find('*[data-toggle="tab"]').first().tab('show');
         this.currentIdx = parseInt(idx);
 
+        this.getAceEditorAtIdx(idx).focus();
+
         return true;
     };
 
@@ -289,12 +341,20 @@ var EditorsHandler = function () {
         var isRo      = typeof ro === typeof undefined ? false : ro;
         var lockClass = isRo ? 'fa-lock' : 'fa-unlock';
 
+        var mode = editor.getOption('mode').split('/').pop().toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+
+        var lineEndings = editor.getOption('newLineMode').toLowerCase().replace(/\b[a-z]/g, function (letter) {
+            return letter.toUpperCase();
+        });
+
         $statusBar.find('.ace_status-info').remove();
         $statusBar.append(
             '<div class="ace_status-info">' +
-            '<span><a href="#" class="action-toggle-readonly"><i class="fa ' + lockClass + ' "></i></a></span>' +
-            '<span>' + editor.getOption('mode').split('/').pop() + '</span>' +
-            '<span>' + editor.getOption('newLineMode') + '</span>' +
+            '<span><a href="#" class="action-toggle-readonly" title="Toggle readonly" data-toggle="tooltip"><i class="fa ' + lockClass + ' "></i></a></span>' +
+            '<span>' + mode + '</span>' +
+            '<span>' + lineEndings + '</span>' +
             '</div>'
         );
     };

@@ -141,7 +141,10 @@ $(document).ready(function () {
 
     // Add new tab (editor)
     $(document).on('click', '.action-add-tab', function () {
-        Editors.onAddNewTab($(this).attr('data-type'));
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__new');
+        }
     });
 
     // Open new file
@@ -151,7 +154,7 @@ $(document).ready(function () {
 
     // Close application
     $(document).on('click', '.action-exit', function () {
-        chrome.app.window.AppWindow.close();
+        chrome.app.window.current().close();
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,6 +212,14 @@ $(document).ready(function () {
         }
     });
 
+    // Perform select all
+    $(document).on('click', '.action-select-all', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('selectall');
+        }
+    });
+
     // Perform fold all current active editor
     $(document).on('click', '.action-fold-all', function () {
         var ace = Editors.getCurrentAceEditor();
@@ -224,6 +235,51 @@ $(document).ready(function () {
         if (typeof ace !== typeof undefined) {
             ace.focus();
             ace.getSession().unfold();
+        }
+    });
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Edit Actions
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Perform minimize
+    $(document).on('click', '.action-minimize', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__minimize');
+        }
+    });
+
+    // Perform maximize
+    $(document).on('click', '.action-maximize', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__maximize');
+        }
+    });
+
+    // Perform fullscreen
+    $(document).on('click', '.action-fullscreen', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__fullscreen');
+        }
+    });
+
+    // Perform font increase
+    $(document).on('click', '.action-font-increase', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__fontIncrease');
+        }
+    });
+
+    // Perform font decrease
+    $(document).on('click', '.action-font-decrease', function () {
+        var ace = Editors.getCurrentAceEditor();
+        if (typeof ace !== typeof undefined) {
+            ace.execCommand('__fontDecrease');
         }
     });
 

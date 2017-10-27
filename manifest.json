@@ -27,6 +27,7 @@
       ]
     },
     "storage",
-    "clipboardRead"
+    "clipboardRead",
+    "fullscreen"
   ]
 }
