@@ -25,6 +25,24 @@ var IdeSettingsHandler = function () {
         });
     };
 
+    this._flush = function (key) {
+
+        if (typeof key === typeof undefined) {
+            return this;
+        }
+
+        var that = this;
+        chrome.storage.sync.get(this.parentKey, function (obj) {
+
+            if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey)) {
+                obj[that.parentKey] = {};
+            }
+
+            delete obj[that.parentKey][key];
+            chrome.storage.sync.set(obj);
+        });
+    };
+
     this._fetch = function (key) {
 
         var that     = this;
@@ -62,27 +80,6 @@ var IdeSettingsHandler = function () {
 
         return deferred.promise();
     };
-
-    this._keyValFromElement = function (el) {
-
-        var $el  = $(el);
-        var type = $el.attr('type');
-        var key  = $el.attr('data-option').toString();
-        var obj  = {key: key, val: undefined};
-
-        if (typeof key === typeof undefined) {
-            return obj;
-        }
-
-        if ($el.is('input') && typeof type !== typeof undefined && type === 'checkbox') {
-            obj.val = $el.prop('checked');
-            return obj;
-        }
-
-        obj.val = $el.val();
-        return obj;
-    };
-
 
     this._populateViewSetting = function (el) {
 
@@ -126,6 +123,22 @@ var IdeSettingsHandler = function () {
         this.Editors = Editors;
     };
 
+    this.apply = function (obj) {
+
+        if (typeof obj.key === typeof undefined || typeof obj.val === typeof undefined) {
+            return false;
+        }
+
+        this.Editors.getAllAceEditors().forEach(function (editor) {
+            if (typeof editor !== typeof undefined) {
+                editor.ace.setOption(obj.key, obj.val);
+                editor.ace.$blockScrolling = 'Infinity';
+            }
+        });
+
+        return true;
+    };
+
     this.fetch = function (key) {
         return this._fetch(key);
     };
@@ -134,26 +147,62 @@ var IdeSettingsHandler = function () {
         return this._fetch();
     };
 
+    this.flush = function (key) {
+        return this._flush(key);
+    };
+
     // noinspection JSUnusedGlobalSymbols
-    this.flushAllPersistent = function () {
+    this.flushAll = function () {
         chrome.storage.sync.clear();
     };
 
-    this.persistAndApply = function (el) {
+    this.reset = function (key) {
 
-        var obj = this._keyValFromElement(el);
+        this.apply({key: key, val: false});
+        this.flush(key);
+    };
+
+    this.resetAll = function () {
+
+        var that = this;
+
+        this.fetchAll().then(function (settings) {
+            $.each(settings, function (i) {
+                that.reset(i);
+            });
+        });
+    };
+
+
+    this.persistAndApply = function (obj) {
+
         if (typeof obj.key === typeof undefined || typeof obj.val === typeof undefined) {
             return false;
         }
 
-        this._persist(obj.key, obj.val);
+        if (this.apply(obj) !== false) {
+            this._persist(obj.key, obj.val);
+        }
+    };
 
-        this.Editors.getAllAceEditors().forEach(function (editor) {
-            if (typeof editor !== typeof undefined) {
-                editor.ace.setOption(obj.key, obj.val);
-                editor.ace.$blockScrolling = 'Infinity';
-            }
-        });
+    this.getKeyValFromEl = function (el) {
+
+        var $el  = $(el);
+        var type = $el.attr('type');
+        var key  = $el.attr('data-option').toString();
+        var obj  = {key: key, val: undefined};
+
+        if (typeof key === typeof undefined) {
+            return obj;
+        }
+
+        if ($el.is('input') && typeof type !== typeof undefined && type === 'checkbox') {
+            obj.val = $el.prop('checked');
+            return obj;
+        }
+
+        obj.val = $el.val();
+        return obj;
     };
 
     this.decorateView = function () {

@@ -490,7 +490,6 @@ var EditorsHandler = function () {
         this.aceEditors.forEach(function (el) {
             if (el.idx === idx) {
                 ace = el.ace;
-
                 return false;
             }
         });
@@ -653,16 +652,19 @@ var EditorsHandler = function () {
             });
         }
 
-        var aceEditor  = this.getAceEditorAtIdx(idx);
-        var isReadOnly = !aceEditor.getOption('readOnly');
+        var ace = this.getAceEditorAtIdx(idx);
 
-        aceEditor.setOption('readOnly', isReadOnly);
+        if (typeof ace !== typeof undefined) {
+            var isReadOnly = !ace.getOption('readOnly');
 
-        if (isReadOnly) {
-            this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
-        }
-        else {
-            this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+            ace.setOption('readOnly', isReadOnly);
+
+            if (isReadOnly) {
+                this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
+            }
+            else {
+                this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+            }
         }
     };
 };
