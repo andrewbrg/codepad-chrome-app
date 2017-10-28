@@ -150,7 +150,8 @@ var IdeSettingsHandler = function () {
     this.flush = function (key) {
         return this._flush(key);
     };
-    
+
+    // noinspection JSUnusedGlobalSymbols
     this.flushAll = function () {
         chrome.storage.sync.clear();
     };
@@ -161,6 +162,7 @@ var IdeSettingsHandler = function () {
         this.flush(key);
     };
 
+    // noinspection JSUnusedGlobalSymbols
     this.resetAll = function () {
 
         var that = this;
@@ -171,7 +173,6 @@ var IdeSettingsHandler = function () {
             });
         });
     };
-
 
     this.persistAndApply = function (obj) {
 
