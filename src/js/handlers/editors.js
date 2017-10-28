@@ -591,11 +591,19 @@ var EditorsHandler = function () {
         var $fileName = $el.find('.filename').first();
         var $siblings = $fileName.siblings().css('visibility', 'hidden');
 
-        $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
-            $(this).removeAttr('contenteditable');
+        $fileName.attr('contenteditable', 'true').focus();
+
+        $fileName.one('focusout', function () {
+            $(this).removeAttr('contenteditable').off('keydown');
             that.setAceEditorTemplate(idx);
             that._setAceEditorMode(idx);
             $siblings.css('visibility', 'visible');
+        });
+
+        $fileName.on('keydown', function (e) {
+            if (e.which === 27 || e.which === 13) {
+                $(this).trigger('focusout');
+            }
         });
 
         $(window).trigger('resize');
