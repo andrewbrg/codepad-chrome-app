@@ -38,6 +38,12 @@ var ModalsHandler = function () {
             });
         }
 
+        if ($el.hasClass('modal-confirm-close-tab')) {
+            $.get('/src/html/modals/file/confirm.close.tab.html').done(function (data) {
+                deferred.resolve(data);
+            });
+        }
+
         return deferred.promise();
     };
 
@@ -56,7 +62,12 @@ var ModalsHandler = function () {
 
         this._getModalContent($el).done(function (data) {
             var $modalContent = $mc.find('.modal-content').first();
-            $modalContent.find('.modal-title').first().html($el.html());
+
+            var title = (typeof $el.attr('data-title') !== typeof undefined)
+                ? $el.attr('data-title')
+                : $el.html();
+
+            $modalContent.find('.modal-title').first().html(title);
             $modalContent.find('.modal-body').first().html(data);
 
             if (typeof callback === 'function') {

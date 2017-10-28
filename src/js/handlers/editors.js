@@ -9,7 +9,7 @@ var EditorsHandler = function () {
     this.IdeSettings          = null;
     this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab action-close-tab"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-sm-container" data-title="Save changes?"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -221,6 +221,7 @@ var EditorsHandler = function () {
 
         $nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
         $nav.find('.action-close-tab').attr('data-idx', this.idx);
+        $nav.find('.modal-confirm-close-tab').attr('data-idx', this.idx);
 
         obj.nav = $nav;
 
