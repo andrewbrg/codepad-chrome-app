@@ -26,7 +26,7 @@ var EditorsHandler = function () {
     this._notify = function (type, title, message) {
         $.notify(
             {
-                title: '<strong>' + title + '</strong>',
+                title: '<strong>' + title + '</strong><br />',
                 message: message
             },
             {
@@ -125,6 +125,7 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-alt-f', mac: 'ctrl-alt-f'},
             exec: function () {
                 chrome.app.window.current().fullscreen();
+                that._notify('info', 'Fullscreen mode', 'Press esc to exit fullscreen...');
             }
         });
 
@@ -623,7 +624,7 @@ var EditorsHandler = function () {
         chrome.fileSystem.chooseEntry({type: 'openFile'}, function (entry) {
 
             if (chrome.runtime.lastError) {
-                that._notify('danger', 'File error', 'Whoops... ' + chrome.runtime.lastError.message);
+                that._notify('danger', '', 'Whoops... ' + chrome.runtime.lastError.message);
                 return false;
             }
 
