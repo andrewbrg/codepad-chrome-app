@@ -46,7 +46,7 @@ $(document).ready(function () {
     var Modals      = new ModalsHandler();
     var IdeSettings = new IdeSettingsHandler();
 
-    Editors.init();
+    Editors.init(IdeSettings);
     IdeSettings.init(Editors);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,10 +57,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Edit tab name
-    $(document).on('click', '.tab-list .edit', function () {
-        Editors.onEditTabName($(this).attr('data-idx'));
-    });
-    $(document).on('dblclick', '.tab-list .filename', function () {
+    $(document).on('click', '.tab-list .edit, .tab-list .filename', function () {
         Editors.onEditTabName($(this).attr('data-idx'));
     });
 
@@ -84,23 +81,6 @@ $(document).ready(function () {
         $tabsContentContainer.css('top', Math.ceil($header.height()) + 'px');
         $tabsContentContainer.find('.editor').css('height', Math.ceil($tabsContentContainer.height() - statusBarHeight) + 'px');
     }).resize();
-
-
-    // Handle adding settings to new tabs
-    $(window).on('_ace.new', function (e, idx) {
-        IdeSettings.fetchAll().then(function (settings) {
-            if (typeof settings !== typeof undefined) {
-                var editor = Editors.getAceEditorAtIdx(idx);
-                editor.setOptions(settings);
-                editor.$blockScrolling = Infinity;
-            }
-        });
-    });
-
-    // Launch default tab
-    if (Editors.getNumTabs() === 0) {
-        Editors.onAddNewTab();
-    }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -280,6 +260,7 @@ $(document).ready(function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
             ace.execCommand('__fontDecrease');
+            IdeSettings.persistAndApply()
         }
     });
 

@@ -4,8 +4,9 @@ var EditorsHandler = function () {
     this.currentIdx           = null;
     this.previousIdx          = null;
     this.aceEditors           = [];
-    this.aceClipboard         = '';
     this.aceCleanHashes       = [];
+    this.aceClipboard         = '';
+    this.IdeSettings          = null;
     this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab action-close-tab"></i>';
@@ -150,7 +151,7 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-,', mac: 'ctrl-,'},
             exec: function () {
                 var fontSize = parseInt(aceEditor.getOption('fontSize').replace(/[^0-9]/g, '')) - 1;
-                aceEditor.setOption('fontSize', fontSize + 'pt');
+                that.IdeSettings.persistAndApply({key: 'fontSize', val: fontSize + 'pt'});
             }
         });
 
@@ -159,7 +160,7 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-.', mac: 'ctrl-.'},
             exec: function () {
                 var fontSize = parseInt(aceEditor.getOption('fontSize').replace(/[^0-9]/g, '')) + 1;
-                aceEditor.setOption('fontSize', fontSize + 'pt');
+                that.IdeSettings.persistAndApply({key: 'fontSize', val: fontSize + 'pt'});
             }
         });
     };
@@ -420,9 +421,28 @@ var EditorsHandler = function () {
     /// Public Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function () {
+    this.init = function (ideSettings) {
 
+        var that = this;
+
+        this.IdeSettings = ideSettings;
         this._populateAddTabDropDown();
+
+        // Handle adding settings to new tabs
+        $(window).on('_ace.new', function (e, idx) {
+            that.IdeSettings.fetchAll().then(function (settings) {
+                if (typeof settings !== typeof undefined) {
+                    var editor = that.getAceEditorAtIdx(idx);
+                    editor.setOptions(settings);
+                    editor.$blockScrolling = Infinity;
+                }
+            });
+        });
+
+        // Launch default tab
+        if (that.getNumTabs() === 0) {
+            that.onAddNewTab();
+        }
     };
 
     this.setAceEditorTemplate = function (idx) {

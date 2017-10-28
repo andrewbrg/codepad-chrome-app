@@ -150,8 +150,7 @@ var IdeSettingsHandler = function () {
     this.flush = function (key) {
         return this._flush(key);
     };
-
-    // noinspection JSUnusedGlobalSymbols
+    
     this.flushAll = function () {
         chrome.storage.sync.clear();
     };
