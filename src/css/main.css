@@ -53,14 +53,7 @@ input.cmn-tgl-rnd-flt + label {
     width: 60px;
     height: 30px;
     background-color: #cccccc;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    -ms-border-radius: 30px;
-    -o-border-radius: 30px;
     border-radius: 30px;
-    -webkit-transition: background 0.4s;
-    -moz-transition: background 0.4s;
-    -o-transition: background 0.4s;
     transition: background 0.4s;
 }
 
@@ -76,10 +69,6 @@ input.cmn-tgl-rnd-flt + label:before {
     bottom: 2px;
     right: 2px;
     background-color: #fff;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-    -ms-border-radius: 30px;
-    -o-border-radius: 30px;
     border-radius: 30px;
     -webkit-transition: background 0.4s;
     -moz-transition: background 0.4s;
@@ -93,14 +82,7 @@ input.cmn-tgl-rnd-flt + label:after {
     bottom: 4px;
     width: 22px;
     background-color: #cccccc;
-    -webkit-border-radius: 22px;
-    -moz-border-radius: 22px;
-    -ms-border-radius: 22px;
-    -o-border-radius: 22px;
     border-radius: 22px;
-    -webkit-transition: margin 0.4s, background 0.4s;
-    -moz-transition: margin 0.4s, background 0.4s;
-    -o-transition: margin 0.4s, background 0.4s;
     transition: margin 0.4s, background 0.4s;
 }
 
