@@ -138,16 +138,14 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 .tab-pane,
 .editor {
     position: relative;
+    height: 100%;
     width: 100%;
 }
 
-.tab-content,
-.tab-pane {
-    height: 100%;
-}
-
-.editor {
-    height: calc(100% - 20px);
+.tab-content {
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .ace_gutter-cell {
@@ -281,7 +279,7 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 .tab-list li a .action-close-tab {
     position: absolute;
     top: 7px;
-    right: 10px;
+    right: 5px;
     font-size: 1em;
     text-shadow: none;
     font-weight: 100;

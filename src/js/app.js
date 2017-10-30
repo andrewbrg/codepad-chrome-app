@@ -72,14 +72,15 @@ $(document).ready(function () {
         Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
     });
 
-    // Handle resize of window (keep editor under navigation)
+    // Handle resize of window
     var $header               = $('header');
     var $tabsContentContainer = Editors.getTabsContentContainer();
     var statusBarHeight       = $tabsContentContainer.find('.ace-status-bar').first().height();
 
     $(window).on('resize', function () {
-        $tabsContentContainer.css('top', Math.ceil($header.height()) + 'px');
-        $tabsContentContainer.find('.editor').css('height', Math.ceil($tabsContentContainer.height() - statusBarHeight) + 'px');
+        var headerHeight = $header.height();
+        $tabsContentContainer.css('padding-top', Math.ceil(headerHeight).toString() + 'px');
+        $tabsContentContainer.css('padding-bottom', Math.ceil(statusBarHeight).toString() + 'px');
     }).resize();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -121,10 +122,7 @@ $(document).ready(function () {
 
     // Add new tab (editor)
     $(document).on('click', '.action-add-tab', function () {
-        var ace = Editors.getCurrentAceEditor();
-        if (typeof ace !== typeof undefined) {
-            ace.execCommand('__new');
-        }
+        Editors.onAddNewTab($(this).attr('data-type'));
     });
 
     // Open new file
@@ -260,7 +258,6 @@ $(document).ready(function () {
         var ace = Editors.getCurrentAceEditor();
         if (typeof ace !== typeof undefined) {
             ace.execCommand('__fontDecrease');
-            IdeSettings.persistAndApply()
         }
     });
 
