@@ -54,7 +54,7 @@ var EditorsHandler = function () {
     /// Private Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._bootAceEditor = function (idx, filePath, editorContent) {
+    this._bootAceEditor = function (idx, fileContent, fileEntry) {
 
         if (typeof idx === typeof undefined) {
             return false;
@@ -79,11 +79,11 @@ var EditorsHandler = function () {
             "idx": idx,
             "ace": aceEditor,
             "statusBar": new this.StatusBar(aceEditor, document.getElementById('status-bar-' + idx)),
-            "filePath": filePath
+            "fileEntry": fileEntry
         });
 
         // Configure
-        this.setEditorContent(idx, editorContent).then(function () {
+        this.setEditorContent(idx, fileContent).then(function () {
 
             that._setAceEditorMode(idx);
             that._populateNavTabIcon(idx);
@@ -101,7 +101,7 @@ var EditorsHandler = function () {
             name: '__save',
             bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
-                that.onSaveTab(idx);
+                that.onSaveFile(idx);
             }
         });
 
@@ -508,23 +508,51 @@ var EditorsHandler = function () {
         return this.getAceEditorAtIdx(this.currentIdx);
     };
 
-    this.getAceEditorAtIdx = function (idx) {
+    this.getAceEditorAtIdx = function (idx, returnFullObj) {
 
-        var ace = undefined;
-        idx     = parseInt(idx);
+        idx          = parseInt(idx);
+        var response = undefined;
 
-        this.aceEditors.forEach(function (el) {
-            if (el.idx === idx) {
-                ace = el.ace;
+        this.aceEditors.forEach(function (aceEditorEntry) {
+            if (aceEditorEntry.idx === idx) {
+                response = (typeof returnFullObj !== typeof undefined && returnFullObj)
+                    ? aceEditorEntry
+                    : aceEditorEntry.ace;
                 return false;
             }
         });
 
-        return ace;
+        return response;
     };
 
     this.getAllAceEditors = function () {
         return this.aceEditors;
+    };
+
+    this.getFileEntryAtIdx = function (idx) {
+
+        idx = parseInt(idx);
+
+        var aceEditorFull = this.getAceEditorAtIdx(idx, true);
+
+        if (typeof aceEditorFull !== typeof undefined) {
+            return aceEditorFull.fileEntry;
+        }
+
+        return undefined;
+    };
+
+    this.getAceContentAtIdx = function (idx) {
+
+        idx = parseInt(idx);
+
+        var aceEditor = this.getAceEditorAtIdx(idx);
+
+        if (typeof aceEditor !== typeof undefined) {
+            return aceEditor.getValue();
+        }
+
+        return undefined;
     };
 
 
@@ -580,24 +608,20 @@ var EditorsHandler = function () {
     /// Public Event Callbacks
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.onAddNewTab = function (fileExt, fileName, filePath, fileContent) {
+    this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry) {
 
-        fileExt = (typeof fileExt === typeof undefined)
+        fileExtension = (typeof fileExtension === typeof undefined)
             ? this.defaultFileExt
-            : fileExt;
+            : fileExtension;
 
         fileName = (typeof fileName === typeof undefined)
             ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
 
-        filePath = (typeof filePath === typeof undefined)
-            ? '/' + fileName + '.' + fileExt
-            : filePath;
-
-        var obj = this._getNewTabObject(fileExt, fileName);
+        var obj = this._getNewTabObject(fileExtension, fileName);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
-        this._bootAceEditor(obj.idx, filePath, fileContent);
+        this._bootAceEditor(obj.idx, fileContent, fileEntry);
         this._giveTabFocus(obj.idx);
 
         $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
@@ -634,16 +658,6 @@ var EditorsHandler = function () {
         $(window).trigger('resize');
     };
 
-    this.onSaveTab = function (idx) {
-
-        if (typeof idx === typeof undefined) {
-            return false;
-        }
-
-        this._markNavTabClean(idx);
-        this._closeTabModals(idx);
-    };
-
     this.onCloseTab = function (idx) {
 
         if (typeof idx === typeof undefined) {
@@ -665,27 +679,61 @@ var EditorsHandler = function () {
 
         var that = this;
 
-        chrome.fileSystem.chooseEntry({type: 'openFile'}, function (entry) {
+        chrome.fileSystem.chooseEntry({type: 'openFile'}, function (fileEntry) {
 
             if (chrome.runtime.lastError) {
                 that._notify('danger', '', 'Whoops... ' + chrome.runtime.lastError.message);
                 return false;
             }
 
-            entry.file(function (file) {
+            fileEntry.file(function (file) {
                 var reader   = new FileReader();
-                var fileExt  = entry.name.split('.').pop();
-                var fileName = entry.name.split('.').reverse().pop();
+                var fileExt  = fileEntry.name.split('.').pop();
+                var fileName = fileEntry.name.split('.').reverse().pop();
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
                     that._notify('danger', 'Read Error', 'Whoops... ' + msg);
                 };
                 reader.onload  = function (e) {
-                    that.onAddNewTab(fileExt, fileName, entry.path, e.target.result);
+                    that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
                 };
             });
         });
+    };
+
+    this.onSaveFile = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
+
+        var that       = this;
+        var aceContent = this.getAceContentAtIdx(idx);
+        var fileEntry  = this.getFileEntryAtIdx(idx);
+
+        var handler = function (writableFileEntry) {
+
+            writableFileEntry.createWriter(function (fileWriter) {
+                fileWriter.onerror    = function (e) {
+                    console.log('Error handler');
+                    console.log(e);
+                };
+                fileWriter.onwriteend = function () {
+                    that._markNavTabClean(idx);
+                    that._closeTabModals(idx);
+                };
+
+                fileWriter.write(new Blob([aceContent], {type: fileEntry.type}));
+            });
+        };
+
+
+        if (typeof fileEntry === typeof undefined) {
+            chrome.fileSystem.chooseEntry({type: 'saveFile'}, handler);
+        } else {
+            chrome.fileSystem.getWritableEntry(fileEntry, handler);
+        }
     };
 
     this.onToggleReadOnly = function (idx) {
