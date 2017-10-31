@@ -1,2 +1,2 @@
-# jspad-chrome-app
-A JavaScript editor for Chrome OS
+# Code Pad - A Chrome IDE
+An awesome multi-language IDE crafted for Chrome OS
