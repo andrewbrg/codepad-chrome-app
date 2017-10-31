@@ -25,11 +25,15 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this._notify = function (type, title, message) {
+
+        var obj = {message: message};
+
+        if (typeof title !== typeof undefined) {
+            obj.title = title;
+        }
+
         $.notify(
-            {
-                title: '<strong>' + title + '</strong><br />',
-                message: message
-            },
+            obj,
             {
                 type: type,
                 placement: {
@@ -682,7 +686,7 @@ var EditorsHandler = function () {
         chrome.fileSystem.chooseEntry({type: 'openFile'}, function (fileEntry) {
 
             if (chrome.runtime.lastError) {
-                that._notify('danger', '', 'Whoops... ' + chrome.runtime.lastError.message);
+                that._notify('danger', '', chrome.runtime.lastError.message);
                 return false;
             }
 
@@ -693,7 +697,7 @@ var EditorsHandler = function () {
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
-                    that._notify('danger', 'Read Error', 'Whoops... ' + msg);
+                    that._notify('danger', 'File Error', msg);
                 };
                 reader.onload  = function (e) {
                     that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
@@ -714,10 +718,14 @@ var EditorsHandler = function () {
 
         var handler = function (writableFileEntry) {
 
+            if (chrome.runtime.lastError) {
+                that._notify('danger', '', chrome.runtime.lastError.message);
+                return false;
+            }
+
             writableFileEntry.createWriter(function (fileWriter) {
-                fileWriter.onerror    = function (e) {
-                    console.log('Error handler');
-                    console.log(e);
+                fileWriter.onerror    = function (msg) {
+                    that._notify('danger', 'File Error', msg);
                 };
                 fileWriter.onwriteend = function () {
                     that._markNavTabClean(idx);
