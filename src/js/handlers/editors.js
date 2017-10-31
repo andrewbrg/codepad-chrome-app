@@ -11,7 +11,7 @@ var EditorsHandler = function () {
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-sm-container" data-title="Save changes?"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
-    this.navFilenameHtml      = '<span class="filename"></span>';
+    this.navFilenameHtml      = '<span class="action-edit-tab filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
     this.defaultFileName      = 'untitled';
     this.defaultFileExt       = 'js';
@@ -101,7 +101,7 @@ var EditorsHandler = function () {
             name: '__save',
             bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
-                that._markNavTabClean(idx);
+                that.onSaveTab(idx);
             }
         });
 
@@ -628,6 +628,10 @@ var EditorsHandler = function () {
         });
 
         $(window).trigger('resize');
+    };
+
+    this.onSaveTab = function (idx) {
+        this._markNavTabClean(idx);
     };
 
     this.onCloseTab = function (idx) {

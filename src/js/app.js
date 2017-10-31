@@ -57,13 +57,8 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Edit tab name
-    $(document).on('click', '.tab-list .edit, .tab-list .filename', function () {
+    $(document).on('click', '.action-edit-tab', function () {
         Editors.onEditTabName($(this).attr('data-idx'));
-    });
-
-    // Close tab
-    $(document).on('click', '.tab-list .action-close-tab', function () {
-        Editors.onCloseTab($(this).attr('data-idx'));
     });
 
     // Maintain correct record of the current and previous idx
@@ -120,12 +115,22 @@ $(document).ready(function () {
     /// File Actions
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Add new tab (editor)
+    // New tab
     $(document).on('click', '.action-add-tab', function () {
         Editors.onAddNewTab($(this).attr('data-type'));
     });
 
-    // Open new file
+    // Save tab
+    $(document).on('click', '.action-save-tab', function () {
+        Editors.onSaveTab($(this).attr('data-idx'));
+    });
+
+    // Close tab
+    $(document).on('click', '.action-close-tab', function () {
+        Editors.onCloseTab($(this).attr('data-idx'));
+    });
+
+    // Open file
     $(document).on('click', '.action-file-open', function () {
         Editors.onOpenFile();
     });

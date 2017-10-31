@@ -40,7 +40,9 @@ var ModalsHandler = function () {
 
         if ($el.hasClass('modal-confirm-close-tab')) {
             $.get('/src/html/modals/file/confirm.close.tab.html').done(function (data) {
-                deferred.resolve(data);
+                var $data = $(data);
+                $data.find('button').attr('data-idx', $el.attr('data-idx'));
+                deferred.resolve($data);
             });
         }
 
