@@ -28,21 +28,19 @@ var ModalsHandler = function () {
 
         if ($el.hasClass('modal-appearance')) {
             $.get('/src/html/modals/editor/appearance.html').done(function (data) {
-                deferred.resolve(data);
+                deferred.resolve({html: data, idx: $el.attr('data-idx')});
             });
         }
 
         if ($el.hasClass('modal-ide-settings')) {
             $.get('/src/html/modals/editor/ide.settings.html').done(function (data) {
-                deferred.resolve(data);
+                deferred.resolve({html: data, idx: $el.attr('data-idx')});
             });
         }
 
         if ($el.hasClass('modal-confirm-close-tab')) {
             $.get('/src/html/modals/file/confirm.close.tab.html').done(function (data) {
-                var $data = $(data);
-                $data.find('button').attr('data-idx', $el.attr('data-idx'));
-                deferred.resolve($data);
+                deferred.resolve({html: data, idx: $el.attr('data-idx')});
             });
         }
 
@@ -69,8 +67,14 @@ var ModalsHandler = function () {
                 ? $el.attr('data-title')
                 : $el.html();
 
+            var $html = $(data.html);
+            if (typeof data.idx !== typeof undefined) {
+                $html.find('button').attr('data-idx', data.idx);
+                $modalContent.find('.modal-body').first().closest('.modal').attr('data-idx', data.idx);
+            }
+
             $modalContent.find('.modal-title').first().html(title);
-            $modalContent.find('.modal-body').first().html(data);
+            $modalContent.find('.modal-body').first().html($html);
 
             if (typeof callback === 'function') {
                 callback();
@@ -85,5 +89,6 @@ var ModalsHandler = function () {
 
         $modalContent.find('.modal-title').first().html('');
         $modalContent.find('.modal-body').first().html('');
+        $modalContent.find('.modal-body').first().closest('.modal').removeAttr('data-idx');
     };
 };

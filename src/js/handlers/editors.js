@@ -263,6 +263,10 @@ var EditorsHandler = function () {
         return true;
     };
 
+    this._closeTabModals = function (idx) {
+        $(document).find('.modal[data-idx="' + idx + '"]').modal('hide');
+    };
+
     this._getTabFileExtension = function (idx) {
 
         idx       = parseInt(idx);
@@ -631,7 +635,13 @@ var EditorsHandler = function () {
     };
 
     this.onSaveTab = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
+
         this._markNavTabClean(idx);
+        this._closeTabModals(idx);
     };
 
     this.onCloseTab = function (idx) {
@@ -644,6 +654,7 @@ var EditorsHandler = function () {
         this.getTabNavElAtIdx(idx).remove();
         this.getTabContentElAtIdx(idx).remove();
         this._giveTabFocus(this.previousIdx);
+        this._closeTabModals(idx);
 
         $(window).trigger('resize');
 
