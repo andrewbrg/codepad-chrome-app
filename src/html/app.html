@@ -28,6 +28,9 @@
 
     <link rel="stylesheet" href="/vendor/font-awesome/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="/vendor/font-mfizz/css/font-mfizz.css">
+
+    <link rel="stylesheet" href="/vendor/jquery-ui-1.12.1/jquery-ui.min.css">
+
     <link rel="stylesheet" href="/vendor/bootstrap/bootstrap.min.css"/>
     <link rel="stylesheet" href="/vendor/bootstrap-treeview/bootstrap-treeview.css"/>
     <link rel="stylesheet" href="/vendor/range-slider/range-slider.css"/>
@@ -35,244 +38,252 @@
 
     <link rel="stylesheet" href="/src/css/gfonts.css"/>
     <link rel="stylesheet" href="/src/css/main.css"/>
+
 </head>
 <body>
-<div class="outer-container">
 
-    <!-- Header -->
-    <header class="fixed-top">
+<header class="fixed-top">
 
-        <!--Navbar-->
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-            <div class="navbar-brand">
-                <button class="btn btn-outline-secondary" type="submit" data-toggle="tooltip" title="Open project">
-                    <i class="fa fa-fw fa-folder-open-o"></i>
-                </button>
-            </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="navbar-brand">
+            <button class="btn btn-outline-secondary action-sidebar-open"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#sidebar"
+                    aria-expanded="false"
+                    aria-controls="sidebar"
+                    title="Open project">
+                <i class="fa fa-fw fa-folder-open-o"></i>
             </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="fa fa-fw fa-file-text"></i>&nbsp;File
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item action-add-tab" href="#">
-                                <i class="fa fa-fw fa-plus"></i>&nbsp;New
-                                <span class="navbar-help pull-right">(ctrl+n)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-save" href="#">
-                                <i class="fa fa-fw fa-save"></i>&nbsp;Save
-                                <span class="navbar-help pull-right">(ctrl+s)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-save-all" href="#">
-                                <i class="fa fa-fw fa-save"></i>&nbsp;Save all
-                                <span class="navbar-help pull-right">(ctrl+shift+s)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item action-file-open" href="#">
-                                <i class="fa fa-fw fa-file-text"></i>&nbsp;Open file
-                                <span class="navbar-help pull-right">(ctrl+o)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-project-open" href="#">
-                                <i class="fa fa-fw fa-folder-open"></i>&nbsp;Open project
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item action-toggle-readonly" href="#">
-                                <i class="fa fa-fw fa-unlock-alt"></i>&nbsp;Toggle read-only
-                            </a>
-                            <a class="dropdown-item action-toggle-readonly-all" href="#">
-                                <i class="fa fa-fw fa-unlock-alt"></i>&nbsp;Toggle read-only all
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item action-exit" href="#">
-                                <i class="fa fa-fw fa-sign-out"></i>&nbsp;Exit
-                                <span class="navbar-help pull-right">(ctrl+w)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item action action-search" href="#">
-                                <i class="fa fa-fw fa-search"></i>
-                                &nbsp;Search
-                                <span class="navbar-help pull-right">(ctrl+f)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item action-undo" href="#">
-                                <i class="fa fa-fw fa-reply"></i>
-                                &nbsp;Undo
-                                <span class="navbar-help pull-right">(ctrl+z)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-redo" href="#">
-                                <i class="fa fa-fw fa-share"></i>
-                                &nbsp;Redo
-                                <span class="navbar-help pull-right">(ctrl+y)</span>
-                                <span class="clearfix"></span>
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item action-cut" href="#">
-                                <i class="fa fa-fw fa-cut"></i>
-                                &nbsp;Cut
-                                <span class="navbar-help pull-right">(ctrl+x)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-copy" href="#">
-                                <i class="fa fa-fw fa-copy"></i>
-                                &nbsp;Copy
-                                <span class="navbar-help pull-right">(ctrl+c)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-paste" href="#">
-                                <i class="fa fa-fw fa-paste"></i>
-                                &nbsp;Paste
-                                <span class="navbar-help pull-right">(ctrl+v)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-select-all" href="#">
-                                <i class="fa fa-fw fa-bars"></i>
-                                &nbsp;Select all
-                                <span class="navbar-help pull-right">(ctrl+a)</span>
-                                <span class="clearfix"></span>
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item action-fold-all" href="#">
-                                <i class="fa fa-fw fa-level-up"></i>
-                                &nbsp;Fold all
-                                <span class="navbar-help pull-right">(alt+0)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-unfold-all" href="#">
-                                <i class="fa fa-fw fa-level-down"></i>
-                                &nbsp;Un-fold all
-                                <span class="navbar-help pull-right">(alt+shift+0)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="fa fa-fw fa-clone"></i>&nbsp;View
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item action-minimize" href="#">
-                                <i class="fa fa-fw fa-window-minimize"></i>
-                                &nbsp;Minimize
-                                <span class="navbar-help pull-right">(ctrl+alt+[)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-maximize" href="#">
-                                <i class="fa fa-fw fa-window-maximize"></i>
-                                &nbsp;Maximize
-                                <span class="navbar-help pull-right">(ctrl+alt+])</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-fullscreen" href="#">
-                                <i class="fa fa-fw fa-arrows-alt"></i>
-                                &nbsp;Fullscreen
-                                <span class="navbar-help pull-right">(ctrl+alt+f)</span>
-                                <span class="clearfix"></span>
-                            </a>
-
-                            <div class="dropdown-divider"></div>
-
-                            <a class="dropdown-item action-font-decrease" href="#">
-                                <i class="fa fa-fw fa-arrow-down"></i>
-                                &nbsp;Decrease font size
-                                <span class="navbar-help pull-right">(ctrl+alt+,)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                            <a class="dropdown-item action-font-increase" href="#">
-                                <i class="fa fa-fw fa-arrow-up"></i>
-                                &nbsp;Increase font size
-                                <span class="navbar-help pull-right">(ctrl+alt+.)</span>
-                                <span class="clearfix"></span>
-                            </a>
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="fa fa-fw fa-github"></i>
-                            &nbsp;Github
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-
-                        </div>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
-                           aria-expanded="false">
-                            <i class="fa fa-fw fa-cog"></i>
-                            &nbsp;Editor
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item modal-appearance" href="#"
-                               data-toggle="modal"
-                               data-target=".modal-lg-container">
-                                <i class="fa fa-fw fa-magic"></i>
-                                &nbsp;Appearance & fonts
-                            </a>
-
-                            <a class="dropdown-item modal-ide-settings" href="#"
-                               data-toggle="modal"
-                               data-target=".modal-lg-container">
-                                <i class="fa fa-fw fa-cogs"></i>
-                                &nbsp;IDE preferences
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <!-- Code navigation tabs -->
-        <div class="nav-tabs bg-dark text-white add-file-container">
-            <div class="dropdown pull-right" data-toggle="tooltip" title="Add file">
-                <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
-                        type="button"
-                        data-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false">
-                    <i class="fa fa-fw fa-plus"></i>
-                </button>
-                <div class="dropdown-menu add-tab-dropdown"></div>
-            </div>
-            <ul class="nav tab-list" role="tablist"></ul>
         </div>
-    </header>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <!-- Ace -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-fw fa-file-text"></i>&nbsp;File
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item action-add-tab" href="#">
+                            <i class="fa fa-fw fa-plus"></i>&nbsp;New
+                            <span class="navbar-help pull-right">(ctrl+n)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-save" href="#">
+                            <i class="fa fa-fw fa-save"></i>&nbsp;Save
+                            <span class="navbar-help pull-right">(ctrl+s)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-save-all" href="#">
+                            <i class="fa fa-fw fa-save"></i>&nbsp;Save all
+                            <span class="navbar-help pull-right">(ctrl+shift+s)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item action-file-open" href="#">
+                            <i class="fa fa-fw fa-file-text"></i>&nbsp;Open file
+                            <span class="navbar-help pull-right">(ctrl+o)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-project-open" href="#">
+                            <i class="fa fa-fw fa-folder-open"></i>&nbsp;Open project
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item action-toggle-readonly" href="#">
+                            <i class="fa fa-fw fa-unlock-alt"></i>&nbsp;Toggle read-only
+                        </a>
+                        <a class="dropdown-item action-toggle-readonly-all" href="#">
+                            <i class="fa fa-fw fa-unlock-alt"></i>&nbsp;Toggle read-only all
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item action-exit" href="#">
+                            <i class="fa fa-fw fa-sign-out"></i>&nbsp;Exit
+                            <span class="navbar-help pull-right">(ctrl+w)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-fw fa-edit"></i>&nbsp;Edit
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item action action-search" href="#">
+                            <i class="fa fa-fw fa-search"></i>
+                            &nbsp;Search
+                            <span class="navbar-help pull-right">(ctrl+f)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item action-undo" href="#">
+                            <i class="fa fa-fw fa-reply"></i>
+                            &nbsp;Undo
+                            <span class="navbar-help pull-right">(ctrl+z)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-redo" href="#">
+                            <i class="fa fa-fw fa-share"></i>
+                            &nbsp;Redo
+                            <span class="navbar-help pull-right">(ctrl+y)</span>
+                            <span class="clearfix"></span>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item action-cut" href="#">
+                            <i class="fa fa-fw fa-cut"></i>
+                            &nbsp;Cut
+                            <span class="navbar-help pull-right">(ctrl+x)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-copy" href="#">
+                            <i class="fa fa-fw fa-copy"></i>
+                            &nbsp;Copy
+                            <span class="navbar-help pull-right">(ctrl+c)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-paste" href="#">
+                            <i class="fa fa-fw fa-paste"></i>
+                            &nbsp;Paste
+                            <span class="navbar-help pull-right">(ctrl+v)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-select-all" href="#">
+                            <i class="fa fa-fw fa-bars"></i>
+                            &nbsp;Select all
+                            <span class="navbar-help pull-right">(ctrl+a)</span>
+                            <span class="clearfix"></span>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item action-fold-all" href="#">
+                            <i class="fa fa-fw fa-level-up"></i>
+                            &nbsp;Fold all
+                            <span class="navbar-help pull-right">(alt+0)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-unfold-all" href="#">
+                            <i class="fa fa-fw fa-level-down"></i>
+                            &nbsp;Un-fold all
+                            <span class="navbar-help pull-right">(alt+shift+0)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-fw fa-clone"></i>&nbsp;View
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item action-minimize" href="#">
+                            <i class="fa fa-fw fa-window-minimize"></i>
+                            &nbsp;Minimize
+                            <span class="navbar-help pull-right">(ctrl+alt+[)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-maximize" href="#">
+                            <i class="fa fa-fw fa-window-maximize"></i>
+                            &nbsp;Maximize
+                            <span class="navbar-help pull-right">(ctrl+alt+])</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-fullscreen" href="#">
+                            <i class="fa fa-fw fa-arrows-alt"></i>
+                            &nbsp;Fullscreen
+                            <span class="navbar-help pull-right">(ctrl+alt+f)</span>
+                            <span class="clearfix"></span>
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <a class="dropdown-item action-font-decrease" href="#">
+                            <i class="fa fa-fw fa-arrow-down"></i>
+                            &nbsp;Decrease font size
+                            <span class="navbar-help pull-right">(ctrl+alt+,)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                        <a class="dropdown-item action-font-increase" href="#">
+                            <i class="fa fa-fw fa-arrow-up"></i>
+                            &nbsp;Increase font size
+                            <span class="navbar-help pull-right">(ctrl+alt+.)</span>
+                            <span class="clearfix"></span>
+                        </a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-fw fa-github"></i>
+                        &nbsp;Github
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        <i class="fa fa-fw fa-cog"></i>
+                        &nbsp;Editor
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item modal-appearance" href="#"
+                           data-toggle="modal"
+                           data-target=".modal-lg-container">
+                            <i class="fa fa-fw fa-magic"></i>
+                            &nbsp;Appearance & fonts
+                        </a>
+
+                        <a class="dropdown-item modal-ide-settings" href="#"
+                           data-toggle="modal"
+                           data-target=".modal-lg-container">
+                            <i class="fa fa-fw fa-cogs"></i>
+                            &nbsp;IDE preferences
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Code navigation tabs -->
+    <div class="nav-tabs bg-dark text-white add-file-container">
+        <div class="dropdown pull-right" data-toggle="tooltip" title="Add file">
+            <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                    type="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false">
+                <i class="fa fa-fw fa-plus"></i> New
+            </button>
+            <div class="dropdown-menu add-tab-dropdown"></div>
+        </div>
+        <ul class="nav tab-list" role="tablist"></ul>
+    </div>
+</header>
+
+<main>
+    <div id="sidebar" class="collapse bg-dark text-white"></div>
     <div class="tab-content"></div>
-</div>
+</main>
 
 <!-- Modals -->
-<div class="modal fade modal-sm-container" tabindex="-1" role="dialog"
+<div class="modal fade modal-sm-container"
+     tabindex="-1"
+     role="dialog"
      aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content bg-dark text-white">
@@ -287,7 +298,9 @@
     </div>
 </div>
 
-<div class="modal fade modal-md-container" tabindex="-1" role="dialog"
+<div class="modal fade modal-md-container"
+     tabindex="-1"
+     role="dialog"
      aria-hidden="true">
     <div class="modal-dialog modal-md">
         <div class="modal-content bg-dark text-white">
@@ -302,7 +315,9 @@
     </div>
 </div>
 
-<div class="modal fade modal-lg-container" tabindex="-1" role="dialog"
+<div class="modal fade modal-lg-container"
+     tabindex="-1"
+     role="dialog"
      aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content bg-dark text-white">
@@ -320,6 +335,7 @@
 
 <!-- Bootstrap -->
 <script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<script src="/vendor/jquery-ui-1.12.1/jquery-ui.min.js"></script>
 <script src="/vendor/popper/popper.min.js"></script>
 <script src="/vendor/bootstrap/bootstrap.min.js"></script>
 

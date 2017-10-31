@@ -69,13 +69,24 @@ $(document).ready(function () {
 
     // Handle resize of window
     var $header               = $('header');
+    var $sidebar              = $('#sidebar');
     var $tabsContentContainer = Editors.getTabsContentContainer();
     var statusBarHeight       = $tabsContentContainer.find('.ace-status-bar').first().height();
 
     $(window).on('resize', function () {
-        var headerHeight = $header.height();
-        $tabsContentContainer.css('padding-top', Math.ceil(headerHeight).toString() + 'px');
-        $tabsContentContainer.css('padding-bottom', Math.ceil(statusBarHeight).toString() + 'px');
+
+        var top    = Math.ceil($header.height()).toString();
+        var bottom = Math.ceil(statusBarHeight).toString();
+
+        $tabsContentContainer.css({
+            'padding-top': top + 'px',
+            'padding-bottom': bottom + 'px'
+        });
+
+        $sidebar.css({
+            'margin-top': top + 'px',
+            'height': ($(window).height() - (parseInt(top) + parseInt(bottom))).toString() + 'px'
+        });
     }).resize();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -294,4 +305,20 @@ $(document).ready(function () {
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Sidebar actions
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    $sidebar.resizable({
+        ghost: true,
+        helper: "ui-resizable-helper"
+    });
+
+    // Sidebar open
+    $(document).on('click', '.action-sidebar-open', function () {
+
+    });
+
 });
