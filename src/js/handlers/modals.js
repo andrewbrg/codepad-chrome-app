@@ -25,23 +25,24 @@ var ModalsHandler = function () {
 
         var $el      = $(el);
         var deferred = $.Deferred();
+        var callback = function (data) {
+            deferred.resolve({html: data, idx: $el.attr('data-idx')});
+        };
 
         if ($el.hasClass('modal-appearance')) {
-            $.get('/src/html/modals/editor/appearance.html').done(function (data) {
-                deferred.resolve({html: data, idx: $el.attr('data-idx')});
-            });
+            $.get('/src/html/modals/editor/appearance.html').done(callback);
         }
 
         if ($el.hasClass('modal-ide-settings')) {
-            $.get('/src/html/modals/editor/ide.settings.html').done(function (data) {
-                deferred.resolve({html: data, idx: $el.attr('data-idx')});
-            });
+            $.get('/src/html/modals/editor/ide.settings.html').done(callback);
         }
 
         if ($el.hasClass('modal-confirm-close-tab')) {
-            $.get('/src/html/modals/file/confirm.close.tab.html').done(function (data) {
-                deferred.resolve({html: data, idx: $el.attr('data-idx')});
-            });
+            $.get('/src/html/modals/file/confirm.close.tab.html').done(callback);
+        }
+
+        if ($el.hasClass('modal-content-help')) {
+            $.get('/src/html/modals/content/help.html').done(callback);
         }
 
         return deferred.promise();

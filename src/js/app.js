@@ -98,9 +98,26 @@ $(document).ready(function () {
 
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
-        Modals.onShowBs(e.relatedTarget, function () {
-            IdeSettings.decorateView();
-        });
+
+        var $el      = $(e.relatedTarget);
+        var callback = function () {
+        };
+
+        if ($el.hasClass('modal-ide-settings') || $el.hasClass('modal-appearance')) {
+            callback = function () {
+                IdeSettings.decorateView();
+            };
+        }
+
+        if ($el.hasClass('modal-content-help')) {
+            callback = function () {
+                $(document).find('.app-name').html(chrome.runtime.getManifest().name);
+                $(document).find('.app-author').html(chrome.runtime.getManifest().author);
+                $(document).find('.app-version').html(chrome.runtime.getManifest().version);
+            };
+        }
+
+        Modals.onShowBs(e.relatedTarget, callback);
     });
 
     // Remove the template from the modal after closing it

@@ -4,6 +4,7 @@
   "minimum_chrome_version": "31",
   "name": "Code Pad",
   "description": "An awesome multi-language IDE crafted for Chrome OS",
+  "author": "Andrew Borg",
   "app": {
     "background": {
       "scripts": [
