@@ -7,6 +7,7 @@ var EditorsHandler = function () {
     this.aceCleanHashes       = [];
     this.aceClipboard         = '';
     this.IdeSettings          = null;
+    this.Modelist             = ace.require("ace/ext/modelist");
     this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-sm-container" data-title="Save changes?"></i>';
@@ -55,6 +56,89 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Private File
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    this._fileExtFromFileEntry = function (fileEntry) {
+        return fileEntry.name.split('.').pop();
+    };
+
+    this._fileNameFromFileEntry = function (fileEntry) {
+        return fileEntry.name.split('.').reverse().pop();
+    };
+
+    this._fileRename = function (fileEntry, oldFileName, newFileName) {
+
+        var deferred = $.Deferred();
+
+        if (typeof oldFileName === typeof undefined || typeof newFileName === typeof undefined) {
+            deferred.resolve(fileEntry);
+            return deferred.promise();
+        }
+
+        chrome.fileSystem.getWritableEntry(fileEntry, function (writableEntry) {
+            deferred.resolve(writableEntry);
+        });
+
+        return deferred.promise();
+    };
+
+    this._fileSave = function (fileEntry, fileContent) {
+
+        var that     = this;
+        var deferred = $.Deferred();
+
+        chrome.fileSystem.getWritableEntry(fileEntry, function (writableEntry) {
+
+            if (chrome.runtime.lastError) {
+                that._notify('danger', '', chrome.runtime.lastError.message);
+                deferred.resolve();
+                return false;
+            }
+
+            writableEntry.createWriter(function (writer) {
+                writer.onerror    = function (msg) {
+                    that._notify('danger', 'File Error', msg);
+                };
+                writer.onwriteend = function (e) {
+                    deferred.resolve(e);
+                };
+                writer.seek(0);
+                writer.write(new Blob([fileContent], {type: 'text/plain'}));
+            });
+        });
+
+        return deferred.promise();
+    };
+
+    this._fileSaveAs = function (fileName, fileContent) {
+
+        var that     = this;
+        var deferred = $.Deferred();
+
+        chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: fileName, acceptsMultiple: false}, function (writableEntry) {
+
+            if (chrome.runtime.lastError) {
+                that._notify('danger', '', chrome.runtime.lastError.message);
+                deferred.resolve();
+                return false;
+            }
+
+            writableEntry.createWriter(function (writer) {
+                writer.onerror    = function (msg) {
+                    that._notify('danger', 'File Error', msg);
+                };
+                writer.onwriteend = function (e) {
+                    deferred.resolve(e);
+                };
+                writer.write(new Blob([fileContent], {type: 'text/plain'}));
+            });
+        });
+
+        return deferred.promise();
+    };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -89,7 +173,7 @@ var EditorsHandler = function () {
         // Configure
         this.setEditorContent(idx, fileContent).then(function () {
 
-            that._setAceEditorMode(idx);
+            that._setAceEditorMode(idx, fileEntry);
             that._populateNavTabIcon(idx);
             that._populateStatusBar(idx);
             that._bindAceCustomCommands(idx, aceEditor);
@@ -187,15 +271,24 @@ var EditorsHandler = function () {
         });
     };
 
-    this._setAceEditorMode = function (idx) {
+    this._setAceEditorMode = function (idx, fileEntry) {
+
+        idx = parseInt(idx);
 
         var that = this;
-        idx      = parseInt(idx);
 
-        this._getTabMode(idx).then(function (data) {
-            that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
-            that._populateStatusBar(idx);
-        });
+        if (typeof fileEntry !== typeof undefined) {
+            chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
+                that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
+                that._populateStatusBar(idx);
+            });
+        }
+        else {
+            this._getTabMode(idx).then(function (data) {
+                that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+                that._populateStatusBar(idx);
+            });
+        }
     };
 
 
@@ -481,17 +574,17 @@ var EditorsHandler = function () {
         var aceEditor = this.getEditor(idx);
         var deferred  = $.Deferred();
 
-        if (this.getEditorContent(idx) === '') {
+        if (this.getEditorContent(idx) !== '') {
             deferred.resolve();
-            return deferred.promise();
         }
-
-        this.getEditorTemplate(idx).then(function (data) {
-            aceEditor.setValue(data);
-            aceEditor.clearSelection();
-            that._markNavTabClean(idx);
-            deferred.resolve();
-        });
+        else {
+            this.getEditorTemplate(idx).then(function (data) {
+                aceEditor.setValue(data);
+                aceEditor.clearSelection();
+                that._markNavTabClean(idx);
+                deferred.resolve();
+            });
+        }
 
         return deferred.promise();
     };
@@ -503,13 +596,14 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
+        var value     = '';
         var aceEditor = this.getEditor(idx);
 
-        if (typeof aceEditor !== typeof undefined) {
-            return aceEditor.getValue();
+        if (typeof aceEditor !== typeof undefined && typeof value !== typeof undefined && value !== null) {
+            value = aceEditor.getValue();
         }
 
-        return '';
+        return value;
     };
 
     this.setEditorContent = function (idx, content) {
@@ -698,17 +792,18 @@ var EditorsHandler = function () {
         var oldFileName = $fileName.html();
 
         $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
+            var fileEntry = that.getEditorFileEntry(idx);
 
             that.setEditorTemplate(idx);
             that._setAceEditorMode(idx);
-            $siblings.css('visibility', 'visible');
 
-            var fileEntry = that.getEditorFileEntry(idx);
             if (typeof fileEntry !== typeof undefined) {
-                fileEntry.name = $fileName.html();
-                that.setEditorFileEntry(idx, fileEntry);
+                that._fileRename(fileEntry, oldFileName, that.getTabNavFilename(idx)).then(function (fileEntry) {
+                    that.setEditorFileEntry(fileEntry)
+                });
             }
 
+            $siblings.css('visibility', 'visible');
             $fileName.removeAttr('contenteditable').off('keydown');
         });
 
@@ -759,8 +854,8 @@ var EditorsHandler = function () {
 
             fileEntry.file(function (file) {
                 var reader   = new FileReader();
-                var fileExt  = fileEntry.name.split('.').pop();
-                var fileName = fileEntry.name.split('.').reverse().pop();
+                var fileExt  = that._fileExtFromFileEntry(fileEntry);
+                var fileName = that._fileNameFromFileEntry(fileEntry);
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
@@ -779,43 +874,17 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that        = this;
-        var aceContent  = this.getEditorContent(idx);
-        var fileEntry   = this.getEditorFileEntry(idx);
-        var saveHandler = function (writableFileEntry) {
+        var that      = this;
+        var fileEntry = this.getEditorFileEntry(idx);
 
-            if (chrome.runtime.lastError) {
-                that._notify('danger', '', chrome.runtime.lastError.message);
-                return false;
-            }
+        var promise = (typeof fileEntry === typeof undefined)
+            ? this._fileSaveAs(this.getTabNavFilename(idx), this.getEditorContent(idx))
+            : this._fileSave(fileEntry, this.getEditorContent(idx));
 
-            writableFileEntry.createWriter(function (fileWriter) {
-                fileWriter.onerror    = function (msg) {
-                    that._notify('danger', 'File Error', msg);
-                };
-                fileWriter.onwriteend = function () {
-                    that._markNavTabClean(idx);
-                    that._closeTabModals(idx);
-                };
-
-                var writeObj = {};
-                if (typeof fileEntry === typeof undefined) {
-                    writeObj.name = that.getTabNavFilename(idx);
-                }
-                else {
-                    writeObj.type = fileEntry.type;
-                }
-
-                fileWriter.write(new Blob([aceContent], writeObj));
-            });
-        };
-
-
-        if (typeof fileEntry === typeof undefined) {
-            chrome.fileSystem.chooseEntry({type: 'saveFile'}, saveHandler);
-        } else {
-            chrome.fileSystem.getWritableEntry(fileEntry, saveHandler);
-        }
+        promise.then(function () {
+            that._markNavTabClean(idx);
+            that._closeTabModals(idx);
+        });
     };
 
     this.onToggleReadOnly = function (idx) {
