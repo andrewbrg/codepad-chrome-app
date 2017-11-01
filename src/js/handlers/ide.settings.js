@@ -70,7 +70,7 @@ var IdeSettingsHandler = function () {
                 return;
             }
 
-            that.Editors.getAllAceEditors().forEach(function (editor) {
+            that.Editors.getAllEditorObjects().forEach(function (editor) {
                 if (typeof editor !== typeof undefined) {
                     deferred.resolve(editor.ace.getOption(key));
                     return false;
@@ -129,7 +129,7 @@ var IdeSettingsHandler = function () {
             return false;
         }
 
-        this.Editors.getAllAceEditors().forEach(function (editor) {
+        this.Editors.getAllEditorObjects().forEach(function (editor) {
             if (typeof editor !== typeof undefined) {
                 editor.ace.setOption(obj.key, obj.val);
                 editor.ace.$blockScrolling = 'Infinity';

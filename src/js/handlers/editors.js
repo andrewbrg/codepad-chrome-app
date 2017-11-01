@@ -193,7 +193,7 @@ var EditorsHandler = function () {
         idx      = parseInt(idx);
 
         this._getTabMode(idx).then(function (data) {
-            that.getAceEditorAtIdx(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+            that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
             that._populateStatusBar(idx);
         });
     };
@@ -262,7 +262,7 @@ var EditorsHandler = function () {
         $el.find('*[data-toggle="tab"]').first().tab('show');
         this.currentIdx = parseInt(idx);
 
-        this.getAceEditorAtIdx(idx).focus();
+        this.getEditor(idx).focus();
 
         return true;
     };
@@ -291,7 +291,7 @@ var EditorsHandler = function () {
         var deferred = $.Deferred();
         idx          = parseInt(idx);
 
-        this.getAllAceEditorModes().then(function (data) {
+        this.getAllEditorModes().then(function (data) {
             data    = JSON.parse(data);
             var ext = that._getTabFileExtension(idx);
             if (typeof ext === typeof undefined) {
@@ -313,7 +313,7 @@ var EditorsHandler = function () {
 
         var that = this;
 
-        this.getAllAceEditorModes().done(function (data) {
+        this.getAllEditorModes().done(function (data) {
             data = JSON.parse(data);
             that.getAddTabDropDownContainer().html('');
             $.each(data, function (i, v) {
@@ -345,7 +345,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var editor     = this.getAceEditorAtIdx(idx);
+        var editor     = this.getEditor(idx);
         var $statusBar = this.getStatusBarContentElAtIdx(idx);
 
         var ro        = editor.getOption('readOnly');
@@ -389,7 +389,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var found = false;
-        var hash  = this._getHash(this.getAceEditorAtIdx(idx).getValue());
+        var hash  = this._getHash(this.getEditor(idx).getValue());
 
         $.each(this.aceCleanHashes, function (i, v) {
             if (v.idx === idx) {
@@ -414,7 +414,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var isClean = false;
-        var hash    = this._getHash(this.getAceEditorAtIdx(idx).getValue());
+        var hash    = this._getHash(this.getEditor(idx).getValue());
 
         $.each(this.aceCleanHashes, function (i, v) {
             if (v.idx === idx && v.hash === hash) {
@@ -441,7 +441,7 @@ var EditorsHandler = function () {
         $(window).on('_ace.new', function (e, idx) {
             that.IdeSettings.fetchAll().then(function (settings) {
                 if (typeof settings !== typeof undefined) {
-                    var editor = that.getAceEditorAtIdx(idx);
+                    var editor = that.getEditor(idx);
                     editor.setOptions(settings);
                     editor.$blockScrolling = Infinity;
                 }
@@ -454,36 +454,73 @@ var EditorsHandler = function () {
         }
     };
 
-    this.setAceEditorTemplate = function (idx) {
+    ///////////////////////////////////
+    // Editor Template
+    ///////////////////////////////////
+    this.getEditorTemplate = function (idx) {
 
         idx = parseInt(idx);
 
-        var that      = this;
-        var ext       = this._getTabFileExtension(idx);
-        var aceEditor = this.getAceEditorAtIdx(idx);
-        var deferred  = $.Deferred();
+        var ext      = this._getTabFileExtension(idx);
+        var deferred = $.Deferred();
 
-        if (typeof ext !== typeof undefined && aceEditor.getValue() === '') {
+        if (typeof ext !== typeof undefined) {
             $.get('/src/html/templates/' + ext + '.tpl', function (data) {
-                aceEditor.setValue(data);
-                aceEditor.clearSelection();
-                that._markNavTabClean(idx);
-                deferred.resolve();
+                deferred.resolve(data);
             });
         }
 
         return deferred.promise();
     };
 
+    this.setEditorTemplate = function (idx) {
+
+        idx = parseInt(idx);
+
+        var that      = this;
+        var aceEditor = this.getEditor(idx);
+        var deferred  = $.Deferred();
+
+        if (this.getEditorContent(idx) === undefined) {
+            deferred.resolve();
+            return deferred.promise();
+        }
+
+        this.getEditorTemplate(idx).then(function (data) {
+            aceEditor.setValue(data);
+            aceEditor.clearSelection();
+            that._markNavTabClean(idx);
+            deferred.resolve();
+        });
+
+        return deferred.promise();
+    };
+
+    ///////////////////////////////////
+    // Editor Content
+    ///////////////////////////////////
+    this.getEditorContent = function (idx) {
+
+        idx = parseInt(idx);
+
+        var aceEditor = this.getEditor(idx);
+
+        if (typeof aceEditor !== typeof undefined) {
+            return aceEditor.getValue();
+        }
+
+        return undefined;
+    };
+
     this.setEditorContent = function (idx, content) {
 
         idx = parseInt(idx);
 
-        var aceEditor = this.getAceEditorAtIdx(idx);
+        var aceEditor = this.getEditor(idx);
         var deferred  = $.Deferred();
 
         if (typeof content === typeof undefined) {
-            this.setAceEditorTemplate(idx).then(function () {
+            this.setEditorTemplate(idx).then(function () {
                 deferred.resolve();
             });
         }
@@ -497,22 +534,44 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-    this.getAllAceEditorModes = function () {
+    ///////////////////////////////////
+    // Editor File Entry (chrome)
+    ///////////////////////////////////
+    this.getEditorFileEntry = function (idx) {
 
-        var deferred = $.Deferred();
+        idx = parseInt(idx);
 
-        $.get('/src/settings/ace.modes.json').done(function (data) {
-            deferred.resolve(data);
+        var aceEditorFull = this.getEditor(idx, true);
+
+        if (typeof aceEditorFull !== typeof undefined) {
+            return aceEditorFull.fileEntry;
+        }
+
+        return undefined;
+    };
+
+    this.setEditorFileEntry = function (idx, fileEntry) {
+
+        idx = parseInt(idx);
+
+        this.aceEditors.forEach(function (aceEditorEntry) {
+            if (aceEditorEntry.idx === idx) {
+                aceEditorEntry.fileEntry = fileEntry;
+                return false;
+            }
         });
 
-        return deferred.promise();
+        return false;
     };
 
-    this.getCurrentAceEditor = function () {
-        return this.getAceEditorAtIdx(this.currentIdx);
+    ///////////////////////////////////
+    // Getters for editors
+    ///////////////////////////////////
+    this.getCurrentEditor = function () {
+        return this.getEditor(this.currentIdx);
     };
 
-    this.getAceEditorAtIdx = function (idx, returnFullObj) {
+    this.getEditor = function (idx, returnFullObj) {
 
         idx          = parseInt(idx);
         var response = undefined;
@@ -529,34 +588,22 @@ var EditorsHandler = function () {
         return response;
     };
 
-    this.getAllAceEditors = function () {
+    this.getAllEditorObjects = function () {
         return this.aceEditors;
     };
 
-    this.getFileEntryAtIdx = function (idx) {
+    ///////////////////////////////////
+    // Getters for editor modes
+    ///////////////////////////////////
+    this.getAllEditorModes = function () {
 
-        idx = parseInt(idx);
+        var deferred = $.Deferred();
 
-        var aceEditorFull = this.getAceEditorAtIdx(idx, true);
+        $.get('/src/settings/ace.modes.json').done(function (data) {
+            deferred.resolve(data);
+        });
 
-        if (typeof aceEditorFull !== typeof undefined) {
-            return aceEditorFull.fileEntry;
-        }
-
-        return undefined;
-    };
-
-    this.getAceContentAtIdx = function (idx) {
-
-        idx = parseInt(idx);
-
-        var aceEditor = this.getAceEditorAtIdx(idx);
-
-        if (typeof aceEditor !== typeof undefined) {
-            return aceEditor.getValue();
-        }
-
-        return undefined;
+        return deferred.promise();
     };
 
 
@@ -648,7 +695,7 @@ var EditorsHandler = function () {
 
         $fileName.one('focusout', function () {
             $(this).removeAttr('contenteditable').off('keydown');
-            that.setAceEditorTemplate(idx);
+            that.setEditorTemplate(idx);
             that._setAceEditorMode(idx);
             $siblings.css('visibility', 'visible');
         });
@@ -713,8 +760,8 @@ var EditorsHandler = function () {
         }
 
         var that       = this;
-        var aceContent = this.getAceContentAtIdx(idx);
-        var fileEntry  = this.getFileEntryAtIdx(idx);
+        var aceContent = this.getEditorContent(idx);
+        var fileEntry  = this.getEditorFileEntry(idx);
 
         var handler = function (writableFileEntry) {
 
@@ -748,12 +795,12 @@ var EditorsHandler = function () {
 
         var that = this;
         if (typeof idx === typeof undefined) {
-            $.each(this.getAllAceEditors(), function (i, v) {
+            $.each(this.getAllEditorObjects(), function (i, v) {
                 that.onToggleReadOnly(v.idx);
             });
         }
 
-        var ace = this.getAceEditorAtIdx(idx);
+        var ace = this.getEditor(idx);
 
         if (typeof ace !== typeof undefined) {
             var isReadOnly = !ace.getOption('readOnly');
