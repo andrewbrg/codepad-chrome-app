@@ -25,82 +25,39 @@ main {
     flex-direction: row;
 }
 
-main #sidebar {
-    position: relative;
-    min-width: 250px;
-    flex-grow: 1;
-}
-
 .btn {
     cursor: pointer;
     box-shadow: none;
 }
 
 /*******************************************************************************/
-/************************************* Toggle **********************************/
+/************************************* Navbar **********************************/
 /*******************************************************************************/
-.cmn-tgl {
-    position: absolute;
-    margin-left: -9999px;
-    visibility: hidden;
-}
 
-.cmn-tgl + label {
-    display: block;
+#sidebar {
+    background-color: #262a2e;
     position: relative;
-    cursor: pointer;
-    outline: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    min-width: 250px;
+    flex-grow: 1;
 }
 
-input.cmn-tgl-rnd-flt + label {
-    padding: 2px;
-    width: 60px;
-    height: 30px;
-    background-color: #cccccc;
-    border-radius: 30px;
-    transition: background 0.4s;
+#sidebar .list-group-item {
+    background: none;
+    padding: .4rem .75rem;
+    color: rgba(255, 255, 255, .5);
 }
 
-input.cmn-tgl-rnd-flt + label:before, input.cmn-tgl-rnd-flt + label:after {
-    display: block;
-    position: absolute;
-    content: "";
+#sidebar .list-group-item .treeview span.icon {
+    margin: 0 3px 0 0;
 }
 
-input.cmn-tgl-rnd-flt + label:before {
-    top: 2px;
-    left: 2px;
-    bottom: 2px;
-    right: 2px;
-    background-color: #fff;
-    border-radius: 30px;
-    -webkit-transition: background 0.4s;
-    -moz-transition: background 0.4s;
-    -o-transition: background 0.4s;
-    transition: background 0.4s;
+#sidebar .list-group-item:hover {
+    background-color: rgba(0, 0, 0, 0.28);
 }
 
-input.cmn-tgl-rnd-flt + label:after {
-    top: 4px;
-    left: 4px;
-    bottom: 4px;
-    width: 22px;
-    background-color: #cccccc;
-    border-radius: 22px;
-    transition: margin 0.4s, background 0.4s;
-}
-
-input.cmn-tgl-rnd-flt:checked + label {
-    background-color: rgba(0, 123, 255, .7);
-}
-
-input.cmn-tgl-rnd-flt:checked + label:after {
-    margin-left: 30px;
-    background-color: rgba(0, 123, 255, .7);
+#sidebar .list-group-item.node-sidebar.node-selected {
+    background-color: #1b1d21 !important;
+    color: rgba(255, 255, 255, 1) !important;
 }
 
 /*******************************************************************************/
@@ -409,7 +366,7 @@ select:focus,
 }
 
 /*******************************************************************************/
-/********************************** Drop down **********************************/
+/****************************** Form Dropdown **********************************/
 /*******************************************************************************/
 .form-group {
     margin: 0.8rem 0;
@@ -433,4 +390,71 @@ select:focus,
 
 .dropdown-divider {
     border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/*******************************************************************************/
+/******************************** Form Toggle **********************************/
+/*******************************************************************************/
+.cmn-tgl {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.cmn-tgl + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+input.cmn-tgl-rnd-flt + label {
+    padding: 2px;
+    width: 60px;
+    height: 30px;
+    background-color: #cccccc;
+    border-radius: 30px;
+    transition: background 0.4s;
+}
+
+input.cmn-tgl-rnd-flt + label:before, input.cmn-tgl-rnd-flt + label:after {
+    display: block;
+    position: absolute;
+    content: "";
+}
+
+input.cmn-tgl-rnd-flt + label:before {
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    right: 2px;
+    background-color: #fff;
+    border-radius: 30px;
+    -webkit-transition: background 0.4s;
+    -moz-transition: background 0.4s;
+    -o-transition: background 0.4s;
+    transition: background 0.4s;
+}
+
+input.cmn-tgl-rnd-flt + label:after {
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: 22px;
+    background-color: #cccccc;
+    border-radius: 22px;
+    transition: margin 0.4s, background 0.4s;
+}
+
+input.cmn-tgl-rnd-flt:checked + label {
+    background-color: rgba(0, 123, 255, .7);
+}
+
+input.cmn-tgl-rnd-flt:checked + label:after {
+    margin-left: 30px;
+    background-color: rgba(0, 123, 255, .7);
 }

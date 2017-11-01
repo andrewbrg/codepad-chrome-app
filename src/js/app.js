@@ -45,9 +45,11 @@ $(document).ready(function () {
     var Editors     = new EditorsHandler();
     var Modals      = new ModalsHandler();
     var IdeSettings = new IdeSettingsHandler();
+    var Sidebar     = new SidebarHandler();
 
     Editors.init(IdeSettings);
     IdeSettings.init(Editors);
+    Sidebar.init();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
