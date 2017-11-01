@@ -255,9 +255,9 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var $el = (typeof this.getTabNavElAtIdx(idx) === typeof undefined)
+        var $el = (typeof this.getTabNavElement(idx) === typeof undefined)
             ? this.getTabsNavContainer().children().first()
-            : this.getTabNavElAtIdx(idx);
+            : this.getTabNavElement(idx);
 
         $el.find('*[data-toggle="tab"]').first().tab('show');
         this.currentIdx = parseInt(idx);
@@ -274,7 +274,7 @@ var EditorsHandler = function () {
     this._getTabFileExtension = function (idx) {
 
         idx       = parseInt(idx);
-        var $el   = this.getTabNavElAtIdx(idx);
+        var $el   = this.getTabNavElement(idx);
         var regEx = /(?:\.([^.]+))?$/;
 
         if (typeof $el !== typeof undefined) {
@@ -334,7 +334,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
             data    = JSON.parse(data);
-            var $el = that.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+            var $el = that.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
             $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);
             $el.find('.filetype-icon').addClass(data.icon);
@@ -379,7 +379,7 @@ var EditorsHandler = function () {
             return;
         }
 
-        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+        var $el = this.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
         $el.addClass('is-dirty').find('.dirty-tab').remove();
         $el.append($(this.navDirtyBtnHtml).attr('data-idx', idx));
     };
@@ -405,7 +405,7 @@ var EditorsHandler = function () {
             });
         }
 
-        var $el = this.getTabNavElAtIdx(idx).find('*[data-toggle="tab"]').first();
+        var $el = this.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
         $el.removeClass('is-dirty').find('.dirty-tab').remove();
     };
 
@@ -481,7 +481,7 @@ var EditorsHandler = function () {
         var aceEditor = this.getEditor(idx);
         var deferred  = $.Deferred();
 
-        if (this.getEditorContent(idx) === undefined) {
+        if (this.getEditorContent(idx) === '') {
             deferred.resolve();
             return deferred.promise();
         }
@@ -509,7 +509,7 @@ var EditorsHandler = function () {
             return aceEditor.getValue();
         }
 
-        return undefined;
+        return '';
     };
 
     this.setEditorContent = function (idx, content) {
@@ -611,34 +611,39 @@ var EditorsHandler = function () {
     /// Public tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this.getTabNavElement = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return undefined;
+        }
+
+        return this.getTabsNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
+    };
+
     this.getTabsNavContainer = function () {
         return $(document).find('.tab-list').first();
+    };
+
+    this.getTabContentElement = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return undefined;
+        }
+
+        return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
     };
 
     this.getTabsContentContainer = function () {
         return $(document).find('.tab-content').first();
     };
 
-
-    this.getTabNavElAtIdx = function (idx) {
-
-        if (typeof idx === typeof undefined) {
-            return undefined;
-        }
-        return this.getTabsNavContainer().find('*[data-idx="' + idx + '"]').first().closest('li');
-    };
-
-    this.getTabContentElAtIdx = function (idx) {
-
-        if (typeof idx === typeof undefined) {
-            return undefined;
-        }
-        return this.getTabsContentContainer().find('.tab-pane[data-idx="' + idx + '"]').first();
+    this.getTabNavFilename = function (idx) {
+        return this.getTabNavElement(idx).find('.filename').first().html();
     };
 
     this.getStatusBarContentElAtIdx = function (idx) {
 
-        var $tabContent = this.getTabContentElAtIdx(idx);
+        var $tabContent = this.getTabContentElement(idx);
         if (typeof $tabContent === typeof undefined) {
             return undefined;
         }
@@ -685,24 +690,39 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that      = this;
-        idx           = parseInt(idx);
-        var $el       = this.getTabNavElAtIdx(idx);
-        var $fileName = $el.find('.filename').first();
-        var $siblings = $fileName.siblings().css('visibility', 'hidden');
+        idx = parseInt(idx);
 
-        $fileName.attr('contenteditable', 'true').focus();
+        var that        = this;
+        var $fileName   = this.getTabNavElement(idx).find('.filename').first();
+        var $siblings   = $fileName.siblings().css('visibility', 'hidden');
+        var oldFileName = $fileName.html();
 
-        $fileName.one('focusout', function () {
-            $(this).removeAttr('contenteditable').off('keydown');
+        $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
+
             that.setEditorTemplate(idx);
             that._setAceEditorMode(idx);
             $siblings.css('visibility', 'visible');
+
+            var fileEntry = that.getEditorFileEntry(idx);
+            if (typeof fileEntry !== typeof undefined) {
+                fileEntry.name = $fileName.html();
+                that.setEditorFileEntry(idx, fileEntry);
+            }
+
+            $fileName.removeAttr('contenteditable').off('keydown');
         });
 
         $fileName.on('keydown', function (e) {
-            if (e.which === 27 || e.which === 13) {
-                $(this).trigger('focusout');
+
+            var $this = $(this);
+
+            if (e.which === 27) {
+                $this.html(oldFileName);
+                $this.trigger('focusout');
+            }
+
+            if (e.which === 13) {
+                $this.trigger('focusout');
             }
         });
 
@@ -716,8 +736,8 @@ var EditorsHandler = function () {
         }
 
         idx = parseInt(idx);
-        this.getTabNavElAtIdx(idx).remove();
-        this.getTabContentElAtIdx(idx).remove();
+        this.getTabNavElement(idx).remove();
+        this.getTabContentElement(idx).remove();
         this._giveTabFocus(this.previousIdx);
         this._closeTabModals(idx);
 
@@ -759,11 +779,10 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that       = this;
-        var aceContent = this.getEditorContent(idx);
-        var fileEntry  = this.getEditorFileEntry(idx);
-
-        var handler = function (writableFileEntry) {
+        var that        = this;
+        var aceContent  = this.getEditorContent(idx);
+        var fileEntry   = this.getEditorFileEntry(idx);
+        var saveHandler = function (writableFileEntry) {
 
             if (chrome.runtime.lastError) {
                 that._notify('danger', '', chrome.runtime.lastError.message);
@@ -779,15 +798,23 @@ var EditorsHandler = function () {
                     that._closeTabModals(idx);
                 };
 
-                fileWriter.write(new Blob([aceContent], {type: fileEntry.type}));
+                var writeObj = {};
+                if (typeof fileEntry === typeof undefined) {
+                    writeObj.name = that.getTabNavFilename(idx);
+                }
+                else {
+                    writeObj.type = fileEntry.type;
+                }
+
+                fileWriter.write(new Blob([aceContent], writeObj));
             });
         };
 
 
         if (typeof fileEntry === typeof undefined) {
-            chrome.fileSystem.chooseEntry({type: 'saveFile'}, handler);
+            chrome.fileSystem.chooseEntry({type: 'saveFile'}, saveHandler);
         } else {
-            chrome.fileSystem.getWritableEntry(fileEntry, handler);
+            chrome.fileSystem.getWritableEntry(fileEntry, saveHandler);
         }
     };
 
@@ -808,10 +835,10 @@ var EditorsHandler = function () {
             ace.setOption('readOnly', isReadOnly);
 
             if (isReadOnly) {
-                this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
+                this.getTabContentElement(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
             }
             else {
-                this.getTabContentElAtIdx(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+                this.getTabContentElement(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
             }
         }
     };

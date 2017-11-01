@@ -57,7 +57,7 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Edit tab name
-    $(document).on('click', '.action-edit-tab', function () {
+    $(document).on('dblclick', '.action-edit-tab', function () {
         Editors.onEditTabName($(this).attr('data-idx'));
     });
 
