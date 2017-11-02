@@ -1,16 +1,22 @@
 var GitHubHandler = function () {
 
-    this.GitHub = require('github-api');
+    this.octo = null;
+
+    this.callback = function (err, val) {
+        console.log(val);
+    };
 
     this.authenticate = function (username, password) {
 
-        var gh = new this.GitHub({
+        this.octo = new Octokat({
             username: username,
             password: password
         });
+        console.log(this.octo);
 
-        var me = gh.getUser();
-
-        console.log(me);
+        this.octo.zen.read(function (err, val) {
+            console.log(err);
+            console.log(val);
+        });
     };
 };
