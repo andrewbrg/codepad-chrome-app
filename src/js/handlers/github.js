@@ -4,7 +4,7 @@ var GitHubHandler = function () {
 
     this.authenticate = function (username, password) {
 
-        var gh = new GitHub({
+        var gh = new this.GitHub({
             username: username,
             password: password
         });
