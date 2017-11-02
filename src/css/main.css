@@ -49,6 +49,8 @@ main {
 
 #sidebar .list-group-item .treeview span.icon {
     margin: 0 3px 0 0;
+    font-size: 0.75rem;
+    line-height: 10px;
 }
 
 #sidebar .list-group-item:hover {
@@ -386,6 +388,11 @@ select:focus,
 .dropdown-item:hover {
     background-color: #1b1d21;
     color: rgba(255, 255, 255, 1);
+}
+
+.dropdown-item .filetype-icon {
+    width: 20px;
+    display: inline-block;
 }
 
 .dropdown-divider {

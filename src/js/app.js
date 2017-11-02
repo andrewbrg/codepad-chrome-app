@@ -42,14 +42,15 @@ $(document).ready(function () {
     /// Globals and initializations
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var Editors     = new EditorsHandler();
-    var Modals      = new ModalsHandler();
-    var IdeSettings = new IdeSettingsHandler();
-    var Sidebar     = new SidebarHandler();
+    var Editors       = new EditorsHandler();
+    var Modals        = new ModalsHandler();
+    var IdeSettings   = new IdeSettingsHandler();
+    var Sidebar       = new SidebarHandler();
+    var Notifications = new NotificationsHandler();
 
-    Editors.init(IdeSettings);
+    Editors.init(IdeSettings, Notifications);
     IdeSettings.init(Editors);
-    Sidebar.init();
+    Sidebar.init(Notifications);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -330,14 +331,14 @@ $(document).ready(function () {
     /// Sidebar actions
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    $sidebar.resizable({
-        ghost: true,
-        helper: "ui-resizable-helper"
-    });
 
     // Sidebar open
     $(document).on('click', '.action-sidebar-open', function () {
 
     });
 
+    // Directory open
+    $(document).on('click', '.action-project-open', function () {
+        Sidebar.onOpenDir();
+    });
 });

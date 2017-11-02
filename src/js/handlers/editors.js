@@ -1,16 +1,18 @@
 var EditorsHandler = function () {
 
+    this.Notifications = null;
+    this.IdeSettings   = null;
+    this.Modelist      = ace.require("ace/ext/modelist");
+    this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
+
     this.idx                  = 0;
     this.currentIdx           = null;
     this.previousIdx          = null;
     this.aceEditors           = [];
     this.aceCleanHashes       = [];
     this.aceClipboard         = '';
-    this.IdeSettings          = null;
-    this.Modelist             = ace.require("ace/ext/modelist");
-    this.StatusBar            = ace.require('ace/ext/statusbar').StatusBar;
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-sm-container" data-title="Save changes?"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="action-edit-tab filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
@@ -24,27 +26,6 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Helper
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    this._notify = function (type, title, message) {
-
-        var obj = {message: message};
-
-        if (typeof title !== typeof undefined) {
-            obj.title = title;
-        }
-
-        $.notify(
-            obj,
-            {
-                type: type,
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                offset: 10
-            }
-        );
-    };
 
     this._getHash = function (input) {
         var hash = 0, len = input.length;
@@ -91,14 +72,14 @@ var EditorsHandler = function () {
         chrome.fileSystem.getWritableEntry(fileEntry, function (writableEntry) {
 
             if (chrome.runtime.lastError) {
-                that._notify('danger', '', chrome.runtime.lastError.message);
+                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
                 deferred.resolve();
                 return false;
             }
 
             writableEntry.createWriter(function (writer) {
                 writer.onerror    = function (msg) {
-                    that._notify('danger', 'File Error', msg);
+                    that.Notifications.notify('danger', 'File Error', msg);
                 };
                 writer.onwriteend = function (e) {
                     deferred.resolve(e);
@@ -119,14 +100,14 @@ var EditorsHandler = function () {
         chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: fileName, acceptsMultiple: false}, function (writableEntry) {
 
             if (chrome.runtime.lastError) {
-                that._notify('danger', '', chrome.runtime.lastError.message);
+                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
                 deferred.resolve();
                 return false;
             }
 
             writableEntry.createWriter(function (writer) {
                 writer.onerror    = function (msg) {
-                    that._notify('danger', 'File Error', msg);
+                    that.Notifications.notify('danger', 'File Error', msg);
                 };
                 writer.onwriteend = function (e) {
                     deferred.resolve(e);
@@ -214,7 +195,7 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-alt-f', mac: 'ctrl-alt-f'},
             exec: function () {
                 chrome.app.window.current().fullscreen();
-                that._notify('info', 'Fullscreen mode', 'Press esc to exit fullscreen...');
+                that.Notifications.notify('info', 'Fullscreen mode', 'Press esc to exit fullscreen...');
             }
         });
 
@@ -523,11 +504,13 @@ var EditorsHandler = function () {
     /// Public Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function (ideSettings) {
+    this.init = function (ideSettings, notifications) {
 
         var that = this;
 
-        this.IdeSettings = ideSettings;
+        this.Notifications = notifications;
+        this.IdeSettings   = ideSettings;
+
         this._populateAddTabDropDown();
 
         // Handle adding settings to new tabs
@@ -755,9 +738,12 @@ var EditorsHandler = function () {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Public Event Callbacks
+    /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    ///////////////////////////////////
+    // Tab Related
+    ///////////////////////////////////
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry) {
 
         fileExtension = (typeof fileExtension === typeof undefined)
@@ -841,6 +827,9 @@ var EditorsHandler = function () {
         return true;
     };
 
+    ///////////////////////////////////
+    // File System Related
+    ///////////////////////////////////
     this.onOpenFile = function () {
 
         var that = this;
@@ -848,7 +837,7 @@ var EditorsHandler = function () {
         chrome.fileSystem.chooseEntry({type: 'openFile'}, function (fileEntry) {
 
             if (chrome.runtime.lastError) {
-                that._notify('danger', '', chrome.runtime.lastError.message);
+                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
                 return false;
             }
 
@@ -859,7 +848,7 @@ var EditorsHandler = function () {
 
                 reader.readAsText(file);
                 reader.onerror = function (msg) {
-                    that._notify('danger', 'File Error', msg);
+                    that.Notifications.notify('danger', 'File Error', msg);
                 };
                 reader.onload  = function (e) {
                     that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);

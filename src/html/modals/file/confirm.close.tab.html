@@ -1,24 +1,21 @@
 <div class="container-fluid confirm-close-tab">
-    <form>
-        <p>This file has been modified, save changes?</p>
-        <div class="row">
-            <div class="col-sm-4">
-                <button class="action-save-tab btn btn-outline-primary btn-sm"
-                        type="button">Save
-                </button>
-            </div>
-            <div class="col-sm-4">
-                <button class="action-close-tab btn btn-outline-danger btn-sm"
-                        type="button">Discard
-                </button>
-            </div>
-            <div class="col-sm-4">
-                <button class="btn btn-outline-secondary btn-sm"
-                        type="button"
-                        data-dismiss="modal"
-                        aria-label="Close">Cancel
-                </button>
-            </div>
+    <p class="text-center">This file has been modified, would you like to save your changes?</p>
+    <div class="row">
+        <div class="col-4">
+            <button class="action-save-tab btn btn-primary btn-sm" type="button">
+                <i class="fa fa-fw fa-check"></i>&nbsp;Save
+            </button>
         </div>
-    </form>
+
+        <div class="col-4">
+            <button class="btn btn-outline-secondary btn-sm" type="button" data-dismiss="modal" aria-label="Close">
+                <i class="fa fa-fw fa-times"></i>&nbsp;Cancel
+            </button>
+        </div>
+        <div class="col-4">
+            <button class="action-close-tab btn btn-outline-danger btn-sm" type="button">
+                <i class="fa fa-fw fa-trash-o"></i>&nbsp;Discard
+            </button>
+        </div>
+    </div>
 </div>

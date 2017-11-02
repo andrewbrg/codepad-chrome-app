@@ -1,17 +1,36 @@
 var SidebarHandler = function () {
 
+    this.Notifications = null;
 
-    this.init = function () {
-        this.loadSidebar();
+    this.directoryTree = null;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public Sidebar
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    this.init = function (notifications) {
+
+        this.Notifications = notifications;
+
+        this.getSidebar().resizable({
+            ghost: true,
+            helper: "ui-resizable-helper"
+        });
+        this.getSidebar().treeview({data: this.getDirectoryTree()});
     };
 
-    this.loadSidebar = function () {
-        $('#sidebar').treeview({data: this.getDirectoryTree()});
+    this.getSidebar = function () {
+        return $(document).find('#sidebar').first();
     };
 
 
     this.getDirectoryTree = function () {
-        var tree = [
+
+        if (typeof this.directoryTree !== typeof undefined && this.directoryTree !== null) {
+            return this.directoryTree;
+        }
+
+        this.directoryTree = [
             {
                 text: "Parent 1",
                 icon: "fa fa-fw fa-folder-o",
@@ -48,6 +67,43 @@ var SidebarHandler = function () {
             }
         ];
 
-        return tree;
-    }
+        return this.directoryTree;
+    };
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public Event Handlers
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////
+    // File System Related
+    ///////////////////////////////////
+    this.onOpenDir = function () {
+        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
+
+            if (chrome.runtime.lastError) {
+                this._notify('danger', '', chrome.runtime.lastError.message);
+                return false;
+            }
+
+            if (dirEntry !== false && dirEntry.isDirectory) {
+                var dirReader = dirEntry.createReader();
+                var entries   = [];
+
+                var readEntries = function () {
+                    dirReader.readEntries(function (results) {
+                        if (results.length) {
+                            results.forEach(function (item) {
+                                console.log(item);
+                                entries = entries.concat(item);
+                            });
+                            readEntries();
+                        }
+                    }, errorHandler);
+                };
+
+                readEntries();
+            }
+        });
+    };
 };
