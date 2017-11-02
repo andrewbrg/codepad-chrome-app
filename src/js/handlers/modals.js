@@ -29,7 +29,7 @@ var ModalsHandler = function () {
             deferred.resolve({html: data, idx: $el.attr('data-idx')});
         };
 
-        if ($el.hasClass('modal-appearance')) {
+        if ($el.hasClass('modal-ide-appearance')) {
             $.get('/src/html/modals/editor/appearance.html').done(callback);
         }
 
@@ -44,6 +44,12 @@ var ModalsHandler = function () {
         if ($el.hasClass('modal-content-help')) {
             $.get('/src/html/modals/content/help.html').done(callback);
         }
+
+        if ($el.hasClass('modal-github-auth')) {
+            $.get('/src/html/modals/github/authenticate.html').done(callback);
+        }
+
+
 
         return deferred.promise();
     };

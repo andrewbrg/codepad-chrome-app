@@ -1,219 +1,217 @@
 <div class="container-fluid ide-settings">
-    <form>
-        <div class="row">
+    <div class="row">
 
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Selection style</strong><br/>
-                        <span>Indicate how selections should occur</span>
-                    </label>
-                    <div>
-                        <select data-action="ide-setting"
-                                data-option="selectionStyle"
-                                title="Selection style">
-                            <option value="line">Line</option>
-                            <option value="text">Text</option>
-                        </select>
-                    </div>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Selection style</strong><br/>
+                    <span>Indicate how selections should occur</span>
+                </label>
+                <div>
+                    <select data-action="ide-setting"
+                            data-option="selectionStyle"
+                            title="Selection style">
+                        <option value="line">Line</option>
+                        <option value="text">Text</option>
+                    </select>
                 </div>
             </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Cursor style</strong><br/>
-                        <span>Indicate the cursor style</span>
-                    </label>
-                    <div>
-                        <select data-action="ide-setting"
-                                data-option="cursorStyle"
-                                title="Cursor style">
-                            <option value="ace">Ace</option>
-                            <option value="slim">Slim</option>
-                            <option value="smooth">Smooth</option>
-                            <option value="wide">Wide</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Newline format</strong><br/>
-                        <span>Format to use on new lines</span>
-                    </label>
-                    <div>
-                        <select data-action="ide-setting"
-                                data-option="newLineMode"
-                                title="Newline format">
-                            <option value="auto">Auto</option>
-                            <option value="unix">Unix</option>
-                            <option value="windows">Windows</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Highlight active line</strong><br/>
-                        <span>Highlight the current active line</span>
-                    </label>
-                    <div class="switch">
-                        <input id="highlightActiveLine"
-                               data-action="ide-setting"
-                               data-option="highlightActiveLine"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="highlightActiveLine"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Line numbering</strong><br/>
-                        <span>Display line numbers in the editor</span>
-                    </label>
-                    <div class="switch">
-                        <input id="showGutter"
-                               data-action="ide-setting"
-                               data-option="showGutter"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="showGutter"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Invisible characters</strong><br/>
-                        <span>Display helper symbols for tabs, spaces etc.</span>
-                    </label>
-                    <div class="switch">
-                        <input id="showInvisibles"
-                               data-action="ide-setting"
-                               data-option="showInvisibles"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="showInvisibles"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Indentation guides</strong><br/>
-                        <span>Display vertical indentation guides in the editor</span>
-                    </label>
-                    <div class="switch">
-                        <input id="displayIndentGuides"
-                               data-action="ide-setting"
-                               data-option="displayIndentGuides"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="displayIndentGuides"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Soft tabs</strong><br/>
-                        <span>Soft tabs instead of standard tabs</span>
-                    </label>
-                    <div class="switch">
-                        <input id="useSoftTabs"
-                               data-action="ide-setting"
-                               data-option="useSoftTabs"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="useSoftTabs"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Word wrap</strong><br/>
-                        <span>Enable word wrapping on long lines</span>
-                    </label>
-                    <div class="switch">
-                        <input id="wrapBehavioursEnabled"
-                               data-action="ide-setting"
-                               data-option="wrapBehavioursEnabled"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="wrapBehavioursEnabled"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Allow over-scroll</strong><br/>
-                        <span>Scroll past the end of a document</span>
-                    </label>
-                    <div class="switch">
-                        <input id="scrollPastEnd"
-                               data-action="ide-setting"
-                               data-option="scrollPastEnd"
-                               class="cmn-tgl cmn-tgl-rnd-flt"
-                               type="checkbox"/>
-                        <label for="scrollPastEnd"></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Tab size</strong><br/>
-                        <span>#No. of columns per tab</span>
-                    </label>
-                    <div class="range-slider">
-                        <input data-toggle="tooltip"
-                               data-option="tabSize"
-                               class="range-slider-range"
-                               type="range"
-                               min="0"
-                               max="50"
-                               step="1"
-                               title="Tab size"/>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6 col-sm-12">
-                <div class="form-group">
-                    <label>
-                        <strong>Word wrap limit</strong><br/>
-                        <span>#No. of characters per line before wrapping</span>
-                    </label>
-                    <div class="range-slider">
-                        <input data-toggle="tooltip"
-                               data-action="ide-setting"
-                               data-option="wrap"
-                               class="range-slider-range"
-                               type="range"
-                               min="0"
-                               max="900"
-                               step="1"
-                               title="Word wrap limit"/>
-                    </div>
-                </div>
-            </div>
-
         </div>
-    </form>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Cursor style</strong><br/>
+                    <span>Indicate the cursor style</span>
+                </label>
+                <div>
+                    <select data-action="ide-setting"
+                            data-option="cursorStyle"
+                            title="Cursor style">
+                        <option value="ace">Ace</option>
+                        <option value="slim">Slim</option>
+                        <option value="smooth">Smooth</option>
+                        <option value="wide">Wide</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Newline format</strong><br/>
+                    <span>Format to use on new lines</span>
+                </label>
+                <div>
+                    <select data-action="ide-setting"
+                            data-option="newLineMode"
+                            title="Newline format">
+                        <option value="auto">Auto</option>
+                        <option value="unix">Unix</option>
+                        <option value="windows">Windows</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Highlight active line</strong><br/>
+                    <span>Highlight the current active line</span>
+                </label>
+                <div class="switch">
+                    <input id="highlightActiveLine"
+                           data-action="ide-setting"
+                           data-option="highlightActiveLine"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="highlightActiveLine"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Line numbering</strong><br/>
+                    <span>Display line numbers in the editor</span>
+                </label>
+                <div class="switch">
+                    <input id="showGutter"
+                           data-action="ide-setting"
+                           data-option="showGutter"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="showGutter"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Invisible characters</strong><br/>
+                    <span>Display helper symbols for tabs, spaces etc.</span>
+                </label>
+                <div class="switch">
+                    <input id="showInvisibles"
+                           data-action="ide-setting"
+                           data-option="showInvisibles"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="showInvisibles"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Indentation guides</strong><br/>
+                    <span>Display vertical indentation guides in the editor</span>
+                </label>
+                <div class="switch">
+                    <input id="displayIndentGuides"
+                           data-action="ide-setting"
+                           data-option="displayIndentGuides"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="displayIndentGuides"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Soft tabs</strong><br/>
+                    <span>Soft tabs instead of standard tabs</span>
+                </label>
+                <div class="switch">
+                    <input id="useSoftTabs"
+                           data-action="ide-setting"
+                           data-option="useSoftTabs"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="useSoftTabs"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Word wrap</strong><br/>
+                    <span>Enable word wrapping on long lines</span>
+                </label>
+                <div class="switch">
+                    <input id="wrapBehavioursEnabled"
+                           data-action="ide-setting"
+                           data-option="wrapBehavioursEnabled"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="wrapBehavioursEnabled"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Allow over-scroll</strong><br/>
+                    <span>Scroll past the end of a document</span>
+                </label>
+                <div class="switch">
+                    <input id="scrollPastEnd"
+                           data-action="ide-setting"
+                           data-option="scrollPastEnd"
+                           class="cmn-tgl cmn-tgl-rnd-flt"
+                           type="checkbox"/>
+                    <label for="scrollPastEnd"></label>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Tab size</strong><br/>
+                    <span>#No. of columns per tab</span>
+                </label>
+                <div class="range-slider">
+                    <input data-toggle="tooltip"
+                           data-option="tabSize"
+                           class="range-slider-range"
+                           type="range"
+                           min="0"
+                           max="50"
+                           step="1"
+                           title="Tab size"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="form-group">
+                <label>
+                    <strong>Word wrap limit</strong><br/>
+                    <span>#No. of characters per line before wrapping</span>
+                </label>
+                <div class="range-slider">
+                    <input data-toggle="tooltip"
+                           data-action="ide-setting"
+                           data-option="wrap"
+                           class="range-slider-range"
+                           type="range"
+                           min="0"
+                           max="900"
+                           step="1"
+                           title="Word wrap limit"/>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

@@ -106,7 +106,7 @@ $(document).ready(function () {
         var callback = function () {
         };
 
-        if ($el.hasClass('modal-ide-settings') || $el.hasClass('modal-appearance')) {
+        if ($el.hasClass('modal-ide-settings') || $el.hasClass('modal-ide-appearance')) {
             callback = function () {
                 IdeSettings.decorateView();
             };

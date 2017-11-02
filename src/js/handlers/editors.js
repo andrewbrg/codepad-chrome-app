@@ -870,9 +870,11 @@ var EditorsHandler = function () {
             ? this._fileSaveAs(this.getTabNavFilename(idx), this.getEditorContent(idx))
             : this._fileSave(fileEntry, this.getEditorContent(idx));
 
-        promise.then(function () {
-            that._markNavTabClean(idx);
-            that._closeTabModals(idx);
+        promise.then(function (e) {
+            if (typeof e !== typeof undefined) {
+                that._markNavTabClean(idx);
+                that._closeTabModals(idx);
+            }
         });
     };
 

@@ -2,7 +2,14 @@ var SidebarHandler = function () {
 
     this.Notifications = null;
 
-    this.directoryTree = null;
+    this.dirTree         = null;
+    this.dirSeperator    = '/';
+    this.dirTreeEntryTpl = {text: '', nodes: []};
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Private Sidebar
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Sidebar
@@ -26,11 +33,11 @@ var SidebarHandler = function () {
 
     this.getDirectoryTree = function () {
 
-        if (typeof this.directoryTree !== typeof undefined && this.directoryTree !== null) {
-            return this.directoryTree;
+        if (typeof this.dirTree !== typeof undefined && this.dirTree !== null) {
+            return this.dirTree;
         }
 
-        this.directoryTree = [
+        this.dirTree = [
             {
                 text: "Parent 1",
                 icon: "fa fa-fw fa-folder-o",
@@ -67,7 +74,7 @@ var SidebarHandler = function () {
             }
         ];
 
-        return this.directoryTree;
+        return this.dirTree;
     };
 
 
@@ -79,31 +86,70 @@ var SidebarHandler = function () {
     // File System Related
     ///////////////////////////////////
     this.onOpenDir = function () {
-        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
+
+        var that     = this;
+        this.dirTree = [];
+
+        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
 
             if (chrome.runtime.lastError) {
                 this._notify('danger', '', chrome.runtime.lastError.message);
                 return false;
             }
 
-            if (dirEntry !== false && dirEntry.isDirectory) {
-                var dirReader = dirEntry.createReader();
-                var entries   = [];
+            var makeObj = function (name) {
+                var obj = that.dirTreeEntryTpl;
+                return obj.name = name;
+            };
 
-                var readEntries = function () {
-                    dirReader.readEntries(function (results) {
-                        if (results.length) {
-                            results.forEach(function (item) {
-                                console.log(item);
-                                entries = entries.concat(item);
-                            });
-                            readEntries();
+            var parsePath = function (path) {
+
+                var toTraverse = that.dirTree;
+                var pathParts  = path.split('/');
+
+                pathParts.forEach(function (name) {
+
+                    var found = false;
+                    toTraverse.forEach(function (dirTreeEntry) {
+                        if (dirTreeEntry.name === name) {
+                            dirTreeEntry.nodes.push(makeObj(name));
+                            toTraverse = dirTreeEntry.nodes;
+                            found      = true;
                         }
-                    }, errorHandler);
-                };
+                    });
 
-                readEntries();
-            }
+                    if (!found) {
+                        that.dirTree.push(makeObj(name));
+                    }
+                });
+            };
+
+            var traverseDir = function (entry, path) {
+
+                path = path || '';
+
+                // noinspection JSUnresolvedVariable
+                if (entry.isFile) {
+                    parsePath((path + entry.name));
+                    return false;
+                }
+
+                if (entry.isDirectory) {
+
+                    parsePath((path + entry.name));
+
+                    var dirReader = entry.createReader();
+                    dirReader.readEntries(function (entries) {
+                        for (var i = 0; i < entries.length; i++) {
+                            traverseDir(entries[i], path + entry.name + "/")
+                        }
+                    });
+                }
+            };
+
+            traverseDir(entry);
+
+            console.log(that.dirTree);
         });
     };
 };
