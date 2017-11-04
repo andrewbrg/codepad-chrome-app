@@ -47,7 +47,6 @@ $(document).ready(function () {
     var IdeSettings   = new IdeSettingsHandler();
     var Sidebar       = new SidebarHandler();
     var Notifications = new NotificationsHandler();
-    var GitHubHndl    = new GitHubHandler();
 
     Editors.init(IdeSettings, Notifications);
     IdeSettings.init(Editors);
@@ -340,18 +339,6 @@ $(document).ready(function () {
     // Project open
     $(document).on('click', '.action-project-open', function () {
         Sidebar.onOpenDir();
-    });
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Github actions
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // Toggle read only mode on all tabs
-    $(document).on('click', '.action-github-auth', function () {
-        var username = $(document).find('input[name="github-username"]').first().val();
-        var password = $(document).find('input[name="github-password"]').first().val();
-        GitHubHndl.authenticate(username, password);
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

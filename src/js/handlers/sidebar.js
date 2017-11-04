@@ -18,7 +18,7 @@ var SidebarHandler = function () {
     this.init = function (notifications) {
 
         this.Notifications = notifications;
-        
+
         this.getSidebar().treeview({data: this.getDirectoryTree()});
         this.getSidebar().resizable({
             ghost: true,
@@ -97,29 +97,37 @@ var SidebarHandler = function () {
                 return false;
             }
 
-            var makeObj = function (name) {
-                var obj = that.dirTreeEntryTpl;
-                return obj.name = name;
+            var pushObj = function (name, dirTreeEntry) {
+
+                var obj  = that.dirTreeEntryTpl;
+                obj.name = name;
+
+                if (typeof dirTreeEntry === typeof undefined) {
+                    that.dirTree.push(obj);
+                    return that.dirTree;
+                }
+
+                dirTreeEntry.nodes.push(obj);
+                return dirTreeEntry.nodes;
             };
 
             var parsePath = function (path) {
 
                 var toTraverse = that.dirTree;
-                var pathParts  = path.split('/');
+                var pathParts  = path.split(that.dirSeperator);
 
                 pathParts.forEach(function (name) {
 
                     var found = false;
                     toTraverse.forEach(function (dirTreeEntry) {
                         if (dirTreeEntry.name === name) {
-                            dirTreeEntry.nodes.push(makeObj(name));
-                            toTraverse = dirTreeEntry.nodes;
+                            toTraverse = pushObj(name, dirTreeEntry);
                             found      = true;
                         }
                     });
 
                     if (!found) {
-                        that.dirTree.push(makeObj(name));
+                        pushObj(name);
                     }
                 });
             };
