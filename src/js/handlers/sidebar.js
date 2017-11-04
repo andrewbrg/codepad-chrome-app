@@ -2,14 +2,29 @@ var SidebarHandler = function () {
 
     this.Notifications = null;
 
-    this.dirTree         = null;
-    this.dirSeperator    = '/';
-    this.dirTreeEntryTpl = {text: '', nodes: []};
+    this.dirTree = [];
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this._loadDirTree = function () {
+
+        var that = this;
+
+        if (this.dirTree.length > 0) {
+            var $sidebar = this.getSidebar();
+
+            if ($sidebar.hasOwnProperty('treeview')) {
+                $sidebar.treeview('remove', function () {
+                    $sidebar.treeview({data: that.dirTree});
+                });
+            }
+            else {
+                $sidebar.treeview({data: this.dirTree});
+            }
+        }
+    };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Sidebar
@@ -19,7 +34,7 @@ var SidebarHandler = function () {
 
         this.Notifications = notifications;
 
-        this.getSidebar().treeview({data: this.getDirectoryTree()});
+        this._loadDirTree();
         this.getSidebar().resizable({
             ghost: true,
             helper: "ui-resizable-helper"
@@ -28,53 +43,6 @@ var SidebarHandler = function () {
 
     this.getSidebar = function () {
         return $(document).find('#sidebar').first();
-    };
-
-
-    this.getDirectoryTree = function () {
-
-        if (typeof this.dirTree !== typeof undefined && this.dirTree !== null) {
-            return this.dirTree;
-        }
-
-        this.dirTree = [
-            {
-                text: "Parent 1",
-                icon: "fa fa-fw fa-folder-o",
-                selectedIcon: "fa fa-fw fa-folder-open-o",
-                selectable: false,
-                nodes: [
-                    {
-                        text: "Child 1",
-                        nodes: [
-                            {
-                                text: "Grandchild 1"
-                            },
-                            {
-                                text: "Grandchild 2"
-                            }
-                        ]
-                    },
-                    {
-                        text: "Child 2"
-                    }
-                ]
-            },
-            {
-                text: "Parent 2"
-            },
-            {
-                text: "Parent 3"
-            },
-            {
-                text: "Parent 4"
-            },
-            {
-                text: "Parent 5"
-            }
-        ];
-
-        return this.dirTree;
     };
 
 
@@ -97,67 +65,53 @@ var SidebarHandler = function () {
                 return false;
             }
 
-            var pushObj = function (name, dirTreeEntry) {
+            var buildDirTree = function (entry, callback) {
 
-                var obj  = that.dirTreeEntryTpl;
-                obj.name = name;
+                var results = [];
+                entry.createReader().readEntries(function (entries) {
 
-                if (typeof dirTreeEntry === typeof undefined) {
-                    that.dirTree.push(obj);
-                    return that.dirTree;
-                }
+                    var pending = entries.length;
+                    if (!pending) {
+                        return callback({
+                            text: entry.name,
+                            icon: "fa fa-fw fa-folder-o",
+                            selectable: false,
+                            nodes: results
+                        });
+                    }
 
-                dirTreeEntry.nodes.push(obj);
-                return dirTreeEntry.nodes;
-            };
-
-            var parsePath = function (path) {
-
-                var toTraverse = that.dirTree;
-                var pathParts  = path.split(that.dirSeperator);
-
-                pathParts.forEach(function (name) {
-
-                    var found = false;
-                    toTraverse.forEach(function (dirTreeEntry) {
-                        if (dirTreeEntry.name === name) {
-                            toTraverse = pushObj(name, dirTreeEntry);
-                            found      = true;
+                    entries.forEach(function (entry) {
+                        if (entry.isDirectory) {
+                            buildDirTree(entry, function (res) {
+                                results.push({
+                                    text: entry.name,
+                                    icon: "fa fa-fw fa-folder-o",
+                                    selectable: false,
+                                    nodes: res
+                                });
+                                if (!--pending) {
+                                    callback(results);
+                                }
+                            });
+                        }
+                        else {
+                            results.push({
+                                text: entry.name,
+                                icon: "fa fa-fw fa-file-o",
+                                selectable: true
+                            });
+                            if (!--pending) {
+                                callback(results);
+                            }
                         }
                     });
-
-                    if (!found) {
-                        pushObj(name);
-                    }
                 });
             };
 
-            var traverseDir = function (entry, path) {
-
-                path = path || '';
-
-                // noinspection JSUnresolvedVariable
-                if (entry.isFile) {
-                    parsePath((path + entry.name));
-                    return false;
-                }
-
-                if (entry.isDirectory) {
-
-                    parsePath((path + entry.name));
-
-                    var dirReader = entry.createReader();
-                    dirReader.readEntries(function (entries) {
-                        for (var i = 0; i < entries.length; i++) {
-                            traverseDir(entries[i], path + entry.name + "/")
-                        }
-                    });
-                }
-            };
-
-            traverseDir(entry);
-
-            console.log(that.dirTree);
+            buildDirTree(entry, function (result) {
+                that.dirTree = result;
+                that._loadDirTree();
+            });
         });
     };
 };
