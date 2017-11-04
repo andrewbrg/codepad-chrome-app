@@ -18,12 +18,12 @@ var SidebarHandler = function () {
     this.init = function (notifications) {
 
         this.Notifications = notifications;
-
+        
+        this.getSidebar().treeview({data: this.getDirectoryTree()});
         this.getSidebar().resizable({
             ghost: true,
             helper: "ui-resizable-helper"
         });
-        this.getSidebar().treeview({data: this.getDirectoryTree()});
     };
 
     this.getSidebar = function () {
