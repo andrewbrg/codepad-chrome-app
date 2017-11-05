@@ -80,10 +80,8 @@ var EditorsHandler = function () {
         }
 
         fileEntry.getParent(function (parent) {
-            fileEntry.moveTo(parent, newFileName, function (new_node) {
-                console.log(new_node);
-                console.log("Success creating the new node");
-                deferred.resolve(writableEntry);
+            fileEntry.moveTo(parent, newFileName, function (newFileEntry) {
+                deferred.resolve(newFileEntry);
             }, function (err) {
                 that.Notifications.notify('danger', 'File Error', err);
             })
@@ -817,7 +815,7 @@ var EditorsHandler = function () {
 
             if (typeof fileEntry !== typeof undefined) {
                 that._fileRename(fileEntry, that.getTabNavFilename(idx)).then(function (fileEntry) {
-                    that.setEditorFileEntry(fileEntry)
+                    that.setEditorFileEntry(idx, fileEntry);
                 });
             }
 

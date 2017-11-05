@@ -1,10 +1,10 @@
-var NotificationsHandler = function(){
+var NotificationsHandler = function () {
     this.notify = function (type, title, message) {
 
         var obj = {message: message};
 
-        if (typeof title !== typeof undefined) {
-            obj.title = '<strong>'+title+'</strong><br />';
+        if (typeof title !== typeof undefined && title.length > 0) {
+            obj.title = '<strong>' + title + '</strong><br />';
         }
 
         $.notify(
