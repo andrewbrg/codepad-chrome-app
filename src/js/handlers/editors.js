@@ -1,7 +1,7 @@
 var EditorsHandler = function () {
 
-    this.Notifications = null;
-    this.IdeSettings   = null;
+    this.Notifications = undefined;
+    this.IdeSettings   = undefined;
     this.Modelist      = ace.require("ace/ext/modelist");
     this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
 

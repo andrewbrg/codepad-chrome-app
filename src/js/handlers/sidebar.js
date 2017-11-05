@@ -1,6 +1,7 @@
 var SidebarHandler = function () {
 
-    this.Notifications = null;
+    this.Notifications = undefined;
+    this.Editors       = undefined;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
@@ -9,6 +10,7 @@ var SidebarHandler = function () {
     this._loadDirTree = function (dirTreeJson) {
 
         if (dirTreeJson.length > 0) {
+
             var $sidebar = this.getSidebar();
 
             if ($sidebar.hasOwnProperty('treeview')) {
@@ -21,9 +23,6 @@ var SidebarHandler = function () {
             }
 
             $sidebar.collapse('show');
-            $sidebar.on('shown.bs.collapse', function () {
-                $(window).trigger('resize');
-            });
         }
     };
 
@@ -31,12 +30,20 @@ var SidebarHandler = function () {
     /// Public Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function (notifications) {
-        this.Notifications = notifications;
+    this.init = function (notifications, editors) {
 
-        this.getSidebar().resizable({
+        this.Notifications = notifications;
+        this.Editors       = editors;
+
+        var $sidebar = this.getSidebar();
+
+        $sidebar.resizable({
             ghost: true,
             helper: "ui-resizable-helper"
+        });
+
+        $sidebar.on('shown.bs.collapse', function () {
+            $(window).trigger('resize');
         });
     };
 
@@ -56,6 +63,7 @@ var SidebarHandler = function () {
 
         var that = this;
 
+
         chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
 
             if (chrome.runtime.lastError) {
@@ -70,57 +78,75 @@ var SidebarHandler = function () {
                 return a.text > b.text;
             };
 
-            var buildDirTree = function (entry, callback) {
+            var buildDirTree = function (entry, modes, callback) {
 
                 var results = [];
                 entry.createReader().readEntries(function (entries) {
 
                     var pending = entries.length;
+
                     if (!pending) {
+
                         var obj = {
                             text: entry.name,
                             path: entry.fullPath,
                             typeFile: 0,
-                            icon: "fa fa-fw fa-folder-o",
+                            icon: 'fa fa-fw fa-folder-o',
                             selectable: false
                         };
+
                         if (results.length > 0) {
                             results   = results.sort(sortFn);
                             obj.nodes = results;
                         }
+
                         callback(obj);
                     }
 
                     entries.forEach(function (entry) {
                         if (entry.isDirectory) {
-                            buildDirTree(entry, function (res) {
+
+                            buildDirTree(entry, modes, function (res) {
                                 var obj = {
                                     text: entry.name,
                                     path: entry.fullPath,
                                     typeFile: 0,
-                                    icon: "fa fa-fw fa-folder-o",
+                                    icon: 'fa fa-fw fa-folder-o',
                                     selectable: false
                                 };
+
                                 if (res.length > 0) {
                                     res       = res.sort(sortFn);
                                     obj.nodes = res;
                                 }
+
                                 results.push(obj);
                                 results = results.sort(sortFn);
+
                                 if (!--pending) {
                                     callback(results);
                                 }
                             });
                         }
                         else {
+
+                            var icon = 'fa fa-fw fa-file-text';
+                            var ext  = that.Editors._fileExtFromFileEntry(entry.name);
+
+                            if (modes.hasOwnProperty(ext)) {
+                                icon = JSON.stringify(modes[ext].icon);
+                            }
+
                             results.push({
                                 text: entry.name,
                                 path: entry.fullPath,
                                 typeFile: 1,
-                                icon: "fa fa-fw fa-file-text-o",
+                                icon: icon,
                                 selectable: true
                             });
+
                             results = results.sort(sortFn);
+
                             if (!--pending) {
                                 callback(results);
                             }
@@ -129,8 +155,12 @@ var SidebarHandler = function () {
                 });
             };
 
-            buildDirTree(entry, function (result) {
-                that._loadDirTree(result);
+            that.Editors.getAllEditorModes().then(function (data) {
+                console.log(data);
+                buildDirTree(entry, JSON.parse(data), function (result) {
+                    console.log(result);
+                    that._loadDirTree(result);
+                });
             });
         });
     };

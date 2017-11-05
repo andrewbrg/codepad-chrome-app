@@ -50,7 +50,7 @@ $(document).ready(function () {
 
     Editors.init(IdeSettings, Notifications);
     IdeSettings.init(Editors);
-    Sidebar.init(Notifications);
+    Sidebar.init(Notifications, Editors);
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
