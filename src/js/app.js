@@ -359,20 +359,27 @@ if (typeof $ !== typeof undefined) {
             }
         });
 
-        // Sidebar expand
+        // Sidebar show
+        $(document).on('click', '.action-sidebar-show', function () {
+            Sidebar.show();
+        });
+
+        // Sidebar hide
+        $(document).on('click', '.action-sidebar-hide', function () {
+            Sidebar.hide();
+        });
+
+        // Sidebar nodes expand
         $(document).on('click', '.action-sidebar-expand', function () {
             Sidebar.expandNodes();
         });
 
-        // Sidebar toggle
-        $(document).on('click', '.action-sidebar-open', function () {
+        // Sidebar nodes compress
+        $(document).on('click', '.action-sidebar-compress', function () {
             Sidebar.compressNodes();
         });
 
-        // Sidebar close
-        $(document).on('click', '.action-sidebar-close', function () {
-            Sidebar.compressNodes();
-        });
+
 
         // Project open
         $(document).on('click', '.action-project-open', function () {
