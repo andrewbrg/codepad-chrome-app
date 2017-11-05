@@ -29,6 +29,11 @@
     "mode": "javascript",
     "name": "JavaScript"
   },
+  "json": {
+    "icon": "icon-javascript-alt",
+    "mode": "javascript",
+    "name": "JSON"
+  },
   "md": {
     "icon": "icon-html",
     "mode": "markdown",

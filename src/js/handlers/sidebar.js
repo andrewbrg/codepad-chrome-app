@@ -61,7 +61,8 @@ var SidebarHandler = function () {
     ///////////////////////////////////
     this.onOpenDir = function () {
 
-        var that = this;
+        var that  = this;
+        var modes = [];
 
 
         chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
@@ -78,7 +79,7 @@ var SidebarHandler = function () {
                 return a.text > b.text;
             };
 
-            var buildDirTree = function (entry, modes, callback) {
+            var buildDirTree = function (entry, callback) {
 
                 var results = [];
                 entry.createReader().readEntries(function (entries) {
@@ -91,7 +92,7 @@ var SidebarHandler = function () {
                             text: entry.name,
                             path: entry.fullPath,
                             typeFile: 0,
-                            icon: 'fa fa-fw fa-folder-o',
+                            icon: 'fa fa-fw fa-folder',
                             selectable: false
                         };
 
@@ -106,12 +107,12 @@ var SidebarHandler = function () {
                     entries.forEach(function (entry) {
                         if (entry.isDirectory) {
 
-                            buildDirTree(entry, modes, function (res) {
+                            buildDirTree(entry, function (res) {
                                 var obj = {
                                     text: entry.name,
                                     path: entry.fullPath,
                                     typeFile: 0,
-                                    icon: 'fa fa-fw fa-folder-o',
+                                    icon: 'fa fa-fw fa-folder',
                                     selectable: false
                                 };
 
@@ -130,11 +131,11 @@ var SidebarHandler = function () {
                         }
                         else {
 
-                            var icon = 'fa fa-fw fa-file-text';
-                            var ext  = that.Editors._fileExtFromFileEntry(entry.name);
+                            var icon = 'fa fa-fw fa-file';
+                            var ext  = that.Editors._fileExtFromFileEntry(entry);
 
                             if (modes.hasOwnProperty(ext)) {
-                                icon = JSON.stringify(modes[ext].icon);
+                                icon = modes[ext].icon;
                             }
 
                             results.push({
@@ -156,8 +157,8 @@ var SidebarHandler = function () {
             };
 
             that.Editors.getAllEditorModes().then(function (data) {
-                console.log(data);
-                buildDirTree(entry, JSON.parse(data), function (result) {
+                modes = JSON.parse(data);
+                buildDirTree(entry, function (result) {
                     console.log(result);
                     that._loadDirTree(result);
                 });
