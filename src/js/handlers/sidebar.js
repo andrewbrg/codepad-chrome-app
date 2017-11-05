@@ -3,6 +3,8 @@ var SidebarHandler = function () {
     this.Notifications = undefined;
     this.Editors       = undefined;
 
+    this.dirEntry = null;
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -15,17 +17,24 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
+        var bootTreeview = function () {
+            $sidebar.treeview({
+                data: dirTreeJson,
+                silent: false
+            });
+            $sidebar.treeview('collapseAll');
+        };
+
         if ($sidebar.hasOwnProperty('treeview')) {
             $sidebar.treeview('remove', function () {
-                $sidebar.treeview({data: dirTreeJson});
+                bootTreeview();
             });
         }
         else {
-            $sidebar.treeview({data: dirTreeJson});
+            bootTreeview();
         }
 
         $sidebar.collapse('show');
-
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,15 +46,23 @@ var SidebarHandler = function () {
         this.Notifications = notifications;
         this.Editors       = editors;
 
+        var that     = this;
         var $sidebar = this.getSidebar();
-
-        $sidebar.resizable({
-            ghost: true,
-            helper: "ui-resizable-helper"
-        });
 
         $sidebar.on('shown.bs.collapse', function () {
             $(window).trigger('resize');
+        });
+
+        $(document).on('click', '.node-sidebar', function () {
+
+            var $this = $(this);
+
+            var node = $sidebar.treeview('getNode', $this.attr('data-nodeid'));
+            if (node.typeFile === 1) {
+                that.dirEntry.getFile(node.path, {}, function (fileEntry) {
+                    that.Editors._fileOpen(fileEntry);
+                });
+            }
         });
     };
 
@@ -66,12 +83,14 @@ var SidebarHandler = function () {
         var that  = this;
         var modes = [];
 
-        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
+        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
 
             if (chrome.runtime.lastError) {
                 that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
                 return false;
             }
+
+            that.dirEntry = dirEntry;
 
             var sortFn = function (a, b) {
                 if (a.typeFile !== b.typeFile) {
@@ -105,13 +124,13 @@ var SidebarHandler = function () {
                         callback(obj);
                     }
 
-                    entries.forEach(function (entry) {
-                        if (entry.isDirectory) {
+                    entries.forEach(function (item) {
+                        if (item.isDirectory) {
 
-                            buildDirTree(entry, function (res) {
+                            buildDirTree(item, function (res) {
                                 var obj = {
-                                    text: entry.name,
-                                    path: entry.fullPath,
+                                    text: item.name,
+                                    path: item.fullPath,
                                     typeFile: 0,
                                     icon: 'fa fa-fw fa-folder',
                                     selectable: false
@@ -132,19 +151,14 @@ var SidebarHandler = function () {
                         }
                         else {
 
-                            var icon = 'fa fa-fw fa-file';
-                            var ext  = that.Editors._fileExtFromFileEntry(entry);
-
-                            if (modes.hasOwnProperty(ext)) {
-                                icon = modes[ext].icon;
-                            }
+                            var ext = that.Editors._fileExtFromFileEntry(item);
 
                             results.push({
-                                text: entry.name,
-                                path: entry.fullPath,
+                                text: item.name,
+                                path: item.fullPath,
                                 typeFile: 1,
-                                icon: icon,
-                                selectable: true
+                                icon: (modes.hasOwnProperty(ext)) ? modes[ext].icon : 'fa fa-fw fa-file fa-sidebar',
+                                selectable: false
                             });
 
                             results = results.sort(sortFn);
@@ -159,7 +173,7 @@ var SidebarHandler = function () {
 
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
-                buildDirTree(entry, function (result) {
+                buildDirTree(dirEntry, function (result) {
                     that._loadDirTree(result);
                 });
             });

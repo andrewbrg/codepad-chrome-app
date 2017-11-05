@@ -64,6 +64,25 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
+    this._fileOpen = function (fileEntry) {
+
+        var that = this;
+
+        fileEntry.file(function (file) {
+            var reader   = new FileReader();
+            var fileExt  = that._fileExtFromFileEntry(fileEntry);
+            var fileName = that._fileNameFromFileEntry(fileEntry);
+
+            reader.readAsText(file);
+            reader.onerror = function (msg) {
+                that.Notifications.notify('danger', 'File Error', msg);
+            };
+            reader.onload  = function (e) {
+                that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
+            };
+        });
+    };
+
     this._fileSave = function (fileEntry, fileContent) {
 
         var that     = this;
@@ -841,19 +860,7 @@ var EditorsHandler = function () {
                 return false;
             }
 
-            fileEntry.file(function (file) {
-                var reader   = new FileReader();
-                var fileExt  = that._fileExtFromFileEntry(fileEntry);
-                var fileName = that._fileNameFromFileEntry(fileEntry);
-
-                reader.readAsText(file);
-                reader.onerror = function (msg) {
-                    that.Notifications.notify('danger', 'File Error', msg);
-                };
-                reader.onload  = function (e) {
-                    that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
-                };
-            });
+            that._fileOpen(fileEntry);
         });
     };
 
