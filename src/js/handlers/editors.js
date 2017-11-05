@@ -79,14 +79,23 @@ var EditorsHandler = function () {
             return deferred.promise();
         }
 
-        fileEntry.getParent(function (parent) {
-            fileEntry.moveTo(parent, newFileName, function (newFileEntry) {
-                deferred.resolve(newFileEntry);
+        chrome.fileSystem.getWritableEntry(fileEntry, function (fileEntry) {
+
+            if (chrome.runtime.lastError) {
+                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
+                deferred.resolve();
+                return false;
+            }
+            
+            fileEntry.getParent(function (parent) {
+                fileEntry.moveTo(parent, newFileName, function (newFileEntry) {
+                    deferred.resolve(newFileEntry);
+                }, function (err) {
+                    that.Notifications.notify('danger', 'File Error', err);
+                })
             }, function (err) {
                 that.Notifications.notify('danger', 'File Error', err);
-            })
-        }, function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            });
         });
         return deferred.promise();
     };

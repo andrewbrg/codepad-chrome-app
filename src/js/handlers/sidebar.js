@@ -3,7 +3,8 @@ var SidebarHandler = function () {
     this.Notifications = undefined;
     this.Editors       = undefined;
 
-    this.dirEntry = null;
+    this.dirEntry     = null;
+    this.treeViewInit = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
@@ -17,11 +18,12 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if ($sidebar.hasOwnProperty('treeview')) {
+        if (this.treeViewInit) {
             $sidebar.treeview('remove');
         }
 
         $sidebar.treeview({data: dirTreeJson, silent: false});
+        this.treeViewInit = true;
         this._setSidebarTopMenu(title);
         this.compressNodes();
         this.show();
@@ -29,7 +31,7 @@ var SidebarHandler = function () {
 
     this._setSidebarTopMenu = function (title) {
 
-        this.getSidebar().find('.sidebar-menu').html(title);
+        this.getAside().find('.sidebar-menu-title').html(title);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,12 +46,6 @@ var SidebarHandler = function () {
         var that     = this;
         var $sidebar = this.getSidebar();
 
-        $sidebar.on('shown.bs.collapse', function () {
-            $(window).trigger('resize');
-        });
-        $sidebar.on('hide.bs.collapse', function () {
-            $(window).trigger('resize');
-        });
 
         $(document).on('click', '.node-sidebar', function () {
 
@@ -84,7 +80,7 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if ($sidebar.hasOwnProperty('treeview')) {
+        if (this.treeViewInit) {
             $sidebar.treeview('expandAll');
         }
     };
@@ -93,7 +89,7 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if ($sidebar.hasOwnProperty('treeview')) {
+        if (this.treeViewInit) {
             $sidebar.treeview('collapseAll');
         }
     };
@@ -202,7 +198,7 @@ var SidebarHandler = function () {
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
                 buildDirTree(dirEntry, function (result) {
-                    that._decorateSidebar(result, result.name);
+                    that._decorateSidebar(result, dirEntry.name);
                 });
             });
         });

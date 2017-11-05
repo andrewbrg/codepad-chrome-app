@@ -267,14 +267,15 @@
 <main>
     <aside class="collapse">
         <div class="sidebar-menu bg-dark text-white">
-            <div class="sidebar-menu-title"></div>
+            <span class="sidebar-menu-title pull-left"></span>
             <div class="sidebar-menu-actions pull-right">
-                <i class="btn fa fa-fw fa-expand action-sidebar-expand"></i>
-                <i class="btn fa fa-fw fa-compress action-sidebar-compress"></i>
-                <i class="btn fa fa-fw fa-close action-sidebar-hide"></i>
+                <i class="fa fa-fw fa-expand action-sidebar-expand" title="Expand nodes"></i>
+                <i class="fa fa-fw fa-compress action-sidebar-compress" title="Collapse nodes"></i>
+                <i class="fa fa-fw fa-caret-square-o-left action-sidebar-hide" title="Close sidebar"></i>
             </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="sidebar text-white"></div>
+        <div id="sidebar" class="sidebar text-white"></div>
     </aside>
     <div class="tab-content"></div>
 </main>

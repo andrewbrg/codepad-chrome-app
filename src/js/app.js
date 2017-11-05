@@ -16,7 +16,7 @@
                 id: "codepad-main"
             },
             function (appWindow) {
-                runtime(appWindow, true);
+                runtime(appWindow, false);
             }
         );
     });
@@ -30,7 +30,7 @@
                 id: "codepad-main"
             },
             function (appWindow) {
-                runtime(appWindow, false);
+                runtime(appWindow, true);
             }
         );
     });
@@ -345,19 +345,17 @@ if (typeof $ !== typeof undefined) {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Sidebar toggle
-        $(document).on('click', '.action-sidebar-toggle', function () {
-
-            var $this = $(this);
-            if ($this.hasClass('btn-outline-secondary')) {
-                $this.removeClass('btn-outline-secondary').addClass('btn-outline-primary');
-                return true;
-            }
-
-            if ($this.hasClass('btn-outline-primary')) {
-                $this.removeClass('btn-outline-primary').addClass('btn-outline-secondary');
-                return true;
-            }
+        $aside.on('shown.bs.collapse', function () {
+            var $el = $(document).find('[data-toggle="collapse"][data-target="aside"]');
+            $el.removeClass('btn-outline-secondary').addClass('btn-outline-primary');
+            $(window).trigger('resize');
         });
+        $aside.on('hide.bs.collapse', function () {
+            var $el = $(document).find('[data-toggle="collapse"][data-target="aside"]');
+            $el.removeClass('btn-outline-primary').addClass('btn-outline-secondary');
+            $(window).trigger('resize');
+        });
+
 
         // Sidebar show
         $(document).on('click', '.action-sidebar-show', function () {
@@ -378,7 +376,6 @@ if (typeof $ !== typeof undefined) {
         $(document).on('click', '.action-sidebar-compress', function () {
             Sidebar.compressNodes();
         });
-
 
 
         // Project open
