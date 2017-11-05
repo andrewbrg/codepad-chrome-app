@@ -2,27 +2,28 @@ var SidebarHandler = function () {
 
     this.Notifications = null;
 
-    this.dirTree = [];
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._loadDirTree = function () {
+    this._loadDirTree = function (dirTreeJson) {
 
-        var that = this;
-
-        if (this.dirTree.length > 0) {
+        if (dirTreeJson.length > 0) {
             var $sidebar = this.getSidebar();
 
             if ($sidebar.hasOwnProperty('treeview')) {
                 $sidebar.treeview('remove', function () {
-                    $sidebar.treeview({data: that.dirTree});
+                    $sidebar.treeview({data: dirTreeJson});
                 });
             }
             else {
-                $sidebar.treeview({data: this.dirTree});
+                $sidebar.treeview({data: dirTreeJson});
             }
+
+            $sidebar.collapse('show');
+            $sidebar.on('shown.bs.collapse', function () {
+                $(window).trigger('resize');
+            });
         }
     };
 
@@ -31,10 +32,8 @@ var SidebarHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.init = function (notifications) {
-
         this.Notifications = notifications;
 
-        this._loadDirTree();
         this.getSidebar().resizable({
             ghost: true,
             helper: "ui-resizable-helper"
@@ -55,15 +54,21 @@ var SidebarHandler = function () {
     ///////////////////////////////////
     this.onOpenDir = function () {
 
-        var that     = this;
-        this.dirTree = [];
+        var that = this;
 
         chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
 
             if (chrome.runtime.lastError) {
-                this._notify('danger', '', chrome.runtime.lastError.message);
+                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
                 return false;
             }
+
+            var sortFn = function (a, b) {
+                if (a.typeFile !== b.typeFile) {
+                    return a.typeFile > b.typeFile;
+                }
+                return a.text > b.text;
+            };
 
             var buildDirTree = function (entry, callback) {
 
@@ -72,23 +77,36 @@ var SidebarHandler = function () {
 
                     var pending = entries.length;
                     if (!pending) {
-                        return callback({
+                        var obj = {
                             text: entry.name,
+                            path: entry.fullPath,
+                            typeFile: 0,
                             icon: "fa fa-fw fa-folder-o",
-                            selectable: false,
-                            nodes: results
-                        });
+                            selectable: false
+                        };
+                        if (results.length > 0) {
+                            results   = results.sort(sortFn);
+                            obj.nodes = results;
+                        }
+                        callback(obj);
                     }
 
                     entries.forEach(function (entry) {
                         if (entry.isDirectory) {
                             buildDirTree(entry, function (res) {
-                                results.push({
+                                var obj = {
                                     text: entry.name,
+                                    path: entry.fullPath,
+                                    typeFile: 0,
                                     icon: "fa fa-fw fa-folder-o",
-                                    selectable: false,
-                                    nodes: res
-                                });
+                                    selectable: false
+                                };
+                                if (res.length > 0) {
+                                    res       = res.sort(sortFn);
+                                    obj.nodes = res;
+                                }
+                                results.push(obj);
+                                results = results.sort(sortFn);
                                 if (!--pending) {
                                     callback(results);
                                 }
@@ -97,9 +115,12 @@ var SidebarHandler = function () {
                         else {
                             results.push({
                                 text: entry.name,
-                                icon: "fa fa-fw fa-file-o",
+                                path: entry.fullPath,
+                                typeFile: 1,
+                                icon: "fa fa-fw fa-file-text-o",
                                 selectable: true
                             });
+                            results = results.sort(sortFn);
                             if (!--pending) {
                                 callback(results);
                             }
@@ -109,8 +130,7 @@ var SidebarHandler = function () {
             };
 
             buildDirTree(entry, function (result) {
-                that.dirTree = result;
-                that._loadDirTree();
+                that._loadDirTree(result);
             });
         });
     };

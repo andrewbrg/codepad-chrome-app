@@ -43,6 +43,7 @@ main {
     position: relative;
     min-width: 250px;
     flex-grow: 1;
+    overflow-y: auto;
 }
 
 #sidebar .list-group-item {
@@ -187,7 +188,7 @@ main {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 20px;
+    height: 24px;
     z-index: 99;
     box-shadow: 0 -1px 2px #222;
 }
