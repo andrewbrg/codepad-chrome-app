@@ -24,40 +24,66 @@ main {
 /*******************************************************************************/
 /************************************ Sidebar **********************************/
 /*******************************************************************************/
-
-#sidebar {
+aside {
     position: relative;
     min-width: 300px;
     flex-grow: 1;
-    overflow: hidden;
-    overflow-y: auto;
     resize: horizontal;
     background-color: #262a2e;
     border-right: 1px solid rgba(0, 0, 0, .3);
 }
 
-#sidebar .list-group-item {
+.sidebar {
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+    background-color: #262a2e;
+}
+
+.sidebar-menu {
+    width: 100%;
+    height: 30px;
+}
+
+.sidebar-menu {
+    width: 100%;
+    height: 30px;
+}
+
+.sidebar-menu-actions {
+    margin: 0.35rem 0.5rem 0 0;
+}
+
+.sidebar-menu-actions i {
+    color: rgba(255, 255, 255, .5);
+}
+
+.sidebar-menu-actions i:hover {
+    color: rgba(0, 123, 255, .7);
+}
+
+.sidebar .list-group-item {
     background: none;
     padding: .4rem .75rem;
     color: rgba(255, 255, 255, .5);
 }
 
-#sidebar .list-group-item .treeview span.icon {
+.sidebar .list-group-item .treeview span.icon {
     margin: 0 3px 0 0;
     font-size: 0.75rem;
     line-height: 10px;
 }
 
-#sidebar .list-group-item:hover {
-    background-color: rgba(0, 0, 0, 0.28);
+.sidebar .list-group-item:hover {
+    background-color: rgba(0, 0, 0, 0.28) !important;
 }
 
-#sidebar .list-group-item.node-sidebar.node-selected {
+.sidebar .list-group-item.node-sidebar.node-selected {
     background-color: #1b1d21 !important;
     color: rgba(255, 255, 255, 1) !important;
 }
 
-#sidebar .fa-sidebar {
+.sidebar .fa-sidebar {
     font-size: 0.78rem;
 }
 

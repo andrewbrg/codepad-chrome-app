@@ -9,7 +9,7 @@ var SidebarHandler = function () {
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._loadDirTree = function (dirTreeJson) {
+    this._decorateSidebar = function (dirTreeJson, title) {
 
         if (dirTreeJson.length === 0) {
             return false;
@@ -17,24 +17,19 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        var bootTreeview = function () {
-            $sidebar.treeview({
-                data: dirTreeJson,
-                silent: false
-            });
-            $sidebar.treeview('collapseAll');
-        };
-
         if ($sidebar.hasOwnProperty('treeview')) {
-            $sidebar.treeview('remove', function () {
-                bootTreeview();
-            });
-        }
-        else {
-            bootTreeview();
+            $sidebar.treeview('remove');
         }
 
-        $sidebar.collapse('show');
+        $sidebar.treeview({data: dirTreeJson, silent: false});
+        this._setSidebarTopMenu(title);
+        this.compressNodes();
+        this.show();
+    };
+
+    this._setSidebarTopMenu = function (title) {
+
+        this.getSidebar().find('.sidebar-menu').html(title);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,6 +47,9 @@ var SidebarHandler = function () {
         $sidebar.on('shown.bs.collapse', function () {
             $(window).trigger('resize');
         });
+        $sidebar.on('hide.bs.collapse', function () {
+            $(window).trigger('resize');
+        });
 
         $(document).on('click', '.node-sidebar', function () {
 
@@ -67,7 +65,37 @@ var SidebarHandler = function () {
     };
 
     this.getSidebar = function () {
-        return $(document).find('#sidebar').first();
+        return $(document).find('.sidebar').first();
+    };
+
+    this.getAside = function () {
+        return $(document).find('aside').first();
+    };
+
+    this.show = function () {
+        this.getAside().collapse('show');
+    };
+
+    this.hide = function () {
+        this.getAside().collapse('hide');
+    };
+
+    this.expandNodes = function () {
+
+        var $sidebar = this.getSidebar();
+
+        if ($sidebar.hasOwnProperty('treeview')) {
+            $sidebar.treeview('expandAll');
+        }
+    };
+
+    this.compressNodes = function () {
+
+        var $sidebar = this.getSidebar();
+
+        if ($sidebar.hasOwnProperty('treeview')) {
+            $sidebar.treeview('collapseAll');
+        }
     };
 
 
@@ -78,7 +106,7 @@ var SidebarHandler = function () {
     ///////////////////////////////////
     // File System Related
     ///////////////////////////////////
-    this.onOpenDir = function () {
+    this.onOpenProject = function () {
 
         var that  = this;
         var modes = [];
@@ -174,7 +202,7 @@ var SidebarHandler = function () {
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
                 buildDirTree(dirEntry, function (result) {
-                    that._loadDirTree(result);
+                    that._decorateSidebar(result, result.name);
                 });
             });
         });

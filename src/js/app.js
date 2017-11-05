@@ -76,23 +76,32 @@ if (typeof $ !== typeof undefined) {
 
         // Handle resize of window
         var $header               = $('header');
-        var $sidebar              = $('#sidebar');
+        var $aside                = $('aside');
+        var $sidebar              = Sidebar.getSidebar();
+        var $sidebarMenu          = $sidebar.find('.sidebar-menu');
         var $tabsContentContainer = Editors.getTabsContentContainer();
         var statusBarHeight       = $tabsContentContainer.find('.ace-status-bar').first().height();
 
         $(window).on('resize', function () {
 
-            var top    = Math.ceil($header.height()).toString();
-            var bottom = Math.ceil(statusBarHeight).toString();
+            var sBarHeight        = Math.ceil(statusBarHeight).toString();
+            var headerHeight      = Math.ceil($header.height()).toString();
+            var sidebarMenuHeight = Math.ceil($sidebarMenu.height()).toString();
+            var asideHeight       = $(window).height() - (parseInt(headerHeight) + parseInt(sBarHeight));
 
             $tabsContentContainer.css({
-                'padding-top': top + 'px',
-                'padding-bottom': bottom + 'px'
+                'padding-top': headerHeight + 'px',
+                'padding-bottom': sBarHeight + 'px'
+            });
+
+            $aside.css({
+                'margin-top': headerHeight + 'px',
+                'height': asideHeight.toString() + 'px'
             });
 
             $sidebar.css({
-                'margin-top': top + 'px',
-                'height': ($(window).height() - (parseInt(top) + parseInt(bottom))).toString() + 'px'
+                'margin-top': sidebarMenuHeight + 'px',
+                'height': (asideHeight - parseInt(sidebarMenuHeight)).toString() + 'px'
             });
         }).resize();
 
@@ -336,7 +345,7 @@ if (typeof $ !== typeof undefined) {
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // Sidebar toggle
-        $(document).on('click', '.action-sidebar-open', function () {
+        $(document).on('click', '.action-sidebar-toggle', function () {
 
             var $this = $(this);
             if ($this.hasClass('btn-outline-secondary')) {
@@ -350,9 +359,24 @@ if (typeof $ !== typeof undefined) {
             }
         });
 
+        // Sidebar expand
+        $(document).on('click', '.action-sidebar-expand', function () {
+            Sidebar.expandNodes();
+        });
+
+        // Sidebar toggle
+        $(document).on('click', '.action-sidebar-open', function () {
+            Sidebar.compressNodes();
+        });
+
+        // Sidebar close
+        $(document).on('click', '.action-sidebar-close', function () {
+            Sidebar.compressNodes();
+        });
+
         // Project open
         $(document).on('click', '.action-project-open', function () {
-            Sidebar.onOpenDir();
+            Sidebar.onOpenProject();
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

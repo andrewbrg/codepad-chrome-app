@@ -41,15 +41,15 @@
 </head>
 <body>
 
+<!--Header-->
 <header class="fixed-top">
-
-    <!--Navbar-->
+    <!--Navigation bar-->
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <div class="navbar-brand">
-            <button class="btn btn-outline-secondary action-sidebar-open"
+            <button class="btn btn-outline-secondary action-sidebar-toggle"
                     type="button"
                     data-toggle="collapse"
-                    data-target="#sidebar"
+                    data-target="aside"
                     aria-expanded="false"
                     aria-controls="sidebar"
                     title="Open project">
@@ -248,8 +248,9 @@
             </ul>
         </div>
     </nav>
+    <!--End navigation bar-->
 
-    <!-- Code navigation tabs -->
+    <!-- Editor tabs -->
     <div class="nav-tabs bg-dark text-white add-file-container">
         <div class="dropdown pull-right" data-toggle="tooltip" title="Add file">
             <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -259,10 +260,22 @@
         </div>
         <ul class="nav tab-list" role="tablist"></ul>
     </div>
+    <!-- End editor tabs -->
 </header>
+<!--End header-->
 
 <main>
-    <div id="sidebar" class="collapse text-white"></div>
+    <aside class="collapse">
+        <div class="sidebar-menu bg-dark text-white">
+            <div class="sidebar-menu-title"></div>
+            <div class="sidebar-menu-actions pull-right">
+                <i class="fa fa-fw fa-expand action-sidebar-expand"></i>
+                <i class="fa fa-fw fa-compress action-sidebar-compress"></i>
+                <i class="fa fa-fw fa-close action-sidebar-close"></i>
+            </div>
+        </div>
+        <div class="sidebar text-white"></div>
+    </aside>
     <div class="tab-content"></div>
 </main>
 
