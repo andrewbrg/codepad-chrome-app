@@ -48,22 +48,6 @@ var EditorsHandler = function () {
         return fileEntry.name.split('.').reverse().pop();
     };
 
-    this._fileRename = function (fileEntry, oldFileName, newFileName) {
-
-        var deferred = $.Deferred();
-
-        if (typeof oldFileName === typeof undefined || typeof newFileName === typeof undefined) {
-            deferred.resolve(fileEntry);
-            return deferred.promise();
-        }
-
-        chrome.fileSystem.getWritableEntry(fileEntry, function (writableEntry) {
-            deferred.resolve(writableEntry);
-        });
-
-        return deferred.promise();
-    };
-
     this._fileOpen = function (fileEntry) {
 
         var that = this;
@@ -80,7 +64,33 @@ var EditorsHandler = function () {
             reader.onload  = function (e) {
                 that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
             };
+        }, function (err) {
+            that.Notifications.notify('danger', 'File Error', err);
         });
+    };
+
+    this._fileRename = function (fileEntry, newFileName) {
+
+        var that     = this;
+        var deferred = $.Deferred();
+
+        if (typeof newFileName === typeof undefined) {
+            deferred.resolve(fileEntry);
+            return deferred.promise();
+        }
+
+        fileEntry.getParent(function (parent) {
+            fileEntry.moveTo(parent, newFileName, function (new_node) {
+                console.log(new_node);
+                console.log("Success creating the new node");
+                deferred.resolve(writableEntry);
+            }, function (err) {
+                that.Notifications.notify('danger', 'File Error', err);
+            })
+        }, function (err) {
+            that.Notifications.notify('danger', 'File Error', err);
+        });
+        return deferred.promise();
     };
 
     this._fileSave = function (fileEntry, fileContent) {
@@ -97,8 +107,8 @@ var EditorsHandler = function () {
             }
 
             writableEntry.createWriter(function (writer) {
-                writer.onerror    = function (msg) {
-                    that.Notifications.notify('danger', 'File Error', msg);
+                writer.onerror    = function (err) {
+                    that.Notifications.notify('danger', 'File Error', err);
                 };
                 writer.onwriteend = function (e) {
                     deferred.resolve(e);
@@ -125,8 +135,8 @@ var EditorsHandler = function () {
             }
 
             writableEntry.createWriter(function (writer) {
-                writer.onerror    = function (msg) {
-                    that.Notifications.notify('danger', 'File Error', msg);
+                writer.onerror    = function (err) {
+                    that.Notifications.notify('danger', 'File Error', err);
                 };
                 writer.onwriteend = function (e) {
                     deferred.resolve(e);
@@ -355,9 +365,12 @@ var EditorsHandler = function () {
         $el.find('*[data-toggle="tab"]').first().tab('show');
         this.currentIdx = parseInt(idx);
 
-        this.getEditor(idx).focus();
+        if (typeof this.getEditor(idx) !== typeof undefined) {
+            this.getEditor(idx).focus();
+            return true;
+        }
 
-        return true;
+        return false;
     };
 
     this._closeTabModals = function (idx) {
@@ -803,7 +816,7 @@ var EditorsHandler = function () {
             that._setAceEditorMode(idx);
 
             if (typeof fileEntry !== typeof undefined) {
-                that._fileRename(fileEntry, oldFileName, that.getTabNavFilename(idx)).then(function (fileEntry) {
+                that._fileRename(fileEntry, that.getTabNavFilename(idx)).then(function (fileEntry) {
                     that.setEditorFileEntry(fileEntry)
                 });
             }
@@ -853,7 +866,7 @@ var EditorsHandler = function () {
 
         var that = this;
 
-        chrome.fileSystem.chooseEntry({type: 'openFile'}, function (fileEntry) {
+        chrome.fileSystem.chooseEntry({type: 'openWritableFile'}, function (fileEntry) {
 
             if (chrome.runtime.lastError) {
                 that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
