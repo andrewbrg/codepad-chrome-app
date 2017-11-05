@@ -334,6 +334,16 @@ $(document).ready(function () {
     // Sidebar toggle
     $(document).on('click', '.action-sidebar-open', function () {
 
+        var $this = $(this);
+        if ($this.hasClass('btn-outline-secondary')) {
+            $this.removeClass('btn-outline-secondary').addClass('btn-outline-primary');
+            return true;
+        }
+
+        if ($this.hasClass('btn-outline-primary')) {
+            $this.removeClass('btn-outline-primary').addClass('btn-outline-secondary');
+            return true;
+        }
     });
 
     // Project open
