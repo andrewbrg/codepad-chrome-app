@@ -9,21 +9,23 @@ var SidebarHandler = function () {
 
     this._loadDirTree = function (dirTreeJson) {
 
-        if (dirTreeJson.length > 0) {
-
-            var $sidebar = this.getSidebar();
-
-            if ($sidebar.hasOwnProperty('treeview')) {
-                $sidebar.treeview('remove', function () {
-                    $sidebar.treeview({data: dirTreeJson});
-                });
-            }
-            else {
-                $sidebar.treeview({data: dirTreeJson});
-            }
-
-            $sidebar.collapse('show');
+        if (dirTreeJson.length === 0) {
+            return false;
         }
+
+        var $sidebar = this.getSidebar();
+
+        if ($sidebar.hasOwnProperty('treeview')) {
+            $sidebar.treeview('remove', function () {
+                $sidebar.treeview({data: dirTreeJson});
+            });
+        }
+        else {
+            $sidebar.treeview({data: dirTreeJson});
+        }
+
+        $sidebar.collapse('show');
+
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +65,6 @@ var SidebarHandler = function () {
 
         var that  = this;
         var modes = [];
-
 
         chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (entry) {
 
@@ -159,7 +160,6 @@ var SidebarHandler = function () {
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
                 buildDirTree(entry, function (result) {
-                    console.log(result);
                     that._loadDirTree(result);
                 });
             });
