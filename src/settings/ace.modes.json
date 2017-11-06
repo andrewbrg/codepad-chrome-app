@@ -14,6 +14,11 @@
     "mode": "css",
     "name": "CSS3"
   },
+  "gitignore":{
+    "icon": "icon-git",
+    "mode": "gitignore",
+    "name": "Gitignore"
+  },
   "go": {
     "icon": "icon-go",
     "mode": "golang",
@@ -83,6 +88,11 @@
     "icon": "icon-database",
     "mode": "sql",
     "name": "SQL"
+  },
+  "mssql": {
+    "icon": "icon-database",
+    "mode": "sqlserver",
+    "name": "MS SQL"
   },
   "txt": {
     "icon": "fa fa-file-text",
