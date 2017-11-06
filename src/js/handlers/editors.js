@@ -40,6 +40,7 @@ var EditorsHandler = function () {
 
     this._loadDefaults = function () {
 
+        var that     = this;
         var deferred = $.Deferred();
 
         $.get('/src/settings/ace.defaults.json', function (data) {
@@ -48,7 +49,7 @@ var EditorsHandler = function () {
             that.defaultTheme      = data.theme;
             that.defaultFont       = data.fontFamily;
             that.defaultFileName   = data.newFileName;
-            that.defaultFileExt    = data.newFileExts;
+            that.defaultFileExt    = data.newFileExt;
             that.undefinedFileMode = data.undefinedFile.mode;
             that.undefinedFileIcon = data.undefinedFile.icon;
 
@@ -818,11 +819,11 @@ var EditorsHandler = function () {
     ///////////////////////////////////
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
 
-        fileExtension = (typeof fileExtension === typeof undefined && fileName !== null)
+        fileExtension = (typeof fileExtension === typeof undefined || fileName === null)
             ? this.defaultFileExt
             : fileExtension;
 
-        fileName = (typeof fileName === typeof undefined && fileName !== null)
+        fileName = (typeof fileName === typeof undefined || fileName === null)
             ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
 
