@@ -183,6 +183,11 @@ if (typeof $ !== typeof undefined) {
             Editors.onOpenFile();
         });
 
+        // Open project
+        $(document).on('click', '.action-project-open', function () {
+            Sidebar.onOpenProject();
+        });
+
         // Close application
         $(document).on('click', '.action-exit', function () {
             chrome.app.window.current().close();
@@ -377,10 +382,9 @@ if (typeof $ !== typeof undefined) {
             Sidebar.compressNodes();
         });
 
-
-        // Project open
-        $(document).on('click', '.action-project-open', function () {
-            Sidebar.onOpenProject();
+        // Sidebar nodes clicked
+        $(document).on('click', '.node-sidebar', function () {
+            Sidebar.onNodeClick($(this).attr('data-nodeid'));
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

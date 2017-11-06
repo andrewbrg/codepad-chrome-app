@@ -267,7 +267,9 @@
 <main>
     <aside class="collapse">
         <div class="sidebar-menu bg-dark text-white">
-            <span class="sidebar-menu-title pull-left"></span>
+            <span class="sidebar-menu-title pull-left">
+                No project opened...
+            </span>
             <div class="sidebar-menu-actions pull-right">
                 <i class="fa fa-fw fa-expand action-sidebar-expand" title="Expand nodes"></i>
                 <i class="fa fa-fw fa-compress action-sidebar-compress" title="Collapse nodes"></i>
@@ -275,7 +277,13 @@
             </div>
             <div class="clearfix"></div>
         </div>
-        <div id="sidebar" class="sidebar text-white"></div>
+        <div id="sidebar" class="sidebar text-white">
+            <br/>
+            <p class="text-center">There is no project currently open...</p>
+            <p class="text-center">
+                <button class="btn btn-outline-secondary btn-sm action-project-open">Open project</button>
+            </p>
+        </div>
     </aside>
     <div class="tab-content"></div>
 </main>

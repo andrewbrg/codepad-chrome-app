@@ -48,7 +48,7 @@ var EditorsHandler = function () {
         return fileEntry.name.split('.').reverse().pop();
     };
 
-    this._fileOpen = function (fileEntry) {
+    this._fileOpen = function (fileEntry, nodeId) {
 
         var that = this;
 
@@ -62,7 +62,7 @@ var EditorsHandler = function () {
                 that.Notifications.notify('danger', 'File Error', msg);
             };
             reader.onload  = function (e) {
-                that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry);
+                that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry, nodeId);
             };
         }, function (err) {
             that.Notifications.notify('danger', 'File Error', err);
@@ -86,7 +86,7 @@ var EditorsHandler = function () {
                 deferred.resolve();
                 return false;
             }
-            
+
             fileEntry.getParent(function (parent) {
                 fileEntry.moveTo(parent, newFileName, function (newFileEntry) {
                     deferred.resolve(newFileEntry);
@@ -184,7 +184,7 @@ var EditorsHandler = function () {
             "idx": idx,
             "ace": aceEditor,
             "statusBar": new this.StatusBar(aceEditor, document.getElementById('status-bar-' + idx)),
-            "fileEntry": fileEntry
+            "fileEntry": typeof fileEntry === typeof undefined || fileEntry === null ? undefined : fileEntry
         });
 
         // Configure
@@ -313,7 +313,7 @@ var EditorsHandler = function () {
     /// Private tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._getNewTabObject = function (fileExt, fileName) {
+    this._getNewTabObject = function (fileExt, fileName, nodeId) {
 
         this.idx++;
 
@@ -323,6 +323,7 @@ var EditorsHandler = function () {
         obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.statusBarId  = 'status-bar-' + this.idx;
         obj.fileName     = fileName + '.' + fileExt;
+        obj.nodeId       = nodeId;
 
         var $nav = $(
             '<li>' +
@@ -333,9 +334,17 @@ var EditorsHandler = function () {
             '</li>'
         );
 
-        $nav.find('.filename').attr('data-idx', this.idx).html(obj.fileName);
+        $nav.find('.filename').attr('data-idx', this.idx);
         $nav.find('.action-close-tab').attr('data-idx', this.idx);
         $nav.find('.modal-confirm-close-tab').attr('data-idx', this.idx);
+
+        if (typeof nodeId !== typeof undefined && nodeId !== null) {
+            $nav.find('.filename').attr('node-id', nodeId);
+            $nav.find('.action-close-tab').attr('node-id', nodeId);
+            $nav.find('.modal-confirm-close-tab').attr('node-id', nodeId);
+        }
+
+        $nav.find('.filename').html(obj.fileName);
 
         obj.nav = $nav;
 
@@ -783,17 +792,17 @@ var EditorsHandler = function () {
     ///////////////////////////////////
     // Tab Related
     ///////////////////////////////////
-    this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry) {
+    this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
 
-        fileExtension = (typeof fileExtension === typeof undefined)
+        fileExtension = (typeof fileExtension === typeof undefined && fileName !== null)
             ? this.defaultFileExt
             : fileExtension;
 
-        fileName = (typeof fileName === typeof undefined)
+        fileName = (typeof fileName === typeof undefined && fileName !== null)
             ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
 
-        var obj = this._getNewTabObject(fileExtension, fileName);
+        var obj = this._getNewTabObject(fileExtension, fileName, nodeId);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
         this._bootAceEditor(obj.idx, fileContent, fileEntry);

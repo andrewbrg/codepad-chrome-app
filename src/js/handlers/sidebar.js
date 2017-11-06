@@ -3,14 +3,14 @@ var SidebarHandler = function () {
     this.Notifications = undefined;
     this.Editors       = undefined;
 
-    this.dirEntry     = null;
-    this.treeViewInit = false;
+    this.dirEntry      = null;
+    this.isInitialised = false;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._decorateSidebar = function (dirTreeJson, title) {
+    this._initialiseTreeView = function (dirTreeJson, title) {
 
         if (dirTreeJson.length === 0) {
             return false;
@@ -18,12 +18,14 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if (this.treeViewInit) {
+        if (this.isInitialised) {
             $sidebar.treeview('remove');
+        } else {
+            $sidebar.html('');
         }
 
         $sidebar.treeview({data: dirTreeJson, silent: false});
-        this.treeViewInit = true;
+        this.isInitialised = true;
         this._setSidebarTopMenu(title);
         this.compressNodes();
         this.show();
@@ -42,22 +44,6 @@ var SidebarHandler = function () {
 
         this.Notifications = notifications;
         this.Editors       = editors;
-
-        var that     = this;
-        var $sidebar = this.getSidebar();
-
-
-        $(document).on('click', '.node-sidebar', function () {
-
-            var $this = $(this);
-
-            var node = $sidebar.treeview('getNode', $this.attr('data-nodeid'));
-            if (node.typeFile === 1) {
-                that.dirEntry.getFile(node.path, {}, function (fileEntry) {
-                    that.Editors._fileOpen(fileEntry);
-                });
-            }
-        });
     };
 
     this.getSidebar = function () {
@@ -80,7 +66,7 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if (this.treeViewInit) {
+        if (this.isInitialised) {
             $sidebar.treeview('expandAll');
         }
     };
@@ -89,7 +75,7 @@ var SidebarHandler = function () {
 
         var $sidebar = this.getSidebar();
 
-        if (this.treeViewInit) {
+        if (this.isInitialised) {
             $sidebar.treeview('collapseAll');
         }
     };
@@ -123,7 +109,7 @@ var SidebarHandler = function () {
                 return a.text > b.text;
             };
 
-            var buildDirTree = function (entry, callback) {
+            var buildTreeViewJson = function (entry, callback) {
 
                 var results = [];
                 entry.createReader().readEntries(function (entries) {
@@ -151,7 +137,7 @@ var SidebarHandler = function () {
                     entries.forEach(function (item) {
                         if (item.isDirectory) {
 
-                            buildDirTree(item, function (res) {
+                            buildTreeViewJson(item, function (res) {
                                 var obj = {
                                     text: item.name,
                                     path: item.fullPath,
@@ -197,10 +183,19 @@ var SidebarHandler = function () {
 
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
-                buildDirTree(dirEntry, function (result) {
-                    that._decorateSidebar(result, dirEntry.name);
+                buildTreeViewJson(dirEntry, function (treeViewJson) {
+                    that._initialiseTreeView(treeViewJson, dirEntry.name);
                 });
             });
         });
     };
+
+    this.onNodeClick = function (nodeId) {
+        var node = $sidebar.treeview('getNode', nodeId);
+        if (node.typeFile === 1) {
+            that.dirEntry.getFile(node.path, {}, function (fileEntry) {
+                that.Editors._fileOpen(fileEntry, nodeId);
+            });
+        }
+    }
 };
