@@ -12,13 +12,14 @@ var EditorsHandler = function () {
     this.aceCleanHashes       = [];
     this.aceClipboard         = '';
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes"></i>';
+    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="action-edit-tab filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
 
     this.defaultTheme      = null;
     this.defaultFont       = null;
+    this.defaultFontSize   = null;
     this.defaultFileName   = null;
     this.defaultFileExt    = null;
     this.undefinedFileMode = null;
@@ -196,6 +197,7 @@ var EditorsHandler = function () {
         aceEditor.$blockScrolling = Infinity;
         aceEditor.setTheme(this.defaultTheme);
         aceEditor.setOptions({
+            fontSize: this.defaultFontSize,
             fontFamily: this.defaultFont,
             enableSnippets: true,
             enableLiveAutocompletion: true,

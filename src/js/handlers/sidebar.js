@@ -191,9 +191,12 @@ var SidebarHandler = function () {
     };
 
     this.onNodeClick = function (nodeId) {
-        var node = $sidebar.treeview('getNode', nodeId);
+
+        var that = this;
+        var node = this.getSidebar().treeview('getNode', nodeId);
+
         if (node.typeFile === 1) {
-            that.dirEntry.getFile(node.path, {}, function (fileEntry) {
+            this.dirEntry.getFile(node.path, {}, function (fileEntry) {
                 that.Editors._fileOpen(fileEntry, nodeId);
             });
         }

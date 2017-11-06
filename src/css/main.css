@@ -68,6 +68,7 @@ aside {
     margin: 0 3px 0 0;
     font-size: 0.75rem;
     line-height: 10px;
+    opacity: 0.4;
 }
 
 .sidebar .list-group-item:hover {
@@ -273,7 +274,7 @@ aside {
 
 .tab-list li a .dirty-tab {
     display: inline-flex;
-    color: #f00000;
+    color: #92c62c;
     opacity: 1;
 }
 
