@@ -16,11 +16,13 @@ var EditorsHandler = function () {
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
     this.navFilenameHtml      = '<span class="action-edit-tab filename"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
-    this.defaultFileName      = 'untitled';
-    this.defaultFileExt       = 'js';
-    this.defaultFont          = 'Roboto Mono';
-    this.undefinedFileExt     = 'text';
-    this.undefinedFileIcon    = 'icon-html';
+
+    this.defaultTheme      = null;
+    this.defaultFont       = null;
+    this.defaultFileName   = null;
+    this.defaultFileExt    = null;
+    this.undefinedFileMode = null;
+    this.undefinedFileIcon = null;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,6 +36,26 @@ var EditorsHandler = function () {
             hash |= 0;
         }
         return hash;
+    };
+
+    this._loadDefaults = function () {
+
+        var deferred = $.Deferred();
+
+        $.get('/src/settings/ace.defaults.json', function (data) {
+            data = JSON.parse(data);
+
+            that.defaultTheme      = data.theme;
+            that.defaultFont       = data.fontFamily;
+            that.defaultFileName   = data.newFileName;
+            that.defaultFileExt    = data.newFileExts;
+            that.undefinedFileMode = data.undefinedFile.mode;
+            that.undefinedFileIcon = data.undefinedFile.icon;
+
+            deferred.resolve();
+        });
+
+        return deferred.promise();
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,7 +193,7 @@ var EditorsHandler = function () {
 
         // Configure Ace
         aceEditor.$blockScrolling = Infinity;
-        aceEditor.setTheme('ace/theme/monokai');
+        aceEditor.setTheme(this.defaultTheme);
         aceEditor.setOptions({
             fontFamily: this.defaultFont,
             enableSnippets: true,
@@ -404,7 +426,7 @@ var EditorsHandler = function () {
             return ext.toLowerCase();
         }
 
-        return this.undefinedFileExt;
+        return this.undefinedFileMode;
     };
 
     this._getTabMode = function (idx) {
@@ -419,7 +441,7 @@ var EditorsHandler = function () {
             if (typeof ext === typeof undefined) {
                 deferred.resolve(JSON.stringify({
                     "icon": that.undefinedFileIcon,
-                    "mode": that.undefinedFileExt,
+                    "mode": that.undefinedFileMode,
                     "name": "Text"
                 }));
             }
@@ -573,9 +595,11 @@ var EditorsHandler = function () {
         });
 
         // Launch default tab
-        if (that.getNumTabs() === 0) {
-            that.onAddNewTab();
-        }
+        this._loadDefaults().then(function () {
+            if (that.getNumTabs() === 0) {
+                that.onAddNewTab();
+            }
+        });
     };
 
     ///////////////////////////////////

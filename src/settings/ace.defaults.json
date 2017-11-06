@@ -1,0 +1,12 @@
+{
+  "theme": "ace/theme/monokai",
+  "fontFamily": "Roboto Mono",
+  "fontSize": "14pt",
+  "newFileName": "undefined",
+  "newFileExt": "js",
+  "undefinedFile": {
+    "icon": "fa fa-file-text",
+    "mode": "text",
+    "name": "Plain text"
+  }
+}

@@ -84,6 +84,11 @@
     "mode": "sql",
     "name": "SQL"
   },
+  "txt": {
+    "icon": "fa fa-file-text",
+    "mode": "text",
+    "name": "Plain text"
+  },
   "xml": {
     "icon": "icon-html",
     "mode": "xml",
