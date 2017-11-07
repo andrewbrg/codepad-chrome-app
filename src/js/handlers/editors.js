@@ -14,7 +14,7 @@ var EditorsHandler = function () {
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab" title="Close file"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes" title="Close file"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
-    this.navFilenameHtml      = '<span class="action-edit-tab filename"></span>';
+    this.navFilenameHtml      = '<span class="tab-name action-edit-tab"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
 
     this.defaultTheme      = null;
