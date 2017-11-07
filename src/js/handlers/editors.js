@@ -116,9 +116,11 @@ var EditorsHandler = function () {
                     deferred.resolve(newFileEntry);
                 }, function (err) {
                     that.Notifications.notify('danger', 'File Error', err);
+                    deferred.resolve(undefined);
                 })
             }, function (err) {
                 that.Notifications.notify('danger', 'File Error', err);
+                deferred.resolve(undefined);
             });
         });
         return deferred.promise();
@@ -347,7 +349,7 @@ var EditorsHandler = function () {
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.statusBarId  = 'status-bar-' + this.idx;
-        obj.fileName     = fileName + '.' + fileExt;
+        obj.tabName      = fileName + '.' + fileExt;
         obj.nodeId       = nodeId;
 
         var $nav = $(
@@ -359,17 +361,17 @@ var EditorsHandler = function () {
             '</li>'
         );
 
-        $nav.find('.filename').attr('data-idx', this.idx);
+        $nav.find('.tab-name').attr('data-idx', this.idx);
         $nav.find('.action-close-tab').attr('data-idx', this.idx);
         $nav.find('.modal-confirm-close-tab').attr('data-idx', this.idx);
 
         if (typeof nodeId !== typeof undefined && nodeId !== null) {
-            $nav.find('.filename').attr('node-id', nodeId);
-            $nav.find('.action-close-tab').attr('node-id', nodeId);
-            $nav.find('.modal-confirm-close-tab').attr('node-id', nodeId);
+            $nav.find('.tab-name').attr('data-node-id', nodeId);
+            $nav.find('.action-close-tab').attr('data-node-id', nodeId);
+            $nav.find('.modal-confirm-close-tab').attr('data-node-id', nodeId);
         }
 
-        $nav.find('.filename').html(obj.fileName);
+        $nav.find('.tab-name').html(obj.tabName);
 
         obj.nav = $nav;
 
@@ -425,7 +427,7 @@ var EditorsHandler = function () {
         var regEx = /(?:\.([^.]+))?$/;
 
         if (typeof $el !== typeof undefined) {
-            var ext = regEx.exec($el.find('.filename').first().html())[1];
+            var ext = regEx.exec($el.find('.tab-name').first().html())[1];
             return ext.toLowerCase();
         }
 
@@ -790,7 +792,7 @@ var EditorsHandler = function () {
     };
 
     this.getTabNavFilename = function (idx) {
-        return this.getTabNavElement(idx).find('.filename').first().html();
+        return this.getTabNavElement(idx).find('.tab-name').first().html();
     };
 
     this.getStatusBarContentElAtIdx = function (idx) {
@@ -810,7 +812,6 @@ var EditorsHandler = function () {
     this.getAddTabDropDownContainer = function () {
         return $(document).find('.add-tab-dropdown').first();
     };
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
@@ -848,27 +849,27 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var that        = this;
-        var $fileName   = this.getTabNavElement(idx).find('.filename').first();
-        var $siblings   = $fileName.siblings().css('visibility', 'hidden');
-        var oldFileName = $fileName.html();
+        var $tabNameEl  = this.getTabNavElement(idx).find('.tab-name').first();
+        var $siblings   = $tabNameEl.siblings().css('visibility', 'hidden');
+        var oldFileName = $tabNameEl.html();
 
-        $fileName.attr('contenteditable', 'true').focus().one('focusout', function () {
-            var fileEntry = that.getEditorFileEntry(idx);
 
-            that.setEditorTemplate(idx);
-            that._setAceEditorMode(idx);
-
-            if (typeof fileEntry !== typeof undefined) {
-                that._fileRename(fileEntry, that.getTabNavFilename(idx)).then(function (fileEntry) {
-                    that.setEditorFileEntry(idx, fileEntry);
-                });
-            }
+        $tabNameEl.attr('contenteditable', 'true').focus().one('focusout', function () {
 
             $siblings.css('visibility', 'visible');
-            $fileName.removeAttr('contenteditable').off('keydown');
+            $tabNameEl.removeAttr('contenteditable').off('keydown');
+
+            $.event.trigger({
+                type: "filerename",
+                time: new Date(),
+                idx: idx,
+                nodeId: $(this).attr('data-node-id'),
+                oldFileName: oldFileName,
+                newFileName: that.getTabNavFilename(idx)
+            });
         });
 
-        $fileName.on('keydown', function (e) {
+        $tabNameEl.on('keydown', function (e) {
 
             var $this = $(this);
 
@@ -939,6 +940,32 @@ var EditorsHandler = function () {
                 that._closeTabModals(idx);
             }
         });
+    };
+
+    this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
+
+        var that       = this;
+        var isRenameOk = true;
+        var fileEntry  = that.getEditorFileEntry(idx);
+
+        that.setEditorTemplate(idx);
+        that._setAceEditorMode(idx);
+
+        if (typeof fileEntry !== typeof undefined) {
+            that._fileRename(fileEntry, newFileName).then(function (fileEntry) {
+
+                if (typeof fileEntry !== typeof undefined) {
+                    that.setEditorFileEntry(idx, fileEntry);
+                }
+                else {
+                    isRenameOk = false;
+                }
+            });
+        }
+
+        if (!isRenameOk) {
+            this.getTabNavElement(idx).find('.tab-name').first().html(oldFileName);
+        }
     };
 
     this.onToggleReadOnly = function (idx) {

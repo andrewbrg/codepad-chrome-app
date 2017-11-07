@@ -63,7 +63,7 @@ if (typeof $ !== typeof undefined) {
         /// Editors
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        // Edit tab name
+        // Rename tab
         $(document).on('dblclick', '.action-edit-tab', function () {
             Editors.onEditTabName($(this).attr('data-idx'));
         });
@@ -191,6 +191,12 @@ if (typeof $ !== typeof undefined) {
         // Close application
         $(document).on('click', '.action-exit', function () {
             chrome.app.window.current().close();
+        });
+
+        $(document).on('filerename', function (e) {
+            console.log(e);
+            Editors.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
+            Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
         });
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

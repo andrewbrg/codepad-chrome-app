@@ -80,7 +80,6 @@ var SidebarHandler = function () {
         }
     };
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -200,5 +199,14 @@ var SidebarHandler = function () {
                 that.Editors._fileOpen(fileEntry, nodeId);
             });
         }
-    }
+    };
+
+    this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
+
+        var $el      = this.getSidebar().find('.sidebar-node[data-nodeid="' + nodeId + '"]').first();
+        var $spanEls = $el.find('span');
+
+        $el.html(newFileName);
+        $link.prepend($spanEls);
+    };
 };
