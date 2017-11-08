@@ -107,7 +107,7 @@ var EditorsHandler = function () {
 
             if (chrome.runtime.lastError) {
                 that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
-                deferred.resolve();
+                deferred.resolve(undefined);
                 return false;
             }
 
@@ -216,7 +216,6 @@ var EditorsHandler = function () {
 
         // Configure
         this.setEditorContent(idx, fileContent).then(function () {
-
             that._setAceEditorMode(idx, fileEntry);
             that._populateNavTabIcon(idx);
             that._populateStatusBar(idx);
@@ -234,6 +233,14 @@ var EditorsHandler = function () {
             bindKey: {win: 'ctrl-s', mac: 'ctrl-s'},
             exec: function () {
                 that.onSaveFile(idx);
+            }
+        });
+
+        aceEditor.commands.addCommand({
+            name: '__saveAll',
+            bindKey: {win: 'ctrl-shift-s', mac: 'ctrl-shift-s'},
+            exec: function () {
+                that.onSaveAllFiles();
             }
         });
 
@@ -523,7 +530,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        if (this._isCleanAtIdx(idx)) {
+        if (this.isEditorClean(idx)) {
             this._markNavTabClean(idx);
             return;
         }
@@ -556,22 +563,6 @@ var EditorsHandler = function () {
 
         var $el = this.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
         $el.removeClass('is-dirty').find('.dirty-tab').remove();
-    };
-
-    this._isCleanAtIdx = function (idx) {
-
-        idx = parseInt(idx);
-
-        var isClean = false;
-        var hash    = this._getHash(this.getEditor(idx).getValue());
-
-        $.each(this.aceCleanHashes, function (i, v) {
-            if (v.idx === idx && v.hash === hash) {
-                isClean = true;
-            }
-        });
-
-        return isClean;
     };
 
 
@@ -760,6 +751,22 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
+    this.isEditorClean = function (idx) {
+
+        idx = parseInt(idx);
+
+        var isClean = false;
+        var hash    = this._getHash(this.getEditor(idx).getValue());
+
+        $.each(this.aceCleanHashes, function (i, v) {
+            if (v.idx === idx && v.hash === hash) {
+                isClean = true;
+            }
+        });
+
+        return isClean;
+    };
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public tabs
@@ -860,7 +867,7 @@ var EditorsHandler = function () {
             $tabNameEl.removeAttr('contenteditable').off('keydown');
 
             $.event.trigger({
-                type: "filerename",
+                type: "_editor.file.rename",
                 time: new Date(),
                 idx: idx,
                 nodeId: $(this).attr('data-node-id'),
@@ -942,29 +949,34 @@ var EditorsHandler = function () {
         });
     };
 
+    this.onSaveAllFiles = function () {
+
+        var that = this;
+
+        this.getAllEditorObjects().forEach(function (aceEditor) {
+            if (!that.isEditorClean(aceEditor.idx)) {
+                that.onSaveFile(aceEditor.idx);
+            }
+        });
+    };
+
     this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
 
-        var that       = this;
-        var isRenameOk = true;
-        var fileEntry  = that.getEditorFileEntry(idx);
+        var that      = this;
+        var fileEntry = that.getEditorFileEntry(idx);
 
         that.setEditorTemplate(idx);
         that._setAceEditorMode(idx);
 
         if (typeof fileEntry !== typeof undefined) {
             that._fileRename(fileEntry, newFileName).then(function (fileEntry) {
-
                 if (typeof fileEntry !== typeof undefined) {
                     that.setEditorFileEntry(idx, fileEntry);
                 }
                 else {
-                    isRenameOk = false;
+                    that.getTabNavElement(idx).find('.tab-name').first().html(oldFileName);
                 }
             });
-        }
-
-        if (!isRenameOk) {
-            this.getTabNavElement(idx).find('.tab-name').first().html(oldFileName);
         }
     };
 

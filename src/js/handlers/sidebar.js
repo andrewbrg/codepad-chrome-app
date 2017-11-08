@@ -207,6 +207,6 @@ var SidebarHandler = function () {
         var $spanEls = $el.find('span');
 
         $el.html(newFileName);
-        $link.prepend($spanEls);
+        $el.prepend($spanEls);
     };
 };

@@ -168,9 +168,14 @@ if (typeof $ !== typeof undefined) {
             Editors.onAddNewTab($(this).attr('data-type'));
         });
 
-        // Save tab
-        $(document).on('click', '.action-save-tab', function () {
+        // Save file
+        $(document).on('click', '.action-save', function () {
             Editors.onSaveFile($(this).attr('data-idx'));
+        });
+
+        // Save all files
+        $(document).on('click', '.action-save-all', function () {
+            Editors.onSaveAllFiles();
         });
 
         // Close tab
@@ -193,8 +198,8 @@ if (typeof $ !== typeof undefined) {
             chrome.app.window.current().close();
         });
 
-        $(document).on('filerename', function (e) {
-            console.log(e);
+        // Rename file
+        $(document).on('_editor.file.rename', function (e) {
             Editors.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
             Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
         });
