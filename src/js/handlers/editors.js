@@ -64,22 +64,14 @@ var EditorsHandler = function () {
     /// Private File
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._fileExtFromFileEntry = function (fileEntry) {
-        return fileEntry.name.split('.').pop();
-    };
-
-    this._fileNameFromFileEntry = function (fileEntry) {
-        return fileEntry.name.split('.').reverse().pop();
-    };
-
     this._fileOpen = function (fileEntry, nodeId) {
 
         var that = this;
 
         fileEntry.file(function (file) {
             var reader   = new FileReader();
-            var fileExt  = that._fileExtFromFileEntry(fileEntry);
-            var fileName = that._fileNameFromFileEntry(fileEntry);
+            var fileExt  = that.getExtFromFileEntry(fileEntry);
+            var fileName = that.getNameFromFileEntry(fileEntry);
 
             reader.readAsText(file);
             reader.onerror = function (msg) {
@@ -123,6 +115,7 @@ var EditorsHandler = function () {
                 deferred.resolve(undefined);
             });
         });
+
         return deferred.promise();
     };
 
@@ -144,7 +137,7 @@ var EditorsHandler = function () {
                     that.Notifications.notify('danger', 'File Error', err);
                 };
                 writer.onwriteend = function (e) {
-                    deferred.resolve(e);
+                    deferred.resolve(e, fileEntry.name);
                 };
                 writer.seek(0);
                 writer.write(new Blob([fileContent], {type: 'text/plain'}));
@@ -172,7 +165,7 @@ var EditorsHandler = function () {
                     that.Notifications.notify('danger', 'File Error', err);
                 };
                 writer.onwriteend = function (e) {
-                    deferred.resolve(e);
+                    deferred.resolve(e, fileName);
                 };
                 writer.write(new Blob([fileContent], {type: 'text/plain'}));
             });
@@ -341,7 +334,6 @@ var EditorsHandler = function () {
             });
         }
     };
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private tabs
@@ -565,6 +557,18 @@ var EditorsHandler = function () {
         $el.removeClass('is-dirty').find('.dirty-tab').remove();
     };
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public Helper
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    this.getExtFromFileEntry = function (fileEntry) {
+        return fileEntry.name.split('.').pop();
+    };
+
+    this.getNameFromFileEntry = function (fileEntry) {
+        return fileEntry.name.split('.').reverse().pop();
+    };
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Ace
@@ -598,7 +602,7 @@ var EditorsHandler = function () {
         });
     };
 
-    ///////////////////////////////////
+
     // Editor Template
     ///////////////////////////////////
     this.getEditorTemplate = function (idx) {
@@ -640,7 +644,7 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-    ///////////////////////////////////
+
     // Editor Content
     ///////////////////////////////////
     this.getEditorContent = function (idx) {
@@ -679,8 +683,8 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-    ///////////////////////////////////
-    // Editor File Entry (chrome)
+
+    // Editor FileEntry (chrome.filesystem)
     ///////////////////////////////////
     this.getEditorFileEntry = function (idx) {
 
@@ -709,8 +713,8 @@ var EditorsHandler = function () {
         return false;
     };
 
-    ///////////////////////////////////
-    // Getters for editors
+
+    // Getters (editors)
     ///////////////////////////////////
     this.getCurrentEditor = function () {
         return this.getEditor(this.currentIdx);
@@ -737,8 +741,8 @@ var EditorsHandler = function () {
         return this.aceEditors;
     };
 
-    ///////////////////////////////////
-    // Getters for editor modes
+
+    // Getters (other)
     ///////////////////////////////////
     this.getAllEditorModes = function () {
 
@@ -772,6 +776,19 @@ var EditorsHandler = function () {
     /// Public tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Getters for editor modes
+    ///////////////////////////////////
+    this.getTabNavTabName = function (idx) {
+        return this.getTabNavElement(idx).find('.tab-name').first().html();
+    };
+
+    this.setTabNavTabName = function (idx, tabName) {
+        return this.getTabNavElement(idx).find('.tab-name').first().html(tabName);
+    };
+
+
+    // Getters (tabs)
+    ///////////////////////////////////
     this.getTabNavElement = function (idx) {
 
         if (typeof idx === typeof undefined) {
@@ -798,10 +815,17 @@ var EditorsHandler = function () {
         return $(document).find('.tab-content').first();
     };
 
-    this.getTabNavFilename = function (idx) {
-        return this.getTabNavElement(idx).find('.tab-name').first().html();
+    this.getTabNavNodeId = function (idx) {
+        return this.getTabNavElement(idx).find('.tab-name').attr('data-node-id');
     };
 
+    this.getNumTabs = function () {
+        return parseInt(this.getTabsNavContainer().children().length);
+    };
+
+
+    // Getters (other)
+    ///////////////////////////////////
     this.getStatusBarContentElAtIdx = function (idx) {
 
         var $tabContent = this.getTabContentElement(idx);
@@ -810,10 +834,6 @@ var EditorsHandler = function () {
         }
 
         return $tabContent.find('.ace-status-bar').first();
-    };
-
-    this.getNumTabs = function () {
-        return parseInt(this.getTabsNavContainer().children().length);
     };
 
     this.getAddTabDropDownContainer = function () {
@@ -870,9 +890,9 @@ var EditorsHandler = function () {
                 type: "_editor.file.rename",
                 time: new Date(),
                 idx: idx,
-                nodeId: $(this).attr('data-node-id'),
+                nodeId: that.getTabNavNodeId(idx),
                 oldFileName: oldFileName,
-                newFileName: that.getTabNavFilename(idx)
+                newFileName: that.getTabNavTabName(idx)
             });
         });
 
@@ -938,14 +958,24 @@ var EditorsHandler = function () {
         var fileEntry = this.getEditorFileEntry(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
-            ? this._fileSaveAs(this.getTabNavFilename(idx), this.getEditorContent(idx))
+            ? this._fileSaveAs(this.getTabNavTabName(idx), this.getEditorContent(idx))
             : this._fileSave(fileEntry, this.getEditorContent(idx));
 
-        promise.then(function (e) {
+        promise.then(function (e, fileName) {
+
             if (typeof e !== typeof undefined) {
+                $.event.trigger({
+                    type: "_editor.tabname.change",
+                    time: new Date(),
+                    idx: idx,
+                    nodeId: that.getTabNavNodeId(idx),
+                    tabName: fileName
+                });
+
                 that._markNavTabClean(idx);
                 that._closeTabModals(idx);
             }
+
         });
     };
 
@@ -974,10 +1004,20 @@ var EditorsHandler = function () {
                     that.setEditorFileEntry(idx, fileEntry);
                 }
                 else {
-                    that.getTabNavElement(idx).find('.tab-name').first().html(oldFileName);
+                    $.event.trigger({
+                        type: "_editor.tabname.change",
+                        time: new Date(),
+                        idx: idx,
+                        nodeId: that.getTabNavNodeId(idx),
+                        tabName: oldFileName
+                    });
                 }
             });
         }
+    };
+
+    this.onChangeTabName = function (idx, nodeId, tabName) {
+        this.setTabNavTabName(idx, tabName);
     };
 
     this.onToggleReadOnly = function (idx) {
@@ -995,12 +1035,13 @@ var EditorsHandler = function () {
             var isReadOnly = !ace.getOption('readOnly');
 
             ace.setOption('readOnly', isReadOnly);
+            var $toggleEl = this.getTabContentElement(idx).find('.action-toggle-readonly .fa');
 
             if (isReadOnly) {
-                this.getTabContentElement(idx).find('.action-toggle-readonly .fa').removeClass('fa-unlock').addClass('fa-lock');
+                $toggleEl.removeClass('fa-unlock').addClass('fa-lock');
             }
             else {
-                this.getTabContentElement(idx).find('.action-toggle-readonly .fa').removeClass('fa-lock').addClass('fa-unlock');
+                $toggleEl.removeClass('fa-lock').addClass('fa-unlock');
             }
         }
     };

@@ -204,6 +204,13 @@ if (typeof $ !== typeof undefined) {
             Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
         });
 
+        // Change tab name
+        $(document).on('_editor.tabname.change', function (e) {
+            Editors.onChangeTabName(e.idx, e.nodeId, e.tabName);
+            Sidebar.onChangeTabName(e.idx, e.nodeId, e.tabName);
+        });
+
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

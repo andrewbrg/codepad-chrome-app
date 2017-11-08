@@ -160,7 +160,7 @@ var SidebarHandler = function () {
                         }
                         else {
 
-                            var ext = that.Editors._fileExtFromFileEntry(item);
+                            var ext = that.Editors.getExtFromFileEntry(item);
 
                             results.push({
                                 text: item.name,
@@ -208,5 +208,9 @@ var SidebarHandler = function () {
 
         $el.html(newFileName);
         $el.prepend($spanEls);
+    };
+
+    this.onChangeTabName = function (idx, nodeId, tabName) {
+        this.onRenameFile(idx, nodeId, tabName, tabName);
     };
 };
