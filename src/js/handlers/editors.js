@@ -76,7 +76,7 @@ var EditorsHandler = function () {
             var reader   = new FileReader();
             var fileExt  = that.getExtFromFileEntry(fileEntry);
             var fileName = that.getNameFromFileEntry(fileEntry);
-            
+
             reader.readAsText(file);
             reader.onerror = onError;
             reader.onload  = function (e) {
@@ -108,9 +108,9 @@ var EditorsHandler = function () {
                 deferred.resolve(undefined);
             };
 
-            writableFileEntry.getFile(fileEntry, {create: false}, function (gotFileEntry) {
-                gotFileEntry.moveTo(writableFileEntry, newFileName, function (movedFileEntry) {
-                    deferred.resolve(movedFileEntry);
+            fileEntry.getParent(function (fileParent) {
+                writableFileEntry.moveTo(fileParent, newFileName, function (updatedEntry) {
+                    deferred.resolve(updatedEntry);
                 }, onError);
             }, onError);
         });
