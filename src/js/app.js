@@ -170,7 +170,11 @@ if (typeof $ !== typeof undefined) {
 
         // Save file
         $(document).on('click', '.action-save', function () {
-            Editors.onSaveFile($(this).attr('data-idx'));
+
+            var attr = $(this).attr('data-idx');
+            var idx  = (typeof attr !== typeof undefined && attr !== false) ? attr : Editors.currentIdx;
+
+            Editors.onSaveFile(idx);
         });
 
         // Save all files
