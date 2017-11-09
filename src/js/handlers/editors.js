@@ -967,7 +967,6 @@ var EditorsHandler = function () {
             : this._fileSave(fileEntry, this.getEditorContent(idx));
 
         promise.then(function (e, fileEntry) {
-            console.log(e);
             if (typeof e !== typeof undefined) {
                 $.event.trigger({
                     type: "_editor.tabname.change",
@@ -981,7 +980,6 @@ var EditorsHandler = function () {
                 that._markNavTabClean(idx);
                 that._closeTabModals(idx);
             }
-
         });
     };
 
