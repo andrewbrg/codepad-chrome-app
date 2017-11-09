@@ -831,7 +831,11 @@ var EditorsHandler = function () {
         var that = this;
 
         this.Files.fileOpen().then(function (e, fileEntry) {
-            that.onAddNewTab(that.getExtFromFileEntry(fileEntry), that.getNameFromFileEntry(fileEntry), e.target.result, fileEntry);
+            that.onAddNewTab(
+                that.getExtFromFileEntry(fileEntry),
+                that.getNameFromFileEntry(fileEntry),
+                typeof e.target.result === typeof undefined ? undefined : e.target.result,
+                fileEntry);
         });
     };
 
@@ -883,7 +887,7 @@ var EditorsHandler = function () {
         this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
 
-        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileNamenewFileName).then(function (fileEntry) {
+        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileName, newFileName).then(function (fileEntry) {
 
             if (typeof fileEntry !== typeof undefined) {
                 that.setEditorFileEntry(idx, fileEntry);
