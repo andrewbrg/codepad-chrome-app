@@ -191,7 +191,18 @@ var SidebarHandler = function () {
 
         if (node.typeFile === 1) {
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
-                that.Editors._fileOpen(fileEntry, nodeId);
+
+                that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
+
+                    if (typeof fileEntry !== typeof undefined) {
+                        that.Editors.onAddNewTab(
+                            that.Editors.getExtFromFileEntry(fileEntry),
+                            that.Editors.getNameFromFileEntry(fileEntry),
+                            e.target.result,
+                            fileEntry,
+                            nodeId);
+                    }
+                });
             });
         }
     };

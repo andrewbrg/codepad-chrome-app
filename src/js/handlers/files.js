@@ -30,7 +30,7 @@ var FilesHandler = function () {
     };
 
 
-    this.fileOpen = function () {
+    this.fileOpen = function (fileEntry) {
 
         var that     = this;
         var deferred = $.Deferred();
@@ -41,13 +41,7 @@ var FilesHandler = function () {
             deferred.resolve(undefined);
         };
 
-        chrome.fileSystem.chooseEntry({type: 'openWritableFile'}, function (fileEntry) {
-
-            if (chrome.runtime.lastError) {
-                onError(chrome.runtime.lastError.message);
-                return deferred.promise();
-            }
-
+        var readFile = function (fileEntry, deferred) {
             fileEntry.file(function (file) {
 
                 var reader = new FileReader();
@@ -58,10 +52,24 @@ var FilesHandler = function () {
                     deferred.resolve(e, fileEntry);
                 };
             }, onError);
-        });
 
+            return deferred.promise();
+        };
 
-        return deferred.promise();
+        if (typeof fileEntry === typeof undefined) {
+            chrome.fileSystem.chooseEntry({type: 'openWritableFile'}, function (fileEntry) {
+
+                if (chrome.runtime.lastError) {
+                    onError(chrome.runtime.lastError.message);
+                    return deferred.promise();
+                }
+
+                readFile(fileEntry, deferred);
+            });
+        }
+        else {
+            readFile(fileEntry, deferred);
+        }
     };
 
 
