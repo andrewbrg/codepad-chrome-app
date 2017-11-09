@@ -879,7 +879,7 @@ var EditorsHandler = function () {
         this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
 
-        this.Files.fileRename(this.getEditorFileEntry(idx), newFileName).then(function (fileEntry) {
+        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileName, newFileName).then(function (fileEntry) {
 
             if (typeof fileEntry !== typeof undefined) {
                 that.setEditorFileEntry(idx, fileEntry);

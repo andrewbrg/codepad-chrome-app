@@ -2,8 +2,52 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
+    this.fileSystem = undefined;
+
+    this._restoreEntries = function () {
+
+        var that = this;
+
+        chrome.storage.local.get('retainedEntries', function (data) {
+
+            if (chrome.runtime.lastError) {
+                that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
+                return false;
+            }
+
+            var allEntries = data.retainedEntries || [];
+            allEntries.forEach(function (retainedItem) {
+                chrome.fileSystem.isRestorable(retainedItem, function () {
+                    chrome.fileSystem.restoreEntry(retainedItem, function (chosenEntry) {
+                    });
+                });
+            });
+        });
+    };
+
+    this._retainEntry = function (entry) {
+
+        var that = this;
+
+        chrome.storage.local.get('retainedEntries', function (data) {
+
+            if (chrome.runtime.lastError) {
+                that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
+                return false;
+            }
+
+            var allEntries = data.retainedEntries || [];
+            allEntries.push(chrome.fileSystem.retainEntry(entry));
+
+            chrome.storage.local.set({'retainedEntries': allEntries});
+        });
+    };
+
+
     this.init = function (notifications) {
+
         this.Notifications = notifications;
+        this._restoreEntries();
     };
 
     this.directoryOpen = function () {
@@ -12,7 +56,7 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            that.Notifications.notify('danger', 'Directory Error', err);
             deferred.resolve(undefined);
         };
 
@@ -23,6 +67,7 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
+            that._retainEntry(dirEntry);
             deferred.resolve(dirEntry);
         });
 
@@ -49,11 +94,10 @@ var FilesHandler = function () {
                 reader.readAsText(file);
                 reader.onerror = onError;
                 reader.onload  = function (e) {
+                    that._retainEntry(fileEntry);
                     deferred.resolve(e, fileEntry);
                 };
             }, onError);
-
-            return deferred.promise();
         };
 
         if (typeof fileEntry === typeof undefined) {
@@ -64,12 +108,14 @@ var FilesHandler = function () {
                     return deferred.promise();
                 }
 
-                return readFile(fileEntry, deferred);
+                readFile(fileEntry, deferred);
             });
         }
         else {
-            return readFile(fileEntry, deferred);
+            readFile(fileEntry, deferred);
         }
+
+        return deferred.promise();
     };
 
 
@@ -102,6 +148,7 @@ var FilesHandler = function () {
 
                 writer.onerror    = onError;
                 writer.onwriteend = function (e) {
+                    that._retainEntry(writableEntry);
                     deferred.resolve(e, writableEntry);
                 };
             });
@@ -134,6 +181,7 @@ var FilesHandler = function () {
 
                 writer.onerror    = onError;
                 writer.onwriteend = function (e) {
+                    that._retainEntry(writableEntry);
                     deferred.resolve(e, writableEntry);
                 };
             });
@@ -142,7 +190,7 @@ var FilesHandler = function () {
         return deferred.promise();
     };
 
-    this.fileRename = function (fileEntry, newFileName) {
+    this.fileRename = function (fileEntry, oldFileName, newFileName) {
 
         var that     = this;
         var deferred = $.Deferred();
@@ -166,6 +214,7 @@ var FilesHandler = function () {
 
             writableFileEntry.getParent(function (fileParent) {
                 writableFileEntry.moveTo(fileParent, newFileName, function (updatedEntry) {
+                    that._retainEntry(updatedEntry);
                     deferred.resolve(updatedEntry);
                 }, onError);
             }, onError);

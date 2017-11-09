@@ -30,5 +30,6 @@
     "storage",
     "clipboardRead",
     "fullscreen"
-  ]
+  ],
+  "offline_enabled": true
 }
