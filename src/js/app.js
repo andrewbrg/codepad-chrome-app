@@ -205,13 +205,13 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Rename file
-        $(document).on('editor.filerename', function (e) {
+        $(document).on('editors.filerename', function (e) {
             Editors.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
             Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
         });
 
         // Change tab name
-        $(document).on('editor.tabnamechange', function (e) {
+        $(document).on('editors.tabnamechange', function (e) {
             Editors.onChangeTabName(e.idx, e.nodeId, e.tabName);
             Sidebar.onChangeTabName(e.idx, e.nodeId, e.tabName);
         });

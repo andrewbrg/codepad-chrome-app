@@ -847,7 +847,7 @@ var EditorsHandler = function () {
         promise.then(function (e, fileEntry) {
             if (typeof e !== typeof undefined) {
                 $.event.trigger({
-                    type: "editors.tabnamechange",
+                    type: 'editors.tabnamechange',
                     time: new Date(),
                     idx: idx,
                     nodeId: that.getTabNavNodeId(idx),
@@ -886,7 +886,7 @@ var EditorsHandler = function () {
             }
             else {
                 $.event.trigger({
-                    type: "editors.tabnamechange",
+                    type: 'editors.tabnamechange',
                     time: new Date(),
                     idx: idx,
                     nodeId: that.getTabNavNodeId(idx),
