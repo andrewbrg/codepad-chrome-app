@@ -450,11 +450,15 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.getExtFromFileEntry = function (fileEntry) {
-        return fileEntry.name.split('.').pop();
+        return (typeof fileEntry === typeof undefined)
+            ? undefined
+            : fileEntry.name.split('.').pop();
     };
 
     this.getNameFromFileEntry = function (fileEntry) {
-        return fileEntry.name.split('.').reverse().pop();
+        return (typeof fileEntry === typeof undefined)
+            ? undefined
+            : fileEntry.name.split('.').reverse().pop();
     };
 
 
@@ -879,7 +883,7 @@ var EditorsHandler = function () {
         this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
 
-        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileName, newFileName).then(function (fileEntry) {
+        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileNamenewFileName).then(function (fileEntry) {
 
             if (typeof fileEntry !== typeof undefined) {
                 that.setEditorFileEntry(idx, fileEntry);
