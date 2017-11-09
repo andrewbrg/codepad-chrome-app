@@ -53,6 +53,7 @@ if (typeof $ !== typeof undefined) {
         var Notifications = new NotificationsHandler();
         var Files         = new FilesHandler();
 
+        Files.init(Notifications);
         Editors.init(IdeSettings, Notifications, Files);
         Sidebar.init(Notifications, Editors, Files);
         IdeSettings.init(Editors);

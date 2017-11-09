@@ -43,7 +43,7 @@ var SidebarHandler = function () {
     this.init = function (notifications, editors, files) {
         this.Notifications = notifications;
         this.Editors       = editors;
-        this.files         = files;
+        this.Files         = files;
     };
 
     this.getSidebar = function () {
