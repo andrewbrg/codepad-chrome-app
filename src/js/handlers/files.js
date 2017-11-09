@@ -64,11 +64,11 @@ var FilesHandler = function () {
                     return deferred.promise();
                 }
 
-                readFile(fileEntry, deferred);
+                return readFile(fileEntry, deferred);
             });
         }
         else {
-            readFile(fileEntry, deferred);
+            return readFile(fileEntry, deferred);
         }
     };
 
