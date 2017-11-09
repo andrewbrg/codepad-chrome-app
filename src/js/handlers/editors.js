@@ -108,7 +108,7 @@ var EditorsHandler = function () {
                 deferred.resolve(undefined);
             };
 
-            fileEntry.getParent(function (fileParent) {
+            writableFileEntry.getParent(function (fileParent) {
                 writableFileEntry.moveTo(fileParent, newFileName, function (updatedEntry) {
                     deferred.resolve(updatedEntry);
                 }, onError);
