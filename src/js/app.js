@@ -51,10 +51,11 @@ if (typeof $ !== typeof undefined) {
         var IdeSettings   = new IdeSettingsHandler();
         var Sidebar       = new SidebarHandler();
         var Notifications = new NotificationsHandler();
+        var Files         = new FilesHandler();
 
-        Editors.init(IdeSettings, Notifications);
+        Editors.init(IdeSettings, Notifications, Files);
+        Sidebar.init(Notifications, Editors, Files);
         IdeSettings.init(Editors);
-        Sidebar.init(Notifications, Editors);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -203,13 +204,13 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Rename file
-        $(document).on('_editor.file.rename', function (e) {
+        $(document).on('editor.filerename', function (e) {
             Editors.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
             Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
         });
 
         // Change tab name
-        $(document).on('_editor.tabname.change', function (e) {
+        $(document).on('editor.tabnamechange', function (e) {
             Editors.onChangeTabName(e.idx, e.nodeId, e.tabName);
             Sidebar.onChangeTabName(e.idx, e.nodeId, e.tabName);
         });

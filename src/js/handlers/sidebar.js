@@ -2,6 +2,7 @@ var SidebarHandler = function () {
 
     this.Notifications = undefined;
     this.Editors       = undefined;
+    this.Files         = undefined;
 
     this.dirEntry      = null;
     this.isInitialised = false;
@@ -12,11 +13,11 @@ var SidebarHandler = function () {
 
     this._initialiseTreeView = function (dirTreeJson, title) {
 
+        var $sidebar = this.getSidebar();
+
         if (dirTreeJson.length === 0) {
             return false;
         }
-
-        var $sidebar = this.getSidebar();
 
         if (this.isInitialised) {
             $sidebar.treeview('remove');
@@ -39,10 +40,10 @@ var SidebarHandler = function () {
     /// Public Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function (notifications, editors) {
-
+    this.init = function (notifications, editors, files) {
         this.Notifications = notifications;
         this.Editors       = editors;
+        this.files         = files;
     };
 
     this.getSidebar = function () {
@@ -62,18 +63,14 @@ var SidebarHandler = function () {
     };
 
     this.expandNodes = function () {
-
         var $sidebar = this.getSidebar();
-
         if (this.isInitialised) {
             $sidebar.treeview('expandAll');
         }
     };
 
     this.compressNodes = function () {
-
         var $sidebar = this.getSidebar();
-
         if (this.isInitialised) {
             $sidebar.treeview('collapseAll');
         }
@@ -91,10 +88,9 @@ var SidebarHandler = function () {
         var that  = this;
         var modes = [];
 
-        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
+        this.Files.directoryOpen().then(function (dirEntry) {
 
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
+            if (typeof dirEntry === typeof undefined) {
                 return false;
             }
 

@@ -2,6 +2,7 @@ var EditorsHandler = function () {
 
     this.Notifications = undefined;
     this.IdeSettings   = undefined;
+    this.Files         = undefined;
     this.Modelist      = ace.require("ace/ext/modelist");
     this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
 
@@ -60,124 +61,6 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Private File
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    this._fileOpen = function (fileEntry, nodeId) {
-
-        var that = this;
-
-        var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
-        };
-
-        fileEntry.file(function (file) {
-            var reader   = new FileReader();
-            var fileExt  = that.getExtFromFileEntry(fileEntry);
-            var fileName = that.getNameFromFileEntry(fileEntry);
-
-            reader.readAsText(file);
-            reader.onerror = onError;
-            reader.onload  = function (e) {
-                that.onAddNewTab(fileExt, fileName, e.target.result, fileEntry, nodeId);
-            };
-        }, onError);
-    };
-
-    this._fileRename = function (fileEntry, newFileName) {
-
-        var that     = this;
-        var deferred = $.Deferred();
-
-        if (typeof newFileName === typeof undefined) {
-            deferred.resolve(fileEntry);
-            return deferred.promise();
-        }
-
-        chrome.fileSystem.getWritableEntry(fileEntry, function (writableFileEntry) {
-
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('danger', 'File Error', chrome.runtime.lastError.message);
-                deferred.resolve(undefined);
-                return deferred.promise();
-            }
-
-            var onError = function (err) {
-                that.Notifications.notify('danger', 'File Error', err);
-                deferred.resolve(undefined);
-            };
-
-            writableFileEntry.getParent(function (fileParent) {
-                writableFileEntry.moveTo(fileParent, newFileName, function (updatedEntry) {
-                    deferred.resolve(updatedEntry);
-                }, onError);
-            }, onError);
-        });
-
-        return deferred.promise();
-    };
-
-    this._fileSave = function (fileEntry, fileContent) {
-
-        var that     = this;
-        var deferred = $.Deferred();
-
-        chrome.fileSystem.getWritableEntry(fileEntry, function (writableEntry) {
-
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('danger', 'File Error', chrome.runtime.lastError.message);
-                deferred.resolve(undefined);
-                return deferred.promise();
-            }
-
-            var onError = function (err) {
-                that.Notifications.notify('danger', 'File Error', err);
-                deferred.resolve(undefined);
-            };
-
-            writableEntry.createWriter(function (writer) {
-                writer.onerror    = onError;
-                writer.onwriteend = function (e) {
-                    deferred.resolve(e, writableEntry);
-                };
-                writer.seek(0);
-                writer.write(new Blob([fileContent], {type: 'text/plain'}));
-            });
-        });
-
-        return deferred.promise();
-    };
-
-    this._fileSaveAs = function (fileName, fileContent) {
-
-        var that     = this;
-        var deferred = $.Deferred();
-
-        chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: fileName, acceptsMultiple: false}, function (writableEntry) {
-
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('danger', 'File Error', chrome.runtime.lastError.message);
-                deferred.resolve(undefined);
-                return deferred.promise();
-            }
-
-            var onError = function (err) {
-                that.Notifications.notify('danger', 'File Error', err);
-                deferred.resolve(undefined);
-            };
-
-            writableEntry.createWriter(function (writer) {
-                writer.onerror    = onError;
-                writer.onwriteend = function (e) {
-                    deferred.resolve(e, writableEntry);
-                };
-                writer.write(new Blob([fileContent], {type: 'text/plain'}));
-            });
-        });
-
-        return deferred.promise();
-    };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Ace
@@ -579,12 +462,13 @@ var EditorsHandler = function () {
     /// Public Ace
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.init = function (ideSettings, notifications) {
+    this.init = function (ideSettings, notifications, files) {
 
         var that = this;
 
         this.Notifications = notifications;
         this.IdeSettings   = ideSettings;
+        this.Files         = files;
 
         this._populateAddTabDropDown();
 
@@ -892,7 +776,7 @@ var EditorsHandler = function () {
             $tabNameEl.removeAttr('contenteditable').off('keydown');
 
             $.event.trigger({
-                type: "_editor.file.rename",
+                type: "editors.filerename",
                 time: new Date(),
                 idx: idx,
                 nodeId: that.getTabNavNodeId(idx),
@@ -942,14 +826,8 @@ var EditorsHandler = function () {
 
         var that = this;
 
-        chrome.fileSystem.chooseEntry({type: 'openWritableFile'}, function (fileEntry) {
-
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('danger', '', chrome.runtime.lastError.message);
-                return false;
-            }
-
-            that._fileOpen(fileEntry);
+        this.Files.fileOpen().then(function (e, fileEntry) {
+            that.onAddNewTab(that.getExtFromFileEntry(fileEntry), that.getNameFromFileEntry(fileEntry), e.target.result, fileEntry);
         });
     };
 
@@ -963,13 +841,13 @@ var EditorsHandler = function () {
         var fileEntry = this.getEditorFileEntry(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
-            ? this._fileSaveAs(this.getTabNavTabName(idx), this.getEditorContent(idx))
-            : this._fileSave(fileEntry, this.getEditorContent(idx));
+            ? this.Files.fileSaveAs(this.getTabNavTabName(idx), this.getEditorContent(idx))
+            : this.Files.fileSave(fileEntry, this.getEditorContent(idx));
 
         promise.then(function (e, fileEntry) {
             if (typeof e !== typeof undefined) {
                 $.event.trigger({
-                    type: "_editor.tabname.change",
+                    type: "editors.tabnamechange",
                     time: new Date(),
                     idx: idx,
                     nodeId: that.getTabNavNodeId(idx),
@@ -996,28 +874,26 @@ var EditorsHandler = function () {
 
     this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
 
-        var that      = this;
-        var fileEntry = that.getEditorFileEntry(idx);
+        var that = this;
 
-        that.setEditorTemplate(idx);
-        that._setAceEditorMode(idx);
+        this.setEditorTemplate(idx);
+        this._setAceEditorMode(idx);
 
-        if (typeof fileEntry !== typeof undefined) {
-            that._fileRename(fileEntry, newFileName).then(function (fileEntry) {
-                if (typeof fileEntry !== typeof undefined) {
-                    that.setEditorFileEntry(idx, fileEntry);
-                }
-                else {
-                    $.event.trigger({
-                        type: "_editor.tabname.change",
-                        time: new Date(),
-                        idx: idx,
-                        nodeId: that.getTabNavNodeId(idx),
-                        tabName: oldFileName
-                    });
-                }
-            });
-        }
+        this.Files.fileRename(this.getEditorFileEntry(idx), newFileName).then(function (fileEntry) {
+
+            if (typeof fileEntry !== typeof undefined) {
+                that.setEditorFileEntry(idx, fileEntry);
+            }
+            else {
+                $.event.trigger({
+                    type: "editors.tabnamechange",
+                    time: new Date(),
+                    idx: idx,
+                    nodeId: that.getTabNavNodeId(idx),
+                    tabName: oldFileName
+                });
+            }
+        });
     };
 
     this.onChangeTabName = function (idx, nodeId, tabName) {
