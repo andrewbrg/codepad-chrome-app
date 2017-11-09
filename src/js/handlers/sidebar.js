@@ -32,7 +32,6 @@ var SidebarHandler = function () {
     };
 
     this._setSidebarTopMenu = function (title) {
-
         this.getAside().find('.sidebar-menu-title').html(title);
     };
 
