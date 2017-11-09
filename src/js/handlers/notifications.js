@@ -7,15 +7,15 @@ var NotificationsHandler = function () {
 
         type = message === 'User cancelled' ? 'warning' : type;
 
-        var icon  = 'fa fa-bell';
+        var icon  = 'fa fa-fw fa-bell';
         var sound = '/src/sounds/notif-info.ogg';
         switch (type) {
             case 'danger':
-                icon  = 'fa fa-exclamation-circle';
+                icon  = 'fa fa-fw fa-exclamation-circle';
                 sound = '/src/sounds/notif-danger.ogg';
                 break;
             case 'warning':
-                icon  = 'fa fa-bell';
+                icon  = 'fa fa-fw fa-exclamation-circle';
                 sound = '/src/sounds/notif-danger.ogg';
                 break;
         }
