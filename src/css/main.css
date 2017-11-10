@@ -15,22 +15,29 @@ header {
 }
 
 main {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: row;
+    flex-flow: row;
+}
+
+.flex-1,
+.flex-2 {
+    position: relative;
 }
 
 /*******************************************************************************/
 /************************************ Sidebar **********************************/
 /*******************************************************************************/
 aside {
-    position: relative;
     min-width: 300px;
-    flex-grow: 1;
-    resize: horizontal;
     background-color: #262a2e;
     border-right: 1px solid rgba(0, 0, 0, .3);
+}
+
+aside.ui-resizable.ui-resizing {
+    border: 1px dashed rgba(0, 123, 255, .5);
+    background: rgba(0, 0, 0, 0.15);
 }
 
 .sidebar {
@@ -126,8 +133,8 @@ aside {
 .tab-content,
 .tab-pane,
 .editor {
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 
 .ace_gutter-cell {
@@ -240,7 +247,7 @@ aside {
 }
 
 .nav-tabs .ui-sortable-placeholder {
-    min-width: 30px;
+    min-width: 150px;
     border: 1px dashed rgba(0, 123, 255, .5);
     background: rgba(0, 0, 0, 0.15);
 }
