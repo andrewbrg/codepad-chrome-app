@@ -239,6 +239,12 @@ aside {
     position: relative;
 }
 
+.nav-tabs .ui-sortable-placeholder {
+    min-width: 30px;
+    border: 1px dashed rgba(0, 123, 255, .5);
+    background: rgba(0, 0, 0, 0.15);
+}
+
 .tab-list li a {
     position: relative;
     display: inline-block;

@@ -76,6 +76,17 @@ if (typeof $ !== typeof undefined) {
             Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
         });
 
+        // Enable tab sorting
+        $('.sortable').sortable({
+            cursor: 'move',
+            distance: 15,
+            tolerance: 'pointer',
+            placeholder: "ui-state-highlight",
+            stop: function (event, ui) {
+                Editors.setTabNavFocus($(ui.item).find('a').first().attr('data-idx'));
+            }
+        });
+
         // Handle resize of window
         var $header               = $('header');
         var $aside                = $('aside');

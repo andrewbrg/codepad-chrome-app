@@ -278,31 +278,6 @@ var EditorsHandler = function () {
         return obj;
     };
 
-    this._giveTabFocus = function (idx) {
-
-        idx              = parseInt(idx);
-        this.previousIdx = parseInt(this.currentIdx);
-
-        if (this.getNumTabs() === 0) {
-            this.currentIdx = null;
-            return false;
-        }
-
-        var $el = (typeof this.getTabNavElement(idx) === typeof undefined)
-            ? this.getTabsNavContainer().children().first()
-            : this.getTabNavElement(idx);
-
-        $el.find('*[data-toggle="tab"]').first().tab('show');
-        this.currentIdx = parseInt(idx);
-
-        if (typeof this.getEditor(idx) !== typeof undefined) {
-            this.getEditor(idx).focus();
-            return true;
-        }
-
-        return false;
-    };
-
     this._closeTabModals = function (idx) {
         $(document).find('.modal[data-idx="' + idx + '"]').modal('hide');
     };
@@ -669,6 +644,31 @@ var EditorsHandler = function () {
     /// Public tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this.setTabNavFocus = function (idx) {
+
+        idx              = parseInt(idx);
+        this.previousIdx = parseInt(this.currentIdx);
+
+        if (this.getNumTabs() === 0) {
+            this.currentIdx = null;
+            return false;
+        }
+
+        var $el = (typeof this.getTabNavElement(idx) === typeof undefined)
+            ? this.getTabsNavContainer().children().first()
+            : this.getTabNavElement(idx);
+
+        $el.find('*[data-toggle="tab"]').first().tab('show');
+        this.currentIdx = parseInt(idx);
+
+        if (typeof this.getEditor(idx) !== typeof undefined) {
+            this.getEditor(idx).focus();
+            return true;
+        }
+
+        return false;
+    };
+
     // Getters for editor modes
     ///////////////////////////////////
     this.getTabNavTabName = function (idx) {
@@ -754,7 +754,7 @@ var EditorsHandler = function () {
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
         this._bootAceEditor(obj.idx, fileContent, fileEntry);
-        this._giveTabFocus(obj.idx);
+        this.setTabNavFocus(obj.idx);
 
         $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
         return true;
@@ -815,7 +815,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
         this.getTabNavElement(idx).remove();
         this.getTabContentElement(idx).remove();
-        this._giveTabFocus(this.previousIdx);
+        this.setTabNavFocus(this.previousIdx);
         this._closeTabModals(idx);
 
         $(window).trigger('resize');
