@@ -737,7 +737,7 @@ var EditorsHandler = function () {
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////
+
     // Tab Related
     ///////////////////////////////////
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
@@ -823,7 +823,7 @@ var EditorsHandler = function () {
         return true;
     };
 
-    ///////////////////////////////////
+
     // File System Related
     ///////////////////////////////////
     this.onOpenFile = function () {
