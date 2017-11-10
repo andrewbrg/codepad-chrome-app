@@ -226,7 +226,7 @@ if (typeof $ !== typeof undefined) {
                     $.event.trigger({
                         type: 'file.changename',
                         time: new Date(),
-                        idx: idx,
+                        idx: e.idx,
                         nodeId: e.nodeId,
                         tabName: e.oldFileName
                     });
