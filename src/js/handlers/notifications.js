@@ -40,9 +40,9 @@ var NotificationsHandler = function () {
             onShow: function () {
 
                 var $el = $(
-                    '<audio class="sound-player" autoplay="autoplay" style="display:none;">'
-                    + '<source src="' + sound + '" />'
-                    + '</audio>'
+                    '<audio class="sound-player" autoplay="autoplay" style="display:none;">' +
+                    '<source src="' + sound + '" />' +
+                    '</audio>'
                 );
 
                 $el.appendTo('body');
