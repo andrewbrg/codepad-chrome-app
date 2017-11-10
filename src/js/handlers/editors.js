@@ -227,6 +227,16 @@ var EditorsHandler = function () {
     /// Private tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // Get/Set (Tab name)
+    ///////////////////////////////////
+    this._getTabNavName = function (idx) {
+        return this.getTabNavElement(idx).find('.tab-name').first().html();
+    };
+
+    this._setTabNavName = function (idx, tabName) {
+        this.getTabNavElement(idx).find('.tab-name').first().html(tabName);
+    };
+
     this._getNewTabObject = function (fileExt, fileName, nodeId) {
 
         this.idx++;
@@ -471,7 +481,7 @@ var EditorsHandler = function () {
     };
 
 
-    // Editor Template
+    // Get/Set (Editor Template)
     ///////////////////////////////////
     this.getEditorTemplate = function (idx) {
 
@@ -513,7 +523,7 @@ var EditorsHandler = function () {
     };
 
 
-    // Editor Content
+    // Get/Set (Editor Content)
     ///////////////////////////////////
     this.getEditorContent = function (idx) {
 
@@ -552,7 +562,7 @@ var EditorsHandler = function () {
     };
 
 
-    // Editor FileEntry (chrome.filesystem)
+    // Get/Set (Editor File Entry)
     ///////////////////////////////////
     this.getEditorFileEntry = function (idx) {
 
@@ -582,7 +592,7 @@ var EditorsHandler = function () {
     };
 
 
-    // Getters (editors)
+    // Get (editors)
     ///////////////////////////////////
     this.getCurrentEditor = function () {
         return this.getEditor(this.currentIdx);
@@ -610,7 +620,7 @@ var EditorsHandler = function () {
     };
 
 
-    // Getters (other)
+    // Get (other)
     ///////////////////////////////////
     this.getAllEditorModes = function () {
 
@@ -669,15 +679,6 @@ var EditorsHandler = function () {
         return false;
     };
 
-    // Tabs (name)
-    ///////////////////////////////////
-    this.getTabNavName = function (idx) {
-        return this.getTabNavElement(idx).find('.tab-name').first().html();
-    };
-
-    this.setTabNavName = function (idx, tabName) {
-        this.getTabNavElement(idx).find('.tab-name').first().html(tabName);
-    };
 
     // Getters (tabs)
     ///////////////////////////////////
@@ -784,7 +785,7 @@ var EditorsHandler = function () {
                 idx: idx,
                 nodeId: that.getTabNavNodeId(idx),
                 oldFileName: oldFileName,
-                newFileName: that.getTabNavName(idx)
+                newFileName: that._getTabNavName(idx)
             });
         });
 
@@ -848,7 +849,7 @@ var EditorsHandler = function () {
         var fileEntry = this.getEditorFileEntry(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
-            ? this.Files.fileSaveAs(this.getTabNavName(idx), this.getEditorContent(idx))
+            ? this.Files.fileSaveAs(this._getTabNavName(idx), this.getEditorContent(idx))
             : this.Files.fileSave(fileEntry, this.getEditorContent(idx));
 
         promise.then(function (e, fileEntry) {
@@ -888,7 +889,7 @@ var EditorsHandler = function () {
 
     this.onChangeNameFile = function (idx, fileName) {
 
-        this.setTabNavName(idx, fileName);
+        this._setTabNavName(idx, fileName);
     };
 
 
