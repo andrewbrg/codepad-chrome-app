@@ -892,7 +892,6 @@ var EditorsHandler = function () {
         this._setTabNavName(idx, fileName);
     };
 
-
     this.onToggleReadOnly = function (idx) {
 
         var that = this;

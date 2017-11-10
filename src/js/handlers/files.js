@@ -4,6 +4,10 @@ var FilesHandler = function () {
 
     this.fileSystem = undefined;
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Private File
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     this._restoreEntries = function () {
 
         var that = this;
@@ -44,6 +48,10 @@ var FilesHandler = function () {
     };
 
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Public File
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     this.init = function (notifications) {
 
         this.Notifications = notifications;
@@ -73,7 +81,6 @@ var FilesHandler = function () {
 
         return deferred.promise();
     };
-
 
     this.fileOpen = function (fileEntry) {
 
@@ -117,8 +124,7 @@ var FilesHandler = function () {
 
         return deferred.promise();
     };
-
-
+    
     this.fileSave = function (fileEntry, fileContent) {
 
         var that     = this;
