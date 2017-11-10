@@ -30,6 +30,35 @@ var SidebarHandler = function () {
         this._setSidebarTopMenu(title);
         this.compressNodes();
         this.show();
+
+        new BootstrapMenu('.node-sidebar', {
+            fetchElementData: function ($rowElem) {
+
+                console.log($rowElem);
+            },
+            actions: [{
+                name: 'New',
+                classNames: 'dropdown-item',
+                iconClass: 'fa fa-plus',
+                onClick: function () {
+                    // run when the action is clicked
+                }
+            }, {
+                name: 'Rename',
+                classNames: 'dropdown-item',
+                iconClass: 'fa fa-edit',
+                onClick: function () {
+                    // run when the action is clicked
+                }
+            }, {
+                name: 'Delete',
+                classNames: 'dropdown-item',
+                iconClass: 'fa fa-close',
+                onClick: function () {
+                    // run when the action is clicked
+                }
+            }]
+        });
     };
 
     this._setSidebarTopMenu = function (title) {

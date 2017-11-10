@@ -416,12 +416,15 @@ select:focus,
     border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
-.dropdown-item {
+.dropdown-item,
+.dropdown-item a {
     color: rgba(255, 255, 255, .5);
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover,
+.dropdown-item a:hover {
     background-color: #1b1d21;
+    text-decoration: none;
     color: rgba(255, 255, 255, 1);
 }
 
@@ -538,4 +541,19 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 /*******************************************************************************/
 *[data-notify="container"] {
     opacity: 0.7;
+}
+
+/*******************************************************************************/
+/******************************** Bootstrap menu *******************************/
+/*******************************************************************************/
+.bootstrapMenu .dropdown-menu {
+    padding: .3rem 0;
+}
+
+.bootstrapMenu .dropdown-item {
+    padding: .25em 1em;
+}
+
+.bootstrapMenu .dropdown-item .fa {
+    font-size: 0.9rem;
 }
