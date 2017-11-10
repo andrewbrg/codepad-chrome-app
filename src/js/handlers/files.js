@@ -18,7 +18,7 @@ var FilesHandler = function () {
             var allEntries = data.retainedEntries || [];
             allEntries.forEach(function (retainedItem) {
                 chrome.fileSystem.isRestorable(retainedItem, function () {
-                    chrome.fileSystem.restoreEntry(retainedItem, function (chosenEntry) {
+                    chrome.fileSystem.restoreEntry(retainedItem, function () {
                     });
                 });
             });

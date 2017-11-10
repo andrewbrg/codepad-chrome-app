@@ -32,9 +32,9 @@ var SidebarHandler = function () {
         this.show();
 
         new BootstrapMenu('.node-sidebar', {
-            fetchElementData: function ($rowElem) {
+            fetchElementData: function ($el) {
 
-                console.log($rowElem);
+                console.log($el);
             },
             actions: [{
                 name: 'New',
@@ -63,6 +63,15 @@ var SidebarHandler = function () {
 
     this._setSidebarTopMenu = function (title) {
         this.getAside().find('.sidebar-menu-title').html(title);
+    };
+
+    this._setNodeName = function (nodeId, tabName) {
+
+        var $el      = this.getSidebar().find('.sidebar-node[data-nodeid="' + nodeId + '"]').first();
+        var $spanEls = $el.find('span');
+
+        $el.html(tabName);
+        $el.prepend($spanEls);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -236,16 +245,13 @@ var SidebarHandler = function () {
         }
     };
 
-    this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
+    this.onRenameFile = function (nodeId, fileEntry) {
 
-        var $el      = this.getSidebar().find('.sidebar-node[data-nodeid="' + nodeId + '"]').first();
-        var $spanEls = $el.find('span');
-
-        $el.html(newFileName);
-        $el.prepend($spanEls);
+        this._setNodeName(nodeId, fileEntry.name);
     };
 
-    this.onChangeTabName = function (idx, nodeId, tabName) {
-        this.onRenameFile(idx, nodeId, tabName, tabName);
+    this.onChangeNameFile = function (nodeId, fileName) {
+
+        this._setNodeName(nodeId, fileName);
     };
 };

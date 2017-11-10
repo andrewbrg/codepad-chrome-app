@@ -669,16 +669,15 @@ var EditorsHandler = function () {
         return false;
     };
 
-    // Getters for editor modes
+    // Tabs (name)
     ///////////////////////////////////
-    this.getTabNavTabName = function (idx) {
+    this.getTabNavName = function (idx) {
         return this.getTabNavElement(idx).find('.tab-name').first().html();
     };
 
-    this.setTabNavTabName = function (idx, tabName) {
+    this.setTabNavName = function (idx, tabName) {
         this.getTabNavElement(idx).find('.tab-name').first().html(tabName);
     };
-
 
     // Getters (tabs)
     ///////////////////////////////////
@@ -780,12 +779,12 @@ var EditorsHandler = function () {
             $tabNameEl.removeAttr('contenteditable').off('keydown');
 
             $.event.trigger({
-                type: "editors.filerename",
+                type: "file.rename",
                 time: new Date(),
                 idx: idx,
                 nodeId: that.getTabNavNodeId(idx),
                 oldFileName: oldFileName,
-                newFileName: that.getTabNavTabName(idx)
+                newFileName: that.getTabNavName(idx)
             });
         });
 
@@ -849,13 +848,13 @@ var EditorsHandler = function () {
         var fileEntry = this.getEditorFileEntry(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
-            ? this.Files.fileSaveAs(this.getTabNavTabName(idx), this.getEditorContent(idx))
+            ? this.Files.fileSaveAs(this.getTabNavName(idx), this.getEditorContent(idx))
             : this.Files.fileSave(fileEntry, this.getEditorContent(idx));
 
         promise.then(function (e, fileEntry) {
             if (typeof e !== typeof undefined) {
                 $.event.trigger({
-                    type: 'editors.tabnamechange',
+                    type: 'file.changename',
                     time: new Date(),
                     idx: idx,
                     nodeId: that.getTabNavNodeId(idx),
@@ -880,33 +879,18 @@ var EditorsHandler = function () {
         });
     };
 
-    this.onRenameFile = function (idx, nodeId, oldFileName, newFileName) {
-
-        var that = this;
+    this.onRenameFile = function (idx, fileEntry) {
 
         this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
-
-        this.Files.fileRename(this.getEditorFileEntry(idx), oldFileName, newFileName).then(function (fileEntry) {
-
-            if (typeof fileEntry !== typeof undefined) {
-                that.setEditorFileEntry(idx, fileEntry);
-            }
-            else {
-                $.event.trigger({
-                    type: 'editors.tabnamechange',
-                    time: new Date(),
-                    idx: idx,
-                    nodeId: that.getTabNavNodeId(idx),
-                    tabName: oldFileName
-                });
-            }
-        });
+        this.setEditorFileEntry(idx, fileEntry);
     };
 
-    this.onChangeTabName = function (idx, nodeId, tabName) {
-        this.setTabNavTabName(idx, tabName);
+    this.onChangeNameFile = function (idx, fileName) {
+
+        this.setTabNavName(idx, fileName);
     };
+
 
     this.onToggleReadOnly = function (idx) {
 

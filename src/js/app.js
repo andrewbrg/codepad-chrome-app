@@ -216,15 +216,28 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Rename file
-        $(document).on('editors.filerename', function (e) {
-            Editors.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
-            Sidebar.onRenameFile(e.idx, e.nodeId, e.oldFileName, e.newFileName);
+        $(document).on('file.rename', function (e) {
+            Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
+                if (typeof fileEntry !== typeof undefined) {
+                    Editors.onRenameFile(e.idx, fileEntry);
+                    Sidebar.onRenameFile(e.nodeId, fileEntry);
+                }
+                else {
+                    $.event.trigger({
+                        type: 'file.changename',
+                        time: new Date(),
+                        idx: idx,
+                        nodeId: e.nodeId,
+                        tabName: e.oldFileName
+                    });
+                }
+            });
         });
 
         // Change tab name
-        $(document).on('editors.tabnamechange', function (e) {
-            Editors.onChangeTabName(e.idx, e.nodeId, e.tabName);
-            Sidebar.onChangeTabName(e.idx, e.nodeId, e.tabName);
+        $(document).on('file.changename', function (e) {
+            Editors.onChangeNameFile(e.idx, e.tabName);
+            Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
         });
 
 

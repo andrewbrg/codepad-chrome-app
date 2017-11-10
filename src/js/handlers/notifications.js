@@ -42,7 +42,6 @@ var NotificationsHandler = function () {
                 var $el = $(
                     '<audio class="sound-player" autoplay="autoplay" style="display:none;">'
                     + '<source src="' + sound + '" />'
-                    + '<embed src="' + sound + '" hidden="true" autostart="true" loop="false"/>'
                     + '</audio>'
                 );
 
