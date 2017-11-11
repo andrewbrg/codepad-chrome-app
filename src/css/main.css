@@ -282,6 +282,11 @@ aside.ui-resizable.ui-resizing {
     display: none
 }
 
+.tab-list .filetype-icon.fa {
+    margin: 5px 0 0 0;
+    font-size: 1em;
+}
+
 .tab-list li a .dirty-tab {
     display: inline-flex;
     color: #92c62c;

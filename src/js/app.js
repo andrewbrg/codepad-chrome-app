@@ -169,7 +169,7 @@ if (typeof $ !== typeof undefined) {
         $(document).on('click', '.action-add-tab', function () {
 
             var fileType = $(this).attr('data-type');
-            if (typeof fileType !== typeof undefined && fileType !== false) {
+            if (typeof fileType === typeof undefined || !fileType) {
                 fileType = Editors.defaultFileExt;
             }
 
