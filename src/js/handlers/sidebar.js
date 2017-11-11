@@ -151,12 +151,15 @@ var SidebarHandler = function () {
             var buildTreeViewJson = function (entry, callback) {
 
                 var results = [];
+
+                // noinspection JSUnresolvedFunction
                 entry.createReader().readEntries(function (entries) {
 
                     var pending = entries.length;
 
                     if (!pending) {
 
+                        // noinspection JSUnresolvedVariable
                         var obj = {
                             text: entry.name,
                             path: entry.fullPath,
@@ -177,6 +180,8 @@ var SidebarHandler = function () {
                         if (item.isDirectory) {
 
                             buildTreeViewJson(item, function (res) {
+
+                                // noinspection JSUnresolvedVariable
                                 var obj = {
                                     text: item.name,
                                     path: item.fullPath,
@@ -202,6 +207,7 @@ var SidebarHandler = function () {
 
                             var ext = that.Editors.getExtFromFileEntry(item);
 
+                            // noinspection JSUnresolvedVariable
                             results.push({
                                 text: item.name,
                                 path: item.fullPath,
@@ -235,6 +241,7 @@ var SidebarHandler = function () {
         var node = this.getSidebar().treeview('getNode', nodeId);
 
         if (node.typeFile === 1) {
+            // noinspection JSUnresolvedFunction
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
 
                 that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {

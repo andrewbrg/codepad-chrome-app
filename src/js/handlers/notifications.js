@@ -21,7 +21,7 @@ var NotificationsHandler = function () {
             case 'warning':
                 icon  = 'fa fa-fw fa-exclamation-circle';
                 sound = '/src/sounds/notif-danger.ogg';
-                console.warning(message);
+                console.warn(message);
                 break;
             default:
                 icon  = 'fa fa-fw fa-bell';

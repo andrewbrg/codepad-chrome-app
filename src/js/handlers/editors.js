@@ -48,11 +48,15 @@ var EditorsHandler = function () {
         $.get('/src/settings/ace.defaults.json', function (data) {
             data = JSON.parse(data);
 
-            that.defaultTheme      = data.theme;
-            that.defaultFont       = data.fontFamily;
-            that.defaultFileName   = data.newFileName;
+            that.defaultTheme    = data.theme;
+            that.defaultFont     = data.fontFamily;
+            that.defaultFileName = data.newFileName;
+
+            // noinspection JSUnresolvedVariable
             that.defaultFileExt    = data.newFileExt;
+            // noinspection JSUnresolvedVariable
             that.undefinedFileMode = data.undefinedFile.mode;
+            // noinspection JSUnresolvedVariable
             that.undefinedFileIcon = data.undefinedFile.icon;
 
             deferred.resolve();
@@ -70,27 +74,28 @@ var EditorsHandler = function () {
     ######################################################*/
     this._sortableTabsInit = function () {
 
+        var that = this;
+
         this.getTabsNavContainer().sortable({
             cursor: 'move',
             distance: 30,
             tolerance: 'pointer',
             placeholder: "ui-state-highlight",
             stop: function (event, ui) {
-                Editors.setTabNavFocus($(ui.item).find('a').first().attr('data-idx'));
+                that.setTabNavFocus($(ui.item).find('a').first().attr('data-idx'));
             }
         });
     };
 
     this._sortableTabsEnable = function () {
-        thia.getTabsNavContainer().sortable('enable');
+        this.getTabsNavContainer().sortable('enable');
     };
 
     this._sortableTabsDisable = function () {
-        thia.getTabsNavContainer().sortable('disable');
+        this.getTabsNavContainer().sortable('disable');
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,7 +260,6 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -474,7 +478,6 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Helper
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -517,7 +520,6 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -725,7 +727,6 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -785,7 +786,6 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -920,11 +920,15 @@ var EditorsHandler = function () {
         var that = this;
 
         this.Files.fileOpen().then(function (e, fileEntry) {
-            that.onAddNewTab(
-                that.getExtFromFileEntry(fileEntry),
-                that.getNameFromFileEntry(fileEntry),
-                (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
-                fileEntry);
+
+            if(typeof e !== typeof undefined){
+                that.onAddNewTab(
+                    that.getExtFromFileEntry(fileEntry),
+                    that.getNameFromFileEntry(fileEntry),
+                    (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                    fileEntry
+                );
+            }
         });
     };
 

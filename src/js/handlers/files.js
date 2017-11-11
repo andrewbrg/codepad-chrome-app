@@ -19,10 +19,13 @@ var FilesHandler = function () {
                 return false;
             }
 
+            // noinspection JSUnresolvedVariable
             var allEntries = data.retainedEntries || [];
+
             allEntries.forEach(function (retainedItem) {
                 chrome.fileSystem.isRestorable(retainedItem, function () {
                     chrome.fileSystem.restoreEntry(retainedItem, function (restoredItem) {
+                        // noinspection JSUnresolvedVariable
                         if (restoredItem.isDirectory) {
                             that.openedDirs.push(restoredItem);
                         }
@@ -43,6 +46,7 @@ var FilesHandler = function () {
                 return false;
             }
 
+            // noinspection JSUnresolvedVariable
             var curEntries = data.retainedEntries || [];
             curEntries.push(chrome.fileSystem.retainEntry(entry));
 
@@ -51,6 +55,7 @@ var FilesHandler = function () {
             if (entry.isDirectory) {
                 var _openedDirs = [];
                 that.openedDirs.forEach(function (openedDir) {
+                    // noinspection JSUnresolvedVariable
                     if (openedDir.fullPath !== entry.fullPath) {
                         _openedDirs.push(openedDir);
                     }
@@ -161,6 +166,7 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
+            // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
                 writer.seek(0);
@@ -194,6 +200,7 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
+            // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
                 writer.seek(0);
@@ -232,13 +239,18 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
+
+            var dirEntry = that.openedDirs[0];
+
             that.openedDirs.forEach(function (openedDir) {
+                // noinspection JSUnresolvedVariable
                 if (openedDir.fullpath === '') {
 
                 }
             });
 
-            writableFileEntry.moveTo(that.directory, newFileName, function (updatedEntry) {
+            // noinspection JSUnresolvedFunction
+            writableFileEntry.moveTo(dirEntry, newFileName, function (updatedEntry) {
                 that._retainEntry(updatedEntry);
                 deferred.resolve(updatedEntry);
             }, onError);
