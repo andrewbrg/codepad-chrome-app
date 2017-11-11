@@ -48,17 +48,14 @@ var SidebarHandler = function () {
                 iconClass: 'fa fa-edit',
                 onClick: function (e) {
 
-                    console.log(e.attr('data-idx'), e.data('text'));
-
                     var $el = $('<div></div>', {
                         'class': 'modal-rename-file',
                         'data-toggle': 'modal',
                         'data-target': '.modal-md-container',
                         'data-title': 'Rename file',
-                        'data-idx': 'Rename file',
-                        'data-nodeid': 'Rename file',
-                        'data-old-filename': 'Rename file',
-                        'data-new-filename': 'Rename file'
+                        'data-idx': e.attr('data-idx'),
+                        'data-nodeid': e.data('nodeid'),
+                        'data-old-filename': e.innerText
                     });
                     $el.appendTo('body').trigger('click');
                     $el.remove();
@@ -261,16 +258,21 @@ var SidebarHandler = function () {
 
         if (node.typeFile === 1) {
 
-            this.Editors.getTabsNavContainer().find('li a').each(function (i, v) {
+            var found = false;
+            $.each(this.Editors.getTabsNavContainer().find('.tab-name'), function (i, el) {
 
-                var $v         = $(v);
-                var nodeIdAttr = $v.attr('data-nodeid');
+                var $el  = $(el);
+                var attr = $el.attr('data-nodeid');
 
-                if (typeof nodeIdAttr === typeof undefined && nodeIdAttr === nodeId) {
-                    that.Editors.setTabNavFocus($v.attr('data-idx'));
-                    return false;
+                if (typeof attr !== typeof undefined && attr === nodeId) {
+                    that.Editors.setTabNavFocus($el.attr('data-idx'));
+                    found = true;
                 }
             });
+
+            if (found) {
+                return found;
+            }
 
             // noinspection JSUnresolvedFunction
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
