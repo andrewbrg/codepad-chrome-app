@@ -29,7 +29,7 @@ var SidebarHandler = function () {
         this.isInitialised = true;
         this._setSidebarTopMenu(title);
         this.compressNodes();
-        this.show();
+        this.showSidebar();
 
         new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
@@ -74,6 +74,10 @@ var SidebarHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -91,11 +95,11 @@ var SidebarHandler = function () {
         return $(document).find('aside').first();
     };
 
-    this.show = function () {
+    this.showSidebar = function () {
         this.getAside().collapse('show');
     };
 
-    this.hide = function () {
+    this.hideSidebar = function () {
         this.getAside().collapse('hide');
     };
 
@@ -114,12 +118,16 @@ var SidebarHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    // File System Related
-    ///////////////////////////////////
+    /*######################################################
+    ## EVENT (Sidebar)
+    ######################################################*/
     this.onOpenProject = function () {
 
         var that  = this;
@@ -244,6 +252,9 @@ var SidebarHandler = function () {
         }
     };
 
+    /*######################################################
+    ## EVENT (File)
+    ######################################################*/
     this.onRenameFile = function (nodeId, fileEntry) {
 
         this._setNodeName(nodeId, fileEntry.name);
@@ -253,4 +264,6 @@ var SidebarHandler = function () {
 
         this._setNodeName(nodeId, fileName);
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };

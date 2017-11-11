@@ -76,17 +76,6 @@ if (typeof $ !== typeof undefined) {
             Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
         });
 
-        // Enable tab sorting
-        $('.sortable').sortable({
-            cursor: 'move',
-            distance: 30,
-            tolerance: 'pointer',
-            placeholder: "ui-state-highlight",
-            stop: function (event, ui) {
-                Editors.setTabNavFocus($(ui.item).find('a').first().attr('data-idx'));
-            }
-        });
-
         // Handle resize of window
         var $header               = $('header');
         var $aside                = $('aside');
@@ -421,12 +410,12 @@ if (typeof $ !== typeof undefined) {
 
         // Sidebar show
         $(document).on('click', '.action-sidebar-show', function () {
-            Sidebar.show();
+            Sidebar.showSidebar();
         });
 
         // Sidebar hide
         $(document).on('click', '.action-sidebar-hide', function () {
-            Sidebar.hide();
+            Sidebar.hideSidebar();
         });
 
         // Sidebar nodes expand

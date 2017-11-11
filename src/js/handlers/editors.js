@@ -61,6 +61,37 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
+    this._closeTabModals = function (idx) {
+        $(document).find('.modal[data-idx="' + idx + '"]').modal('hide');
+    };
+
+    /*######################################################
+    ## Sortable UI
+    ######################################################*/
+    this._sortableTabsInit = function () {
+
+        this.getTabsNavContainer().sortable({
+            cursor: 'move',
+            distance: 30,
+            tolerance: 'pointer',
+            placeholder: "ui-state-highlight",
+            stop: function (event, ui) {
+                Editors.setTabNavFocus($(ui.item).find('a').first().attr('data-idx'));
+            }
+        });
+    };
+
+    this._sortableTabsEnable = function () {
+        thia.getTabsNavContainer().sortable('enable');
+    };
+
+    this._sortableTabsDisable = function () {
+        thia.getTabsNavContainer().sortable('disable');
+    };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Ace
@@ -224,19 +255,27 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Get/Set (Tab name)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET/SET (Tab Names)
+    ######################################################*/
     this._getTabNavName = function (idx) {
-        return this.getTabNavElement(idx).find('.tab-name').first().html();
+        return this.getTabNavEl(idx).find('.tab-name').first().html();
     };
 
     this._setTabNavName = function (idx, tabName) {
-        this.getTabNavElement(idx).find('.tab-name').first().html(tabName);
+        this.getTabNavEl(idx).find('.tab-name').first().html(tabName);
     };
 
+    /*######################################################
+    ## GET (Tab Others)
+    ######################################################*/
     this._getNewTabObject = function (fileExt, fileName, nodeId) {
 
         this.idx++;
@@ -288,14 +327,10 @@ var EditorsHandler = function () {
         return obj;
     };
 
-    this._closeTabModals = function (idx) {
-        $(document).find('.modal[data-idx="' + idx + '"]').modal('hide');
-    };
-
     this._getTabFileExtension = function (idx) {
 
         idx       = parseInt(idx);
-        var $el   = this.getTabNavElement(idx);
+        var $el   = this.getTabNavEl(idx);
         var regEx = /(?:\.([^.]+))?$/;
 
         if (typeof $el !== typeof undefined) {
@@ -330,6 +365,9 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
+    /*######################################################
+    ## POPULATE (Tab Related)
+    ######################################################*/
     this._populateAddTabDropDown = function () {
 
         var that = this;
@@ -355,7 +393,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
             data    = JSON.parse(data);
-            var $el = that.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
+            var $el = that.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
             $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);
             $el.find('.filetype-icon').addClass(data.icon);
@@ -367,7 +405,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var editor     = this.getEditor(idx);
-        var $statusBar = this.getStatusBarContentElAtIdx(idx);
+        var $statusBar = this.getStatusBarContentEl(idx);
 
         var ro        = editor.getOption('readOnly');
         var isRo      = typeof ro === typeof undefined ? false : ro;
@@ -391,6 +429,9 @@ var EditorsHandler = function () {
         );
     };
 
+    /*######################################################
+    ## GET/SET (Tab Dirt)
+    ######################################################*/
     this._markNavTabDirty = function (idx) {
 
         idx = parseInt(idx);
@@ -400,7 +441,7 @@ var EditorsHandler = function () {
             return;
         }
 
-        var $el = this.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
+        var $el = this.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
         $el.addClass('is-dirty').find('.dirty-tab').remove();
         $el.append($(this.navDirtyBtnHtml).attr('data-idx', idx));
     };
@@ -426,9 +467,13 @@ var EditorsHandler = function () {
             });
         }
 
-        var $el = this.getTabNavElement(idx).find('*[data-toggle="tab"]').first();
+        var $el = this.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
         $el.removeClass('is-dirty').find('.dirty-tab').remove();
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Helper
@@ -445,6 +490,34 @@ var EditorsHandler = function () {
             ? undefined
             : fileEntry.name.split('.').reverse().pop();
     };
+
+    this.setTabNavFocus = function (idx) {
+
+        idx              = parseInt(idx);
+        this.previousIdx = parseInt(this.currentIdx);
+
+        if (this.getNumTabs() === 0) {
+            this.currentIdx = null;
+            return false;
+        }
+
+        var $el = (typeof this.getTabNavEl(idx) === typeof undefined)
+            ? this.getTabsNavContainer().children().first()
+            : this.getTabNavEl(idx);
+
+        $el.find('*[data-toggle="tab"]').first().tab('show');
+        this.currentIdx = parseInt(idx);
+
+        if (typeof this.getEditor(idx) !== typeof undefined) {
+            this.getEditor(idx).focus();
+            return true;
+        }
+
+        return false;
+    };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -480,9 +553,9 @@ var EditorsHandler = function () {
         });
     };
 
-
-    // Get/Set (Editor Template)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET/SET (Editor Template)
+    ######################################################*/
     this.getEditorTemplate = function (idx) {
 
         idx = parseInt(idx);
@@ -522,9 +595,9 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-
-    // Get/Set (Editor Content)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET/SET (Editor Content)
+    ######################################################*/
     this.getEditorContent = function (idx) {
 
         idx = parseInt(idx);
@@ -561,9 +634,9 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
-
-    // Get/Set (Editor File Entry)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET/SET (Editor File Entry)
+    ######################################################*/
     this.getEditorFileEntry = function (idx) {
 
         idx = parseInt(idx);
@@ -591,9 +664,9 @@ var EditorsHandler = function () {
         return false;
     };
 
-
-    // Get (editors)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET/SET (Editors)
+    ######################################################*/
     this.getCurrentEditor = function () {
         return this.getEditor(this.currentIdx);
     };
@@ -619,9 +692,9 @@ var EditorsHandler = function () {
         return this.aceEditors;
     };
 
-
-    // Get (other)
-    ///////////////////////////////////
+    /*######################################################
+    ## GET (Others)
+    ######################################################*/
     this.getAllEditorModes = function () {
 
         var deferred = $.Deferred();
@@ -649,40 +722,18 @@ var EditorsHandler = function () {
         return isClean;
     };
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public tabs
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this.setTabNavFocus = function (idx) {
-
-        idx              = parseInt(idx);
-        this.previousIdx = parseInt(this.currentIdx);
-
-        if (this.getNumTabs() === 0) {
-            this.currentIdx = null;
-            return false;
-        }
-
-        var $el = (typeof this.getTabNavElement(idx) === typeof undefined)
-            ? this.getTabsNavContainer().children().first()
-            : this.getTabNavElement(idx);
-
-        $el.find('*[data-toggle="tab"]').first().tab('show');
-        this.currentIdx = parseInt(idx);
-
-        if (typeof this.getEditor(idx) !== typeof undefined) {
-            this.getEditor(idx).focus();
-            return true;
-        }
-
-        return false;
-    };
-
-
-    // Getters (tabs)
-    ///////////////////////////////////
-    this.getTabNavElement = function (idx) {
+    /*######################################################
+    ## GET (Tabs)
+    ######################################################*/
+    this.getTabNavEl = function (idx) {
 
         if (typeof idx === typeof undefined) {
             return undefined;
@@ -695,7 +746,7 @@ var EditorsHandler = function () {
         return $(document).find('.tab-list').first();
     };
 
-    this.getTabContentElement = function (idx) {
+    this.getTabContentEl = function (idx) {
 
         if (typeof idx === typeof undefined) {
             return undefined;
@@ -709,19 +760,19 @@ var EditorsHandler = function () {
     };
 
     this.getTabNavNodeId = function (idx) {
-        return this.getTabNavElement(idx).find('.tab-name').attr('data-node-id');
+        return this.getTabNavEl(idx).find('.tab-name').attr('data-node-id');
     };
 
     this.getNumTabs = function () {
         return parseInt(this.getTabsNavContainer().children().length);
     };
 
+    /*######################################################
+    ## GET (Others)
+    ######################################################*/
+    this.getStatusBarContentEl = function (idx) {
 
-    // Getters (other)
-    ///////////////////////////////////
-    this.getStatusBarContentElAtIdx = function (idx) {
-
-        var $tabContent = this.getTabContentElement(idx);
+        var $tabContent = this.getTabContentEl(idx);
         if (typeof $tabContent === typeof undefined) {
             return undefined;
         }
@@ -734,12 +785,16 @@ var EditorsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    // Tab Related
-    ///////////////////////////////////
+    /*######################################################
+    ## EVENTS (Tab)
+    ######################################################*/
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
 
         fileExtension = (typeof fileExtension === typeof undefined || fileName === null)
@@ -755,6 +810,7 @@ var EditorsHandler = function () {
         this.getTabsContentContainer().append(obj.content);
         this._bootAceEditor(obj.idx, fileContent, fileEntry);
         this.setTabNavFocus(obj.idx);
+        this._sortableTabsInit();
 
         $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
         return true;
@@ -769,12 +825,14 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var that        = this;
-        var $tabNameEl  = this.getTabNavElement(idx).find('.tab-name').first();
+        var $tabNameEl  = this.getTabNavEl(idx).find('.tab-name').first();
         var $siblings   = $tabNameEl.siblings().css('visibility', 'hidden');
         var oldFileName = $tabNameEl.html();
 
 
         $tabNameEl.attr('contenteditable', 'true').focus().one('focusout', function () {
+
+            that._sortableTabsDisable();
 
             $siblings.css('visibility', 'visible');
             $tabNameEl.removeAttr('contenteditable').off('keydown');
@@ -795,10 +853,10 @@ var EditorsHandler = function () {
 
             if (e.which === 27) {
                 $this.html(oldFileName);
-                $this.trigger('focusout');
             }
 
-            if (e.which === 13) {
+            if (e.which === 13 || e.which === 27) {
+                that._sortableTabsEnable();
                 $this.trigger('focusout');
             }
         });
@@ -813,8 +871,8 @@ var EditorsHandler = function () {
         }
 
         idx = parseInt(idx);
-        this.getTabNavElement(idx).remove();
-        this.getTabContentElement(idx).remove();
+        this.getTabNavEl(idx).remove();
+        this.getTabContentEl(idx).remove();
         this.setTabNavFocus(this.previousIdx);
         this._closeTabModals(idx);
 
@@ -823,9 +881,40 @@ var EditorsHandler = function () {
         return true;
     };
 
+    this.onChangeNameFile = function (idx, fileName) {
 
-    // File System Related
-    ///////////////////////////////////
+        this._setTabNavName(idx, fileName);
+    };
+
+    this.onToggleReadOnly = function (idx) {
+
+        var that = this;
+        if (typeof idx === typeof undefined) {
+            $.each(this.getAllEditorObjects(), function (i, v) {
+                that.onToggleReadOnly(v.idx);
+            });
+        }
+
+        var ace = this.getEditor(idx);
+
+        if (typeof ace !== typeof undefined) {
+            var isReadOnly = !ace.getOption('readOnly');
+
+            ace.setOption('readOnly', isReadOnly);
+            var $toggleEl = this.getTabContentEl(idx).find('.action-toggle-readonly .fa');
+
+            if (isReadOnly) {
+                $toggleEl.removeClass('fa-unlock').addClass('fa-lock');
+            }
+            else {
+                $toggleEl.removeClass('fa-lock').addClass('fa-unlock');
+            }
+        }
+    };
+
+    /*######################################################
+    ## EVENTS (File)
+    ######################################################*/
     this.onOpenFile = function () {
 
         var that = this;
@@ -887,34 +976,5 @@ var EditorsHandler = function () {
         this.setEditorFileEntry(idx, fileEntry);
     };
 
-    this.onChangeNameFile = function (idx, fileName) {
-
-        this._setTabNavName(idx, fileName);
-    };
-
-    this.onToggleReadOnly = function (idx) {
-
-        var that = this;
-        if (typeof idx === typeof undefined) {
-            $.each(this.getAllEditorObjects(), function (i, v) {
-                that.onToggleReadOnly(v.idx);
-            });
-        }
-
-        var ace = this.getEditor(idx);
-
-        if (typeof ace !== typeof undefined) {
-            var isReadOnly = !ace.getOption('readOnly');
-
-            ace.setOption('readOnly', isReadOnly);
-            var $toggleEl = this.getTabContentElement(idx).find('.action-toggle-readonly .fa');
-
-            if (isReadOnly) {
-                $toggleEl.removeClass('fa-unlock').addClass('fa-lock');
-            }
-            else {
-                $toggleEl.removeClass('fa-lock').addClass('fa-unlock');
-            }
-        }
-    };
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };
