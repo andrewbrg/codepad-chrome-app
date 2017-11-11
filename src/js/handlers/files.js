@@ -80,17 +80,21 @@ var FilesHandler = function () {
     this._getParentDirForFile = function (dirPath) {
 
         var deferred = $.Deferred();
+
+        var found = false;
         this.openedDirs.forEach(function (openedDir) {
             // noinspection JSUnresolvedVariable
             if (openedDir.fullPath === dirPath) {
                 deferred.resolve(openedDir);
-                return deferred.promise();
+                found = true;
             }
         });
 
-        this.directoryOpen(dirPath).then(function (dirEntry) {
-            deferred.resolve(dirEntry);
-        });
+        if (!found) {
+            this.directoryOpen(dirPath).then(function (dirEntry) {
+                deferred.resolve(dirEntry);
+            });
+        }
 
         return deferred.promise();
     };
