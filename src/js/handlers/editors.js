@@ -289,6 +289,8 @@ var EditorsHandler = function () {
             tabName += '.' + fileExt;
         }
 
+        console.log(fileExt);
+
         var obj          = {};
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
@@ -492,7 +494,7 @@ var EditorsHandler = function () {
 
     this.getExtFromFileEntry = function (fileEntry) {
 
-        if (typeof fileEntry === typeof undefined) {
+        if (typeof fileEntry === typeof undefined || fileEntry.indexOf('.') === -1) {
             return undefined;
         }
 
