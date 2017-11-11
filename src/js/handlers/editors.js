@@ -306,9 +306,9 @@ var EditorsHandler = function () {
         $nav.find('.modal-confirm-close-tab').attr('data-idx', this.idx);
 
         if (typeof nodeId !== typeof undefined && nodeId !== null) {
-            $nav.find('.tab-name').attr('data-node-id', nodeId);
-            $nav.find('.action-close-tab').attr('data-node-id', nodeId);
-            $nav.find('.modal-confirm-close-tab').attr('data-node-id', nodeId);
+            $nav.find('.tab-name').attr('data-nodeid', nodeId);
+            $nav.find('.action-close-tab').attr('data-nodeid', nodeId);
+            $nav.find('.modal-confirm-close-tab').attr('data-nodeid', nodeId);
         }
 
         $nav.find('.tab-name').html(obj.tabName);
@@ -483,15 +483,22 @@ var EditorsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.getExtFromFileEntry = function (fileEntry) {
-        return (typeof fileEntry === typeof undefined)
-            ? undefined
-            : fileEntry.name.split('.').pop();
+
+        if (typeof fileEntry === typeof undefined) {
+            return undefined;
+        }
+
+        return fileEntry.name.split('.').pop();
     };
 
     this.getNameFromFileEntry = function (fileEntry) {
-        return (typeof fileEntry === typeof undefined)
-            ? undefined
-            : fileEntry.name.split('.').reverse().pop();
+
+        if (typeof fileEntry === typeof undefined) {
+            return undefined;
+        }
+
+        var extension = this.getExtFromFileEntry(fileEntry);
+        return fileEntry.name.replace('.' + extension, '');
     };
 
     this.setTabNavFocus = function (idx) {
@@ -761,7 +768,7 @@ var EditorsHandler = function () {
     };
 
     this.getTabNavNodeId = function (idx) {
-        return this.getTabNavEl(idx).find('.tab-name').attr('data-node-id');
+        return this.getTabNavEl(idx).find('.tab-name').attr('data-nodeid');
     };
 
     this.getNumTabs = function () {

@@ -66,7 +66,7 @@ var SidebarHandler = function () {
 
     this._setNodeName = function (nodeId, tabName) {
 
-        var $el      = this.getSidebar().find('.sidebar-node[data-node-id="' + nodeId + '"]').first();
+        var $el      = this.getSidebar().find('.node-sidebar[data-nodeid="' + nodeId + '"]').first();
         var $spanEls = $el.find('span');
 
         $el.html(tabName);
@@ -237,7 +237,6 @@ var SidebarHandler = function () {
         if (node.typeFile === 1) {
             // noinspection JSUnresolvedFunction
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
-
                 that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
                     that.Editors.onAddNewTab(
                         that.Editors.getExtFromFileEntry(fileEntry),
@@ -255,7 +254,6 @@ var SidebarHandler = function () {
     ## EVENT (File)
     ######################################################*/
     this.onRenameFile = function (nodeId, fileEntry) {
-        console.log(nodeId, fileEntry);
         this._setNodeName(nodeId, fileEntry.name);
     };
 

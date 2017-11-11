@@ -246,6 +246,10 @@ var FilesHandler = function () {
                 }
             });
 
+            console.log(writableFileEntry);
+            console.log(fileEntry);
+
+
             // noinspection JSUnresolvedFunction
             writableFileEntry.moveTo(dirEntry, newFileName, function (updatedEntry) {
                 that._retainEntry(updatedEntry);
