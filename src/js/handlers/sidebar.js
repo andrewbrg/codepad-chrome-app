@@ -66,13 +66,19 @@ var SidebarHandler = function () {
 
     this._setNodeName = function (nodeId, nodeName) {
 
+        if (typeof nodeId === typeof undefined || typeof nodeName === typeof undefined) {
+            return false;
+        }
+
         var $el      = this.getSidebar().find('.node-sidebar[data-nodeid="' + nodeId + '"]').first();
         var $spanEls = $el.find('span');
 
         // Update the node
-        var node  = this.getSidebar().treeview('getNode', nodeId);
-        node.path = node.path.replace(node.text, nodeName);
-        node.text = nodeName;
+        var node = this.getSidebar().treeview('getNode', nodeId);
+        if (typeof node === typeof undefined) {
+            node.path = node.path.replace(node.text, nodeName);
+            node.text = nodeName;
+        }
 
         $el.html(nodeName);
         $el.prepend($spanEls);

@@ -289,7 +289,7 @@ var EditorsHandler = function () {
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.statusBarId  = 'status-bar-' + this.idx;
-        obj.tabName      = fileName + '.' + fileExt;
+        obj.tabName      = fileName + (typeof fileExt !== typeof undefined) ? '' : '.' + fileExt;
         obj.nodeId       = nodeId;
 
         var $nav = $(
@@ -333,13 +333,12 @@ var EditorsHandler = function () {
 
     this._getTabFileExtension = function (idx) {
 
-        idx       = parseInt(idx);
-        var $el   = this.getTabNavEl(idx);
-        var regEx = /(?:\.([^.]+))?$/;
+        idx     = parseInt(idx);
+        var $el = this.getTabNavEl(idx);
 
         if (typeof $el !== typeof undefined) {
-            var ext = regEx.exec($el.find('.tab-name').first().html())[1];
-            return ext.toLowerCase();
+            var ext = /(?:\.([^.]+))?$/.exec($el.find('.tab-name').first().html())[1];
+            return (typeof ext === typeof undefined) ? this.undefinedFileIcon : ext.toLowerCase();
         }
 
         return this.undefinedFileMode;
