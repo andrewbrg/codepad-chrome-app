@@ -5,9 +5,7 @@ var NotificationsHandler = function () {
         var icon;
         var sound;
 
-        type = message === 'User cancelled'
-            ? 'warning'
-            : type;
+        type = (message === 'User cancelled') ? 'warning' : type;
 
         switch (type) {
             case 'danger':

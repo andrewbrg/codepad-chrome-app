@@ -79,15 +79,11 @@ var FilesHandler = function () {
 
     this._getParentDirForFile = function (dirPath) {
 
-        var dirEntry = undefined;
         var deferred = $.Deferred();
-
         this.openedDirs.forEach(function (openedDir) {
-
             // noinspection JSUnresolvedVariable
             if (openedDir.fullPath === dirPath) {
-                dirEntry = openedDir;
-                deferred.resolve(dirEntry);
+                deferred.resolve(openedDir);
                 return deferred.promise();
             }
         });
@@ -274,7 +270,7 @@ var FilesHandler = function () {
             }
 
             // noinspection JSUnresolvedVariable
-            var dirPath = fileEntry.fullPath.replace(writableFileEntry.name, '');
+            var dirPath = fileEntry.fullPath.replace(writableFileEntry.fullPath, '');
 
             that._getParentDirForFile(dirPath).then(function (dirEntry) {
                 // noinspection JSUnresolvedFunction
