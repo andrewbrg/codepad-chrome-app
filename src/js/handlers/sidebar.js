@@ -66,7 +66,7 @@ var SidebarHandler = function () {
 
     this._setNodeName = function (nodeId, nodeName) {
 
-        if (typeof nodeId === typeof undefined || typeof nodeName === typeof undefined) {
+        if (typeof nodeId === typeof undefined) {
             return false;
         }
 
