@@ -75,7 +75,7 @@ var SidebarHandler = function () {
 
         // Update the node
         var node = this.getSidebar().treeview('getNode', nodeId);
-        if (typeof node === typeof undefined) {
+        if (typeof node !== typeof undefined) {
             node.path = node.path.replace(node.text, nodeName);
             node.text = nodeName;
         }
