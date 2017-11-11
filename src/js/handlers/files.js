@@ -2,32 +2,44 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
-    this.openedDirs = [];
+    this.retainedKey = 'retEntStorage';
+    this.openedDirs  = [];
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this._getRetainedEntries = function () {
+
+        var that     = this;
+        var deferred = $.Deferred();
+
+        chrome.storage.local.get(this.retainedKey, function (data) {
+
+            if (chrome.runtime.lastError) {
+                that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
+                deferred.reject();
+            }
+            else {
+                var retainedEntries = data[that.retainedKey] || [];
+                deferred.resolve(retainedEntries);
+            }
+        });
+
+        return deferred.promise();
+    };
+
     this._restoreEntries = function () {
 
         var that = this;
 
-        chrome.storage.local.get('retainedEntries', function (data) {
-
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
-                return false;
-            }
-
-            // noinspection JSUnresolvedVariable
-            var allEntries = data.retainedEntries || [];
-
-            allEntries.forEach(function (retainedItem) {
-                chrome.fileSystem.isRestorable(retainedItem, function () {
-                    chrome.fileSystem.restoreEntry(retainedItem, function (restoredItem) {
+        this._getRetainedEntries().then(function (data) {
+            data.forEach(function (retainedEntry) {
+                chrome.fileSystem.isRestorable(retainedEntry, function () {
+                    chrome.fileSystem.restoreEntry(retainedEntry, function (restoredEntry) {
                         // noinspection JSUnresolvedVariable
-                        if (restoredItem.isDirectory) {
-                            that.openedDirs.push(restoredItem);
+                        if (restoredEntry.isDirectory) {
+                            that.openedDirs.push(restoredEntry);
                         }
                     });
                 });
@@ -39,31 +51,52 @@ var FilesHandler = function () {
 
         var that = this;
 
-        chrome.storage.local.get('retainedEntries', function (data) {
+        this._getRetainedEntries().then(function (data) {
 
-            if (chrome.runtime.lastError) {
-                that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
-                return false;
-            }
+            var obj             = {};
+            var retainEntryHash = chrome.fileSystem.retainEntry(entry);
+            var _openedDirs     = [entry];
+
+            that.openedDirs.forEach(function (openedDir) {
+                // noinspection JSUnresolvedVariable
+                if (openedDir.fullPath !== entry.fullPath) {
+                    _openedDirs.push(openedDir);
+                }
+            });
+
+            var retainEntryHashName = retainEntryHash.split(':').pop();
+            obj[that.retainedKey]   = [retainEntryHash];
+            data.forEach(function (retainedEntry) {
+                if (retainEntryHashName !== retainedEntry.split(':').pop()) {
+                    obj[that.retainedKey].push(retainedEntry);
+                }
+            });
+
+            that.openedDirs = _openedDirs;
+            chrome.storage.local.set(obj);
+        });
+    };
+
+    this._getParentDirForFile = function (dirPath) {
+
+        var dirEntry = undefined;
+        var deferred = $.Deferred();
+
+        this.openedDirs.forEach(function (openedDir) {
 
             // noinspection JSUnresolvedVariable
-            var curEntries = data.retainedEntries || [];
-            curEntries.push(chrome.fileSystem.retainEntry(entry));
-
-            chrome.storage.local.set({'retainedEntries': curEntries});
-
-            if (entry.isDirectory) {
-                var _openedDirs = [];
-                that.openedDirs.forEach(function (openedDir) {
-                    // noinspection JSUnresolvedVariable
-                    if (openedDir.fullPath !== entry.fullPath) {
-                        _openedDirs.push(openedDir);
-                    }
-                });
-                _openedDirs.push(entry);
-                that.openedDirs = _openedDirs;
+            if (openedDir.fullPath === dirPath) {
+                dirEntry = openedDir;
+                deferred.resolve(dirEntry);
+                return deferred.promise();
             }
         });
+
+        this.directoryOpen(dirPath).then(function (dirEntry) {
+            deferred.resolve(dirEntry);
+        });
+
+        return deferred.promise();
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -79,7 +112,7 @@ var FilesHandler = function () {
         this._restoreEntries();
     };
 
-    this.directoryOpen = function () {
+    this.directoryOpen = function (dirPath) {
 
         var that     = this;
         var deferred = $.Deferred();
@@ -89,7 +122,7 @@ var FilesHandler = function () {
             deferred.reject();
         };
 
-        chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
+        chrome.fileSystem.chooseEntry({type: 'openDirectory', suggestedName: dirPath}, function (dirEntry) {
 
             if (chrome.runtime.lastError) {
                 onError(chrome.runtime.lastError.message);
@@ -240,23 +273,16 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
-            var dirEntry = that.openedDirs[0];
-            that.openedDirs.forEach(function (openedDir) {
-                // noinspection JSUnresolvedVariable
-                if (openedDir.fullpath === '') {
+            // noinspection JSUnresolvedVariable
+            var dirPath = fileEntry.fullPath.replace(writableFileEntry.name, '');
 
-                }
+            that._getParentDirForFile(dirPath).then(function (dirEntry) {
+                // noinspection JSUnresolvedFunction
+                writableFileEntry.moveTo(dirEntry, newFileName, function (updatedEntry) {
+                    that._retainEntry(updatedEntry);
+                    deferred.resolve(updatedEntry);
+                }, onError);
             });
-
-            console.log(writableFileEntry);
-            console.log(fileEntry);
-            return false;
-
-            // noinspection JSUnresolvedFunction
-            writableFileEntry.moveTo(dirEntry, newFileName, function (updatedEntry) {
-                that._retainEntry(updatedEntry);
-                deferred.resolve(updatedEntry);
-            }, onError);
         });
 
         return deferred.promise();

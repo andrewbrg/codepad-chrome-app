@@ -843,7 +843,7 @@ var EditorsHandler = function () {
             $tabNameEl.removeAttr('contenteditable').off('keydown');
 
             $.event.trigger({
-                type: "file.rename",
+                type: "_file.rename",
                 time: new Date(),
                 idx: idx,
                 nodeId: that.getTabNavNodeId(idx),
@@ -949,7 +949,7 @@ var EditorsHandler = function () {
 
         promise.then(function (e, fileEntry) {
             $.event.trigger({
-                type: 'file.changename',
+                type: '_file.changename',
                 time: new Date(),
                 idx: idx,
                 nodeId: that.getTabNavNodeId(idx),

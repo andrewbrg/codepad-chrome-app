@@ -205,7 +205,7 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Rename file
-        $(document).on('file.rename', function (e) {
+        $(document).on('_file.rename', function (e) {
 
             Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
                 if (typeof fileEntry !== typeof undefined) {
@@ -214,7 +214,7 @@ if (typeof $ !== typeof undefined) {
                 }
             }).fail(function () {
                 $.event.trigger({
-                    type: 'file.changename',
+                    type: '_file.changename',
                     time: new Date(),
                     idx: e.idx,
                     nodeId: e.nodeId,
@@ -224,7 +224,7 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Change tab name
-        $(document).on('file.changename', function (e) {
+        $(document).on('_file.changename', function (e) {
             Editors.onChangeNameFile(e.idx, e.tabName);
             Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
         });
