@@ -33,7 +33,7 @@ var SidebarHandler = function () {
 
         new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
-                //console.log($el);
+                return $el
             },
             actions: [{
                 name: 'New',
@@ -46,8 +46,22 @@ var SidebarHandler = function () {
                 name: 'Rename',
                 classNames: 'dropdown-item',
                 iconClass: 'fa fa-edit',
-                onClick: function () {
-                    // run when the action is clicked
+                onClick: function (e) {
+
+                    console.log(e.attr('data-idx'), e.data('text'));
+
+                    var $el = $('<div></div>', {
+                        'class': 'modal-rename-file',
+                        'data-toggle': 'modal',
+                        'data-target': '.modal-md-container',
+                        'data-title': 'Rename file',
+                        'data-idx': 'Rename file',
+                        'data-nodeid': 'Rename file',
+                        'data-old-filename': 'Rename file',
+                        'data-new-filename': 'Rename file'
+                    });
+                    $el.appendTo('body').trigger('click');
+                    $el.remove();
                 }
             }, {
                 name: 'Delete',
@@ -246,6 +260,18 @@ var SidebarHandler = function () {
         var node = this.getSidebar().treeview('getNode', nodeId);
 
         if (node.typeFile === 1) {
+
+            this.Editors.getTabsNavContainer().find('li a').each(function (i, v) {
+
+                var $v         = $(v);
+                var nodeIdAttr = $v.attr('data-nodeid');
+
+                if (typeof nodeIdAttr === typeof undefined && nodeIdAttr === nodeId) {
+                    that.Editors.setTabNavFocus($v.attr('data-idx'));
+                    return false;
+                }
+            });
+
             // noinspection JSUnresolvedFunction
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
                 that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {

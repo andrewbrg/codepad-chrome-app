@@ -213,7 +213,6 @@ if (typeof $ !== typeof undefined) {
         // Rename file
         $(document).on('_file.rename', function (e) {
 
-            console.info('Event', '_file.rename');
             Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
                 if (typeof fileEntry !== typeof undefined) {
                     Editors.onRenameFile(e.idx, fileEntry);
@@ -232,7 +231,7 @@ if (typeof $ !== typeof undefined) {
 
         // Change tab name
         $(document).on('_file.changename', function (e) {
-            console.info('Event', '_file.changename');
+
             Editors.onChangeNameFile(e.idx, e.tabName);
             Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
         });

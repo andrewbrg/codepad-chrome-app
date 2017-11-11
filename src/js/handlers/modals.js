@@ -49,7 +49,9 @@ var ModalsHandler = function () {
             $.get('/src/html/modals/github/authenticate.html').done(callback);
         }
 
-
+        if ($el.hasClass('modal-rename-file')) {
+            $.get('/src/html/modals/file/rename.file.html').done(callback);
+        }
 
         return deferred.promise();
     };
