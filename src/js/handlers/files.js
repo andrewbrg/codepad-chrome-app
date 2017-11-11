@@ -106,7 +106,6 @@ var FilesHandler = function () {
         var that     = this;
         var deferred = $.Deferred();
 
-
         var onError = function (err) {
             that.Notifications.notify('danger', 'File Error', err);
             deferred.resolve(undefined);

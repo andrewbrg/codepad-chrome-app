@@ -1,12 +1,9 @@
 var NotificationsHandler = function () {
+
     this.notify = function (type, title, message) {
 
         var icon;
         var sound;
-
-        if (typeof message === typeof undefined) {
-            return false;
-        }
 
         type = message === 'User cancelled'
             ? 'warning'
@@ -30,8 +27,12 @@ var NotificationsHandler = function () {
                 break;
         }
 
-
         var obj = {icon: icon, message: message};
+
+        if (typeof message === typeof undefined || message === 'User cancelled') {
+            return false;
+        }
+
         if (typeof title !== typeof undefined && title.length > 0) {
             obj.title = '<strong>' + title + '</strong><br />';
         }
