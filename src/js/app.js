@@ -206,25 +206,27 @@ if (typeof $ !== typeof undefined) {
 
         // Rename file
         $(document).on('file.rename', function (e) {
+
+            console.info('file.rename');
             Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
                 if (typeof fileEntry !== typeof undefined) {
                     Editors.onRenameFile(e.idx, fileEntry);
                     Sidebar.onRenameFile(e.nodeId, fileEntry);
                 }
-                else {
-                    $.event.trigger({
-                        type: 'file.changename',
-                        time: new Date(),
-                        idx: e.idx,
-                        nodeId: e.nodeId,
-                        tabName: e.oldFileName
-                    });
-                }
+            }).fail(function () {
+                $.event.trigger({
+                    type: 'file.changename',
+                    time: new Date(),
+                    idx: e.idx,
+                    nodeId: e.nodeId,
+                    tabName: e.oldFileName
+                });
             });
         });
 
         // Change tab name
         $(document).on('file.changename', function (e) {
+            console.info('file.changename');
             Editors.onChangeNameFile(e.idx, e.tabName);
             Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
         });

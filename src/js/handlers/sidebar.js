@@ -76,7 +76,6 @@ var SidebarHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +119,6 @@ var SidebarHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,10 +132,6 @@ var SidebarHandler = function () {
         var modes = [];
 
         this.Files.directoryOpen().then(function (dirEntry) {
-
-            if (typeof dirEntry === typeof undefined) {
-                return false;
-            }
 
             that.dirEntry = dirEntry;
 
@@ -245,15 +239,13 @@ var SidebarHandler = function () {
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
 
                 that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
-                    if (typeof fileEntry !== typeof undefined) {
-                        that.Editors.onAddNewTab(
-                            that.Editors.getExtFromFileEntry(fileEntry),
-                            that.Editors.getNameFromFileEntry(fileEntry),
-                            e.target.result,
-                            fileEntry,
-                            nodeId
-                        );
-                    }
+                    that.Editors.onAddNewTab(
+                        that.Editors.getExtFromFileEntry(fileEntry),
+                        that.Editors.getNameFromFileEntry(fileEntry),
+                        e.target.result,
+                        fileEntry,
+                        nodeId
+                    );
                 });
             });
         }

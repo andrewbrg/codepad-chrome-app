@@ -920,15 +920,12 @@ var EditorsHandler = function () {
         var that = this;
 
         this.Files.fileOpen().then(function (e, fileEntry) {
-
-            if(typeof e !== typeof undefined){
-                that.onAddNewTab(
-                    that.getExtFromFileEntry(fileEntry),
-                    that.getNameFromFileEntry(fileEntry),
-                    (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
-                    fileEntry
-                );
-            }
+            that.onAddNewTab(
+                that.getExtFromFileEntry(fileEntry),
+                that.getNameFromFileEntry(fileEntry),
+                (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                fileEntry
+            );
         });
     };
 
@@ -946,19 +943,17 @@ var EditorsHandler = function () {
             : this.Files.fileSave(fileEntry, this.getEditorContent(idx));
 
         promise.then(function (e, fileEntry) {
-            if (typeof e !== typeof undefined) {
-                $.event.trigger({
-                    type: 'file.changename',
-                    time: new Date(),
-                    idx: idx,
-                    nodeId: that.getTabNavNodeId(idx),
-                    tabName: fileEntry.name
-                });
+            $.event.trigger({
+                type: 'file.changename',
+                time: new Date(),
+                idx: idx,
+                nodeId: that.getTabNavNodeId(idx),
+                tabName: fileEntry.name
+            });
 
-                that.setEditorFileEntry(idx, fileEntry);
-                that._markNavTabClean(idx);
-                that._closeTabModals(idx);
-            }
+            that.setEditorFileEntry(idx, fileEntry);
+            that._markNavTabClean(idx);
+            that._closeTabModals(idx);
         });
     };
 

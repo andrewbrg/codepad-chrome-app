@@ -84,7 +84,7 @@ var FilesHandler = function () {
 
         var onError = function (err) {
             that.Notifications.notify('danger', 'Directory Error', err);
-            deferred.resolve(undefined);
+            deferred.reject();
         };
 
         chrome.fileSystem.chooseEntry({type: 'openDirectory'}, function (dirEntry) {
@@ -108,7 +108,7 @@ var FilesHandler = function () {
 
         var onError = function (err) {
             that.Notifications.notify('danger', 'File Error', err);
-            deferred.resolve(undefined);
+            deferred.reject();
         };
 
         var readFile = function (fileEntry, deferred) {
@@ -150,11 +150,11 @@ var FilesHandler = function () {
 
         var onError = function (err) {
             that.Notifications.notify('danger', 'File Error', err);
-            deferred.resolve(undefined);
+            deferred.reject();
         };
 
         if (typeof fileEntry === typeof undefined) {
-            deferred.resolve(undefined);
+            onError('Undefined file entry');
             return deferred.promise();
         }
 
@@ -189,7 +189,7 @@ var FilesHandler = function () {
 
         var onError = function (err) {
             that.Notifications.notify('danger', 'File Error', err);
-            deferred.resolve(undefined);
+            deferred.reject();
         };
 
         chrome.fileSystem.chooseEntry({type: 'saveFile', suggestedName: fileName, acceptsMultiple: false}, function (writableEntry) {
@@ -222,13 +222,13 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         if (typeof fileEntry === typeof undefined || typeof newFileName === typeof undefined) {
-            deferred.resolve(fileEntry);
+            deferred.resolve(undefined);
             return deferred.promise();
         }
 
         var onError = function (err) {
             that.Notifications.notify('danger', 'File Error', err);
-            deferred.resolve(undefined);
+            deferred.reject();
         };
 
         chrome.fileSystem.getWritableEntry(fileEntry, function (writableFileEntry) {
@@ -238,9 +238,7 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
-
             var dirEntry = that.openedDirs[0];
-
             that.openedDirs.forEach(function (openedDir) {
                 // noinspection JSUnresolvedVariable
                 if (openedDir.fullpath === '') {
