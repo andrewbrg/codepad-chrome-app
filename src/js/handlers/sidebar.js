@@ -33,7 +33,7 @@ var SidebarHandler = function () {
 
         new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
-                console.log($el);
+                //console.log($el);
             },
             actions: [{
                 name: 'New',
@@ -64,12 +64,17 @@ var SidebarHandler = function () {
         this.getAside().find('.sidebar-menu-title').html(title);
     };
 
-    this._setNodeName = function (nodeId, tabName) {
+    this._setNodeName = function (nodeId, nodeName) {
 
         var $el      = this.getSidebar().find('.node-sidebar[data-nodeid="' + nodeId + '"]').first();
         var $spanEls = $el.find('span');
 
-        $el.html(tabName);
+        // Update the node
+        var node  = this.getSidebar().treeview('getNode', nodeId);
+        node.path = node.path.replace(node.text, nodeName);
+        node.text = nodeName;
+
+        $el.html(nodeName);
         $el.prepend($spanEls);
     };
 
@@ -258,7 +263,6 @@ var SidebarHandler = function () {
     };
 
     this.onChangeNameFile = function (nodeId, fileName) {
-
         this._setNodeName(nodeId, fileName);
     };
 

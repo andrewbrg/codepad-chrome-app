@@ -66,6 +66,8 @@ var FilesHandler = function () {
         });
     };
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public File
@@ -248,7 +250,7 @@ var FilesHandler = function () {
 
             console.log(writableFileEntry);
             console.log(fileEntry);
-
+            return false;
 
             // noinspection JSUnresolvedFunction
             writableFileEntry.moveTo(dirEntry, newFileName, function (updatedEntry) {
@@ -259,4 +261,6 @@ var FilesHandler = function () {
 
         return deferred.promise();
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 };

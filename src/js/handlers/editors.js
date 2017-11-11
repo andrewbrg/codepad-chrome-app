@@ -669,8 +669,6 @@ var EditorsHandler = function () {
                 return false;
             }
         });
-
-        return false;
     };
 
     /*######################################################
