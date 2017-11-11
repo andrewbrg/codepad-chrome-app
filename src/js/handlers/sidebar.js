@@ -255,7 +255,7 @@ var SidebarHandler = function () {
     ## EVENT (File)
     ######################################################*/
     this.onRenameFile = function (nodeId, fileEntry) {
-
+        console.log(nodeId, fileEntry);
         this._setNodeName(nodeId, fileEntry.name);
     };
 

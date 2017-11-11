@@ -25,73 +25,13 @@ var IdeSettingsHandler = function () {
         });
     };
 
-    this._flush = function (key) {
-
-        if (typeof key === typeof undefined) {
-            return this;
-        }
-
-        var that = this;
-        chrome.storage.sync.get(this.parentKey, function (obj) {
-
-            if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey)) {
-                obj[that.parentKey] = {};
-            }
-
-            delete obj[that.parentKey][key];
-            chrome.storage.sync.set(obj);
-        });
-    };
-
-    this._fetch = function (key) {
-
-        var that     = this;
-        var deferred = $.Deferred();
-
-        chrome.storage.sync.get(this.parentKey, function (obj) {
-
-            if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey)) {
-                deferred.resolve(undefined);
-                return;
-            }
-
-            if (typeof key === typeof undefined || !key) {
-                deferred.resolve(obj[that.parentKey]);
-                return deferred.promise();
-            }
-
-            if (obj[that.parentKey].hasOwnProperty(key)) {
-                deferred.resolve(obj[that.parentKey][key]);
-                return;
-            }
-
-            if (that.Editors.getNumTabs() === 0) {
-                deferred.resolve(undefined);
-                return;
-            }
-
-            that.Editors.getAllEditorObjects().forEach(function (editor) {
-                if (typeof editor !== typeof undefined) {
-                    deferred.resolve(editor.ace.getOption(key));
-                    return false;
-                }
-            });
-        });
-
-        return deferred.promise();
-    };
-
     this._populateViewSetting = function (el) {
 
         var $el  = $(el);
         var type = $el.attr('type');
         var key  = $el.attr('data-option').toString();
 
-        this._fetch(key).then(function (val) {
-
-            if (typeof val === typeof undefined) {
-                return false;
-            }
+        this.fetch(key).then(function (val) {
 
             switch (type) {
 
@@ -113,6 +53,8 @@ var IdeSettingsHandler = function () {
             }
         });
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -140,20 +82,57 @@ var IdeSettingsHandler = function () {
     };
 
     this.fetch = function (key) {
-        return this._fetch(key);
+
+        var that     = this;
+        var deferred = $.Deferred();
+
+        chrome.storage.sync.get(this.parentKey, function (obj) {
+
+            if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey) || that.Editors.getNumTabs() === 0) {
+                deferred.reject();
+            }
+
+            else if (typeof key === typeof undefined || !key) {
+                deferred.resolve(obj[that.parentKey]);
+            }
+
+            else if (obj[that.parentKey].hasOwnProperty(key)) {
+                deferred.resolve(obj[that.parentKey][key]);
+            }
+
+            else {
+                that.Editors.getAllEditorObjects().forEach(function (editor) {
+                    if (typeof editor !== typeof undefined) {
+                        deferred.resolve(editor.ace.getOption(key));
+                        return deferred.promise();
+                    }
+                });
+                deferred.reject();
+            }
+        });
+
+        return deferred.promise();
     };
 
     this.fetchAll = function () {
-        return this._fetch();
+        return this.fetch();
     };
 
     this.flush = function (key) {
-        return this._flush(key);
-    };
 
-    // noinspection JSUnusedGlobalSymbols
-    this.flushAll = function () {
-        chrome.storage.sync.clear();
+        var that = this;
+
+        if (typeof key !== typeof undefined) {
+            chrome.storage.sync.get(this.parentKey, function (obj) {
+
+                if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey)) {
+                    obj[that.parentKey] = {};
+                }
+
+                delete obj[that.parentKey][key];
+                chrome.storage.sync.set(obj);
+            });
+        }
     };
 
     this.reset = function (key) {
@@ -162,17 +141,6 @@ var IdeSettingsHandler = function () {
         this.flush(key);
     };
 
-    // noinspection JSUnusedGlobalSymbols
-    this.resetAll = function () {
-
-        var that = this;
-
-        this.fetchAll().then(function (settings) {
-            $.each(settings, function (i) {
-                that.reset(i);
-            });
-        });
-    };
 
     this.persistAndApply = function (obj) {
 
@@ -257,4 +225,8 @@ var IdeSettingsHandler = function () {
             }
         });
     };
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 };
