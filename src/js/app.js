@@ -167,7 +167,13 @@ if (typeof $ !== typeof undefined) {
 
         // New tab
         $(document).on('click', '.action-add-tab', function () {
-            Editors.onAddNewTab($(this).attr('data-type'));
+
+            var fileType = $(this).attr('data-type');
+            if (typeof fileType !== typeof undefined && fileType !== false) {
+                fileType = Editors.defaultFileExt;
+            }
+
+            Editors.onAddNewTab(fileType);
         });
 
         // Save file

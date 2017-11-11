@@ -494,7 +494,7 @@ var EditorsHandler = function () {
 
     this.getExtFromFileEntry = function (fileEntry) {
 
-        if (typeof fileEntry === typeof undefined || fileEntry.indexOf('.') === -1) {
+        if (typeof fileEntry === typeof undefined || fileEntry.name.indexOf('.') === -1) {
             return undefined;
         }
 
@@ -567,7 +567,7 @@ var EditorsHandler = function () {
         // Launch default tab
         this._loadDefaults().then(function () {
             if (that.getNumTabs() === 0) {
-                that.onAddNewTab();
+                that.onAddNewTab(that.defaultFileExt);
             }
         });
     };
@@ -811,10 +811,6 @@ var EditorsHandler = function () {
     ## EVENTS (Tab)
     ######################################################*/
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
-
-        fileExtension = (typeof fileExtension === typeof undefined || fileName === null)
-            ? this.defaultFileExt
-            : fileExtension;
 
         fileName = (typeof fileName === typeof undefined || fileName === null)
             ? this.defaultFileName + '_' + (this.idx + 1)
