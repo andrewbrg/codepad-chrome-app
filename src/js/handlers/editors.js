@@ -289,8 +289,6 @@ var EditorsHandler = function () {
             tabName += '.' + fileExt;
         }
 
-        console.log(fileExt);
-
         var obj          = {};
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
