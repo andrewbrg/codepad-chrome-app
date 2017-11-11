@@ -284,12 +284,17 @@ var EditorsHandler = function () {
 
         this.idx++;
 
+        var tabName = fileName;
+        if (typeof fileExt !== typeof undefined) {
+            tabName += '.' + fileExt;
+        }
+
         var obj          = {};
         obj.idx          = this.idx;
         obj.contentId    = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
         obj.statusBarId  = 'status-bar-' + this.idx;
-        obj.tabName      = fileName + (typeof fileExt !== typeof undefined) ? '' : ('.' + fileExt);
+        obj.tabName      = tabName;
         obj.nodeId       = nodeId;
 
         var $nav = $(
