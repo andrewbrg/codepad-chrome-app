@@ -1,24 +1,35 @@
 var NotificationsHandler = function () {
     this.notify = function (type, title, message) {
 
+        var icon;
+        var sound;
+
         if (typeof message === typeof undefined) {
             return false;
         }
 
-        type = message === 'User cancelled' ? 'warning' : type;
+        type = message === 'User cancelled'
+            ? 'warning'
+            : type;
 
-        var icon  = 'fa fa-fw fa-bell';
-        var sound = '/src/sounds/notif-info.ogg';
         switch (type) {
             case 'danger':
                 icon  = 'fa fa-fw fa-exclamation-circle';
                 sound = '/src/sounds/notif-danger.ogg';
+                console.error(message);
                 break;
             case 'warning':
                 icon  = 'fa fa-fw fa-exclamation-circle';
                 sound = '/src/sounds/notif-danger.ogg';
+                console.warning(message);
+                break;
+            default:
+                icon  = 'fa fa-fw fa-bell';
+                sound = '/src/sounds/notif-info.ogg';
+                console.info(message);
                 break;
         }
+
 
         var obj = {icon: icon, message: message};
         if (typeof title !== typeof undefined && title.length > 0) {

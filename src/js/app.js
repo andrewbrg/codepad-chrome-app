@@ -79,7 +79,7 @@ if (typeof $ !== typeof undefined) {
         // Enable tab sorting
         $('.sortable').sortable({
             cursor: 'move',
-            distance: 15,
+            distance: 30,
             tolerance: 'pointer',
             placeholder: "ui-state-highlight",
             stop: function (event, ui) {

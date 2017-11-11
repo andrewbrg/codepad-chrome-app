@@ -33,7 +33,6 @@ var SidebarHandler = function () {
 
         new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
-
                 console.log($el);
             },
             actions: [{
@@ -67,7 +66,7 @@ var SidebarHandler = function () {
 
     this._setNodeName = function (nodeId, tabName) {
 
-        var $el      = this.getSidebar().find('.sidebar-node[data-nodeid="' + nodeId + '"]').first();
+        var $el      = this.getSidebar().find('.sidebar-node[data-node-id="' + nodeId + '"]').first();
         var $spanEls = $el.find('span');
 
         $el.html(tabName);
@@ -231,14 +230,14 @@ var SidebarHandler = function () {
             this.dirEntry.getFile(node.path, {}, function (fileEntry) {
 
                 that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
-
                     if (typeof fileEntry !== typeof undefined) {
                         that.Editors.onAddNewTab(
                             that.Editors.getExtFromFileEntry(fileEntry),
                             that.Editors.getNameFromFileEntry(fileEntry),
                             e.target.result,
                             fileEntry,
-                            nodeId);
+                            nodeId
+                        );
                     }
                 });
             });

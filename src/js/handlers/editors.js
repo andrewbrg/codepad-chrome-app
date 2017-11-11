@@ -733,8 +733,6 @@ var EditorsHandler = function () {
         return $(document).find('.add-tab-dropdown').first();
     };
 
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public Event Handlers
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -836,7 +834,7 @@ var EditorsHandler = function () {
             that.onAddNewTab(
                 that.getExtFromFileEntry(fileEntry),
                 that.getNameFromFileEntry(fileEntry),
-                typeof e.target.result === typeof undefined ? undefined : e.target.result,
+                (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
                 fileEntry);
         });
     };

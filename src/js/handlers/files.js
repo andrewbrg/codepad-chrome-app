@@ -2,7 +2,7 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
-    this.fileSystem = undefined;
+    this.openedDirs = [];
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
@@ -22,7 +22,10 @@ var FilesHandler = function () {
             var allEntries = data.retainedEntries || [];
             allEntries.forEach(function (retainedItem) {
                 chrome.fileSystem.isRestorable(retainedItem, function () {
-                    chrome.fileSystem.restoreEntry(retainedItem, function () {
+                    chrome.fileSystem.restoreEntry(retainedItem, function (restoredItem) {
+                        if (restoredItem.isDirectory) {
+                            that.openedDirs.push(restoredItem);
+                        }
                     });
                 });
             });
@@ -40,10 +43,21 @@ var FilesHandler = function () {
                 return false;
             }
 
-            var allEntries = data.retainedEntries || [];
-            allEntries.push(chrome.fileSystem.retainEntry(entry));
+            var curEntries = data.retainedEntries || [];
+            curEntries.push(chrome.fileSystem.retainEntry(entry));
 
-            chrome.storage.local.set({'retainedEntries': allEntries});
+            chrome.storage.local.set({'retainedEntries': curEntries});
+
+            if (entry.isDirectory) {
+                var _openedDirs = [];
+                that.openedDirs.forEach(function (openedDir) {
+                    if (openedDir.fullPath !== entry.fullPath) {
+                        _openedDirs.push(openedDir);
+                    }
+                });
+                _openedDirs.push(entry);
+                that.openedDirs = _openedDirs;
+            }
         });
     };
 
@@ -124,7 +138,7 @@ var FilesHandler = function () {
 
         return deferred.promise();
     };
-    
+
     this.fileSave = function (fileEntry, fileContent) {
 
         var that     = this;
@@ -218,11 +232,15 @@ var FilesHandler = function () {
                 return deferred.promise();
             }
 
-            writableFileEntry.getParent(function (fileParent) {
-                writableFileEntry.moveTo(fileParent, newFileName, function (updatedEntry) {
-                    that._retainEntry(updatedEntry);
-                    deferred.resolve(updatedEntry);
-                }, onError);
+            that.openedDirs.forEach(function (openedDir) {
+                if (openedDir.fullpath === '') {
+
+                }
+            });
+
+            writableFileEntry.moveTo(that.directory, newFileName, function (updatedEntry) {
+                that._retainEntry(updatedEntry);
+                deferred.resolve(updatedEntry);
             }, onError);
         });
 
