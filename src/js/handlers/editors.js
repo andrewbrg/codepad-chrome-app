@@ -881,7 +881,7 @@ var EditorsHandler = function () {
             that.setTabNavFocus(obj.idx);
             that._sortableTabsInit();
             $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
-            deferred.resolve();
+            deferred.resolve(obj.idx);
         });
 
         return deferred.promise();
@@ -1040,8 +1040,8 @@ var EditorsHandler = function () {
     };
 
     this.onRenameFile = function (idx, fileEntry) {
-        this.setEditorTemplate(idx);
         this.setEditorFileEntry(idx, fileEntry);
+        this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
         this._setTabNavName(idx, fileEntry.name);
         this._closeTabModals(idx);

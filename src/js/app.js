@@ -233,9 +233,7 @@ if (typeof $ !== typeof undefined) {
 
         // Rename file
         $(document).on('_file.rename', function (e) {
-
-            var fileEntry = Editors.getEditorFileEntry(e.idx);
-            var callback  = function (fileEntry) {
+            var callback = function (fileEntry) {
                 Files.fileRename(fileEntry, e.oldFileName, e.newFileName).then(function (fileEntry) {
                     if (typeof fileEntry !== typeof undefined) {
                         Editors.onRenameFile(e.idx, fileEntry);
@@ -252,8 +250,10 @@ if (typeof $ !== typeof undefined) {
                 });
             };
 
+            var fileEntry = Editors.getEditorFileEntry(e.idx);
             if (typeof fileEntry === typeof undefined) {
-                Sidebar.onNodeClick(e.nodeId).then(function (fileEntry) {
+                Sidebar.onNodeClick(e.nodeId).then(function (idx, fileEntry) {
+                    e.idx = idx;
                     callback(fileEntry);
                 });
             }

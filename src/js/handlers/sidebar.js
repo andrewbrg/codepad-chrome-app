@@ -262,7 +262,7 @@ var SidebarHandler = function () {
             var idx = this.Editors.getTabNavIdx(nodeId);
             if (typeof idx !== typeof undefined) {
                 that.Editors.setTabNavFocus(idx);
-                deferred.resolve(that.Editors.getEditorFileEntry(idx));
+                deferred.resolve(idx, that.Editors.getEditorFileEntry(idx));
             }
             else {
                 // noinspection JSUnresolvedFunction
@@ -274,8 +274,8 @@ var SidebarHandler = function () {
                             e.target.result,
                             fileEntry,
                             nodeId
-                        ).then(function () {
-                            deferred.resolve(fileEntry);
+                        ).then(function (idx) {
+                            deferred.resolve(idx, fileEntry);
                         });
                     });
                 });
