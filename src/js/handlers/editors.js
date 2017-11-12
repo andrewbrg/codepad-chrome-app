@@ -104,7 +104,7 @@ var EditorsHandler = function () {
 
     this._bootAceEditor = function (idx, fileContent, fileEntry) {
 
-        var deferred  = $.Deferred();
+        var deferred = $.Deferred();
 
         if (typeof idx === typeof undefined) {
             return deferred.promise(undefined);
@@ -267,14 +267,20 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
         if (typeof fileEntry !== typeof undefined) {
             chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
-                that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
-                that._populateStatusBar(idx);
+                var aceEditor = that.getEditor(idx);
+                if (typeof aceEditor !== typeof undefined) {
+                    that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
+                    that._populateStatusBar(idx);
+                }
             });
         }
         else {
             this._getTabMode(idx).then(function (data) {
-                that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
-                that._populateStatusBar(idx);
+                var aceEditor = that.getEditor(idx);
+                if (typeof aceEditor !== typeof undefined) {
+                    that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+                    that._populateStatusBar(idx);
+                }
             });
         }
     };
@@ -1034,7 +1040,6 @@ var EditorsHandler = function () {
     };
 
     this.onRenameFile = function (idx, fileEntry) {
-
         this.setEditorTemplate(idx);
         this.setEditorFileEntry(idx, fileEntry);
         this._setAceEditorMode(idx);
