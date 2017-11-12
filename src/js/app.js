@@ -140,6 +140,7 @@ if (typeof $ !== typeof undefined) {
                     $(document).find('input[name="file-data-idx"]').val($relTgt.attr('data-idx'));
                     $(document).find('input[name="file-data-nodeid"]').val($relTgt.attr('data-nodeid'));
                     $(document).find('input[name="file-old-filename"]').val($relTgt.attr('data-old-filename'));
+                    $(document).find('input[name="file-new-filename"]').val($relTgt.attr('data-old-filename'));
                 };
             }
 
@@ -208,6 +209,18 @@ if (typeof $ !== typeof undefined) {
             Editors.onOpenFile();
         });
 
+        // Rename file
+        $(document).on('click', '.action-rename-file', function () {
+            $.event.trigger({
+                type: "_file.rename",
+                time: new Date(),
+                idx: $(document).find('input[name="file-data-idx"]').first().val(),
+                nodeId: $(document).find('input[name="file-data-nodeid"]').first().val(),
+                oldFileName: $(document).find('input[name="file-old-filename"]').first().val(),
+                newFileName: $(document).find('input[name="file-new-filename"]').first().val()
+            });
+        });
+
         // Open project
         $(document).on('click', '.action-project-open', function () {
             Sidebar.onOpenProject();
@@ -220,7 +233,6 @@ if (typeof $ !== typeof undefined) {
 
         // Rename file
         $(document).on('_file.rename', function (e) {
-
             Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
                 if (typeof fileEntry !== typeof undefined) {
                     Editors.onRenameFile(e.idx, fileEntry);

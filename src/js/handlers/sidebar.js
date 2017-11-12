@@ -40,7 +40,8 @@ var SidebarHandler = function () {
                 'data-title': 'Rename file',
                 'data-idx': that.Editors.getTabNavIdx(e.data('nodeid')),
                 'data-nodeid': e.data('nodeid'),
-                'data-old-filename': $(e).text()
+                'data-old-filename': $(e).text(),
+                'data-new-filename': $(e).text()
             });
         };
 

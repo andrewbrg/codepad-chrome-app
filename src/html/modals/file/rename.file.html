@@ -2,24 +2,16 @@
     <div class="row">
         <div class="col-12">
             <div class="form-group">
-                <label for="oldFileName">Old filename</label>
-                <input id="oldFileName"
-                       name="file-old-filename"
-                       type="text"/>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group">
                 <label for="newFileName">New filename</label>
                 <input id="newFileName"
                        name="file-new-filename"
-                       type="text"/>
+                       type="text"
+                       required/>
             </div>
         </div>
     </div>
     <div class="row">
+        <input name="file-old-filename" type="hidden"/>
         <input name="file-data-idx" type="hidden"/>
         <input name="file-data-nodeid" type="hidden"/>
         <div class="col-6">
@@ -28,7 +20,7 @@
             </button>
         </div>
         <div class="col-6">
-            <button class="action-rename-file btn btn-outline-success btn-sm btn-expanded" type="button">
+            <button class="action-rename-file btn btn-outline-success btn-sm btn-expanded" type="button" aria-label="Save">
                 <i class="fa fa-fw fa-check"></i>&nbsp;Save
             </button>
         </div>

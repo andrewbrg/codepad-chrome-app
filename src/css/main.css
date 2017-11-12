@@ -138,14 +138,14 @@ aside.ui-resizable.ui-resizing {
 }
 
 .ace_gutter-cell {
-    font-size: 1.1rem !important;
+    font-size: 0.9rem !important;
 }
 
 .ace_tooltip.ace_doc-tooltip,
 .ace_editor.ace_autocomplete {
     background-color: rgb(52, 58, 64) !important;
     color: rgb(154, 157, 160) !important;
-    font-size: 1.1rem !important;
+    font-size: 1rem !important;
     -webkit-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
     -moz-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
     box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;

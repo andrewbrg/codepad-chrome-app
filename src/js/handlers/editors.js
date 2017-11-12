@@ -999,6 +999,8 @@ var EditorsHandler = function () {
         this.setEditorTemplate(idx);
         this._setAceEditorMode(idx);
         this.setEditorFileEntry(idx, fileEntry);
+        this._setTabNavName(idx, fileEntry.name);
+        this._closeTabModals(idx);
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
