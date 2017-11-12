@@ -565,6 +565,11 @@ var EditorsHandler = function () {
         return false;
     };
 
+    this.clearAllOpenTabs = function () {
+        this.getTabsNavContainer().html('');
+        this.getTabsContentContainer().html('');
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 

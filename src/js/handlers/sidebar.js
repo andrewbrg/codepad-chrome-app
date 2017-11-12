@@ -246,6 +246,7 @@ var SidebarHandler = function () {
                 modes = JSON.parse(data);
                 buildTreeViewJson(dirEntry, function (treeViewJson) {
                     that._initTreeView(treeViewJson, dirEntry.name);
+                    that.Editors.clearAllOpenTabs();
                 });
             });
         });
