@@ -238,6 +238,8 @@ if (typeof $ !== typeof undefined) {
                     if (typeof fileEntry !== typeof undefined) {
                         Editors.onRenameFile(e.idx, fileEntry);
                         Sidebar.onRenameFile(e.nodeId, fileEntry);
+                    } else {
+                        Editors.onChangeNameFile(e.idx, e.newFileName);
                     }
                 }).fail(function () {
                     $.event.trigger({

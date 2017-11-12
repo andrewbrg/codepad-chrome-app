@@ -568,6 +568,7 @@ var EditorsHandler = function () {
     this.clearAllOpenTabs = function () {
         this.getTabsNavContainer().html('');
         this.getTabsContentContainer().html('');
+        this._sortableTabsInit();
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -908,7 +909,7 @@ var EditorsHandler = function () {
 
         $tabNameEl.attr('contenteditable', 'true').focus().one('focusout', function () {
 
-            that._sortableTabsDisable();
+            that._sortableTabsEnable();
 
             $siblings.css('visibility', 'visible');
             $tabNameEl.removeAttr('contenteditable').off('keydown');
@@ -932,9 +933,12 @@ var EditorsHandler = function () {
             }
 
             if (e.which === 13 || e.which === 27) {
-                that._sortableTabsEnable();
                 $this.trigger('focusout');
             }
+        });
+
+        $tabNameEl.on('focusin', function () {
+            that._sortableTabsDisable();
         });
 
         $(window).trigger('resize');
@@ -960,6 +964,7 @@ var EditorsHandler = function () {
     this.onChangeNameFile = function (idx, fileName) {
 
         this._setTabNavName(idx, fileName);
+        this._setAceEditorMode(idx);
     };
 
     this.onToggleReadOnly = function (idx) {
@@ -1047,8 +1052,8 @@ var EditorsHandler = function () {
     this.onRenameFile = function (idx, fileEntry) {
         this.setEditorFileEntry(idx, fileEntry);
         this.setEditorTemplate(idx);
-        this._setAceEditorMode(idx);
         this._setTabNavName(idx, fileEntry.name);
+        this._setAceEditorMode(idx);
         this._closeTabModals(idx);
     };
 
