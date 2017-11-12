@@ -442,7 +442,7 @@ var EditorsHandler = function () {
         var lockClass = isRo ? 'fa-lock' : 'fa-unlock';
 
         var mode = editor.getOption('mode').split('/').pop().toLowerCase().replace(/\b[a-z]/g, function (letter) {
-            return letter.toUpperCase();
+            return letter.toLowerCase();
         });
 
         var lineEndings = editor.getOption('newLineMode').toLowerCase().replace(/\b[a-z]/g, function (letter) {

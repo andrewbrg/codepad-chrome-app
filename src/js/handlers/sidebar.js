@@ -4,6 +4,7 @@ var SidebarHandler = function () {
     this.Editors       = undefined;
     this.Files         = undefined;
 
+    this.bootstrapMenu = null;
     this.dirEntry      = null;
     this.isInitialised = false;
 
@@ -11,9 +12,8 @@ var SidebarHandler = function () {
     /// Private Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    this._initialiseTreeView = function (dirTreeJson, title) {
+    this._initTreeView = function (dirTreeJson, title) {
 
-        var that     = this;
         var $sidebar = this.getSidebar();
 
         if (dirTreeJson.length === 0) {
@@ -29,8 +29,14 @@ var SidebarHandler = function () {
         $sidebar.treeview({data: dirTreeJson, silent: false});
         this.isInitialised = true;
         this._setSidebarTopMenu(title);
+        this._initBootstrapMenu();
         this.compressNodes();
         this.showSidebar();
+    };
+
+    this._initBootstrapMenu = function () {
+
+        var that = this;
 
         var makeClickAbleEl = function (e) {
             return $('<a></a>', {
@@ -45,7 +51,7 @@ var SidebarHandler = function () {
             });
         };
 
-        new BootstrapMenu('.node-sidebar', {
+        this.bootstrapMenu = new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
                 return $el
             },
@@ -239,7 +245,7 @@ var SidebarHandler = function () {
             that.Editors.getAllEditorModes().then(function (data) {
                 modes = JSON.parse(data);
                 buildTreeViewJson(dirEntry, function (treeViewJson) {
-                    that._initialiseTreeView(treeViewJson, dirEntry.name);
+                    that._initTreeView(treeViewJson, dirEntry.name);
                 });
             });
         });
@@ -247,14 +253,16 @@ var SidebarHandler = function () {
 
     this.onNodeClick = function (nodeId) {
 
-        var that = this;
-        var node = this.getSidebar().treeview('getNode', nodeId);
+        var that     = this;
+        var deferred = $.Deferred();
+        var node     = this.getSidebar().treeview('getNode', nodeId);
 
         if (node.typeFile === 1) {
 
             var idx = this.Editors.getTabNavIdx(nodeId);
             if (typeof idx !== typeof undefined) {
                 that.Editors.setTabNavFocus(idx);
+                deferred.resolve(that.Editors.getEditorFileEntry(idx));
             }
             else {
                 // noinspection JSUnresolvedFunction
@@ -267,10 +275,13 @@ var SidebarHandler = function () {
                             fileEntry,
                             nodeId
                         );
+                        deferred.resolve(fileEntry);
                     });
                 });
             }
         }
+
+        return deferred.promise();
     };
 
     /*######################################################

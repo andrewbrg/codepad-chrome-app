@@ -233,26 +233,38 @@ if (typeof $ !== typeof undefined) {
 
         // Rename file
         $(document).on('_file.rename', function (e) {
-            console.log(e);
-            Files.fileRename(Editors.getEditorFileEntry(e.idx), e.oldFileName, e.newFileName).then(function (fileEntry) {
-                if (typeof fileEntry !== typeof undefined) {
-                    Editors.onRenameFile(e.idx, fileEntry);
-                    Sidebar.onRenameFile(e.nodeId, fileEntry);
-                }
-            }).fail(function () {
-                $.event.trigger({
-                    type: '_file.changename',
-                    time: new Date(),
-                    idx: e.idx,
-                    nodeId: e.nodeId,
-                    tabName: e.oldFileName
+
+            var fileEntry = Editors.getEditorFileEntry(e.idx);
+
+            var callback = function (fileEntry) {
+                Files.fileRename(fileEntry, e.oldFileName, e.newFileName).then(function (fileEntry) {
+                    if (typeof fileEntry !== typeof undefined) {
+                        Editors.onRenameFile(e.idx, fileEntry);
+                        Sidebar.onRenameFile(e.nodeId, fileEntry);
+                    }
+                }).fail(function () {
+                    $.event.trigger({
+                        type: '_file.changename',
+                        time: new Date(),
+                        idx: e.idx,
+                        nodeId: e.nodeId,
+                        tabName: e.oldFileName
+                    });
                 });
-            });
+            };
+
+            if (typeof fileEntry === typeof undefined) {
+                Sidebar.onNodeClick(e.nodeId).then(function (fileEntry) {
+                    callback(fileEntry);
+                });
+            }
+            else {
+                callback(fileEntry);
+            }
         });
 
         // Change tab name
         $(document).on('_file.changename', function (e) {
-            console.log('_fc');
             Editors.onChangeNameFile(e.idx, e.tabName);
             Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
         });

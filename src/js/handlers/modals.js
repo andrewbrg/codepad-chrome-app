@@ -76,11 +76,17 @@ var ModalsHandler = function () {
                 ? $el.attr('data-title')
                 : $el.html();
 
-            var $html = $(data.html);
+            var $html  = $(data.html);
+            var $modal = $modalContent.find('.modal-body').first().closest('.modal');
+
             if (typeof data.idx !== typeof undefined) {
                 $html.find('button').attr('data-idx', data.idx);
+                $modal.attr('data-idx', data.idx);
+            }
+
+            if (typeof data.nodeid !== typeof undefined) {
                 $html.find('button').attr('data-nodeid', data.nodeid);
-                $modalContent.find('.modal-body').first().closest('.modal').attr('data-idx', data.idx);
+                $modal.attr('data-nodeid', data.nodeid);
             }
 
             $modalContent.find('.modal-title').first().html(title);
@@ -100,5 +106,6 @@ var ModalsHandler = function () {
         $modalContent.find('.modal-title').first().html('');
         $modalContent.find('.modal-body').first().html('');
         $modalContent.find('.modal-body').first().closest('.modal').removeAttr('data-idx');
+        $modalContent.find('.modal-body').first().closest('.modal').removeAttr('data-nodeid');
     };
 };
