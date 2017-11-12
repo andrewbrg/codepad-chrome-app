@@ -190,7 +190,7 @@ var EditorsHandler = function () {
             name: '__new',
             bindKey: {win: 'ctrl-n', mac: 'ctrl-n'},
             exec: function () {
-                that.onAddNewTab();
+                that.onAddNewTab(that.defaultFileExt);
             }
         });
 
