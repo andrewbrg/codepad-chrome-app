@@ -104,14 +104,15 @@ var EditorsHandler = function () {
 
     this._bootAceEditor = function (idx, fileContent, fileEntry) {
 
+        var deferred  = $.Deferred();
+
         if (typeof idx === typeof undefined) {
-            return false;
+            return deferred.promise(undefined);
         }
 
         idx = parseInt(idx);
 
         var that      = this;
-        var deferred  = $.Deferred();
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace
@@ -1035,8 +1036,8 @@ var EditorsHandler = function () {
     this.onRenameFile = function (idx, fileEntry) {
 
         this.setEditorTemplate(idx);
-        this._setAceEditorMode(idx);
         this.setEditorFileEntry(idx, fileEntry);
+        this._setAceEditorMode(idx);
         this._setTabNavName(idx, fileEntry.name);
         this._closeTabModals(idx);
     };
