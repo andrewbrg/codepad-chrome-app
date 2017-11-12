@@ -777,6 +777,23 @@ var EditorsHandler = function () {
         return this.getTabNavEl(idx).find('.tab-name').attr('data-nodeid');
     };
 
+    this.getTabNavIdx = function (nodeId) {
+
+        var idx = undefined;
+
+        $.each(this.getTabsNavContainer().find('.tab-name'), function (i, el) {
+
+            var $el  = $(el);
+            var attr = $el.attr('data-nodeid');
+
+            if (typeof attr !== typeof undefined && parseInt(attr) === parseInt(nodeId)) {
+                idx = parseInt($el.attr('data-idx'));
+            }
+        });
+
+        return idx;
+    };
+
     this.getNumTabs = function () {
         return parseInt(this.getTabsNavContainer().children().length);
     };

@@ -13,6 +13,7 @@ var SidebarHandler = function () {
 
     this._initialiseTreeView = function (dirTreeJson, title) {
 
+        var that     = this;
         var $sidebar = this.getSidebar();
 
         if (dirTreeJson.length === 0) {
@@ -31,6 +32,18 @@ var SidebarHandler = function () {
         this.compressNodes();
         this.showSidebar();
 
+        var makeClickAbleEl = function (e) {
+            return $('<a></a>', {
+                'class': 'modal-rename-file',
+                'data-toggle': 'modal',
+                'data-target': '.modal-md-container',
+                'data-title': 'Rename file',
+                'data-idx': that.Editors.getTabNavIdx(e.data('nodeid')),
+                'data-nodeid': e.data('nodeid'),
+                'data-old-filename': $(e).text()
+            });
+        };
+
         new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
                 return $el
@@ -47,18 +60,7 @@ var SidebarHandler = function () {
                 classNames: 'dropdown-item',
                 iconClass: 'fa fa-edit',
                 onClick: function (e) {
-
-                    var $el = $('<div></div>', {
-                        'class': 'modal-rename-file',
-                        'data-toggle': 'modal',
-                        'data-target': '.modal-md-container',
-                        'data-title': 'Rename file',
-                        'data-idx': e.attr('data-idx'),
-                        'data-nodeid': e.data('nodeid'),
-                        'data-old-filename': e.innerText
-                    });
-                    $el.appendTo('body').trigger('click');
-                    $el.remove();
+                    makeClickAbleEl(e).appendTo('body').trigger('click').remove();
                 }
             }, {
                 name: 'Delete',
@@ -258,34 +260,24 @@ var SidebarHandler = function () {
 
         if (node.typeFile === 1) {
 
-            var found = false;
-            $.each(this.Editors.getTabsNavContainer().find('.tab-name'), function (i, el) {
-
-                var $el  = $(el);
-                var attr = $el.attr('data-nodeid');
-
-                if (typeof attr !== typeof undefined && attr === nodeId) {
-                    that.Editors.setTabNavFocus($el.attr('data-idx'));
-                    found = true;
-                }
-            });
-
-            if (found) {
-                return found;
+            var idx = this.Editors.getTabNavIdx(nodeId);
+            if (typeof idx !== typeof undefined) {
+                that.Editors.setTabNavFocus(idx);
             }
-
-            // noinspection JSUnresolvedFunction
-            this.dirEntry.getFile(node.path, {}, function (fileEntry) {
-                that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
-                    that.Editors.onAddNewTab(
-                        that.Editors.getExtFromFileEntry(fileEntry),
-                        that.Editors.getNameFromFileEntry(fileEntry),
-                        e.target.result,
-                        fileEntry,
-                        nodeId
-                    );
+            else {
+                // noinspection JSUnresolvedFunction
+                this.dirEntry.getFile(node.path, {}, function (fileEntry) {
+                    that.Files.fileOpen(fileEntry).then(function (e, fileEntry) {
+                        that.Editors.onAddNewTab(
+                            that.Editors.getExtFromFileEntry(fileEntry),
+                            that.Editors.getNameFromFileEntry(fileEntry),
+                            e.target.result,
+                            fileEntry,
+                            nodeId
+                        );
+                    });
                 });
-            });
+            }
         }
     };
 

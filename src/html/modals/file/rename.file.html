@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="oldFileName">Old filename</label>
                 <input id="oldFileName"
-                       name="file-rename-old"
+                       name="file-old-filename"
                        type="text"/>
             </div>
         </div>
@@ -14,12 +14,14 @@
             <div class="form-group">
                 <label for="newFileName">New filename</label>
                 <input id="newFileName"
-                       name="file-rename-new"
+                       name="file-new-filename"
                        type="text"/>
             </div>
         </div>
     </div>
     <div class="row">
+        <input name="file-data-idx" type="hidden"/>
+        <input name="file-data-nodeid" type="hidden"/>
         <div class="col-6">
             <button class="btn btn-outline-secondary btn-sm btn-expanded" type="button" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-fw fa-times"></i>&nbsp;Cancel

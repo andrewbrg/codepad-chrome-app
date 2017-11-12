@@ -117,21 +117,29 @@ if (typeof $ !== typeof undefined) {
         // Push the template into the modal before showing it
         $(document).on('show.bs.modal', '.modal', function (e) {
 
-            var $el      = $(e.relatedTarget);
+            var $relTgt  = $(e.relatedTarget);
             var callback = function () {
             };
 
-            if ($el.hasClass('modal-ide-settings') || $el.hasClass('modal-ide-appearance')) {
+            if ($relTgt.hasClass('modal-ide-settings') || $relTgt.hasClass('modal-ide-appearance')) {
                 callback = function () {
                     IdeSettings.decorateView();
                 };
             }
 
-            if ($el.hasClass('modal-content-help')) {
+            if ($relTgt.hasClass('modal-content-help')) {
                 callback = function () {
                     $(document).find('.app-name').html(chrome.runtime.getManifest().name);
                     $(document).find('.app-author').html(chrome.runtime.getManifest().author);
                     $(document).find('.app-version').html(chrome.runtime.getManifest().version);
+                };
+            }
+
+            if ($relTgt.hasClass('modal-rename-file')) {
+                callback = function () {
+                    $(document).find('input[name="file-data-idx"]').val($relTgt.attr('data-idx'));
+                    $(document).find('input[name="file-data-nodeid"]').val($relTgt.attr('data-nodeid'));
+                    $(document).find('input[name="file-old-filename"]').val($relTgt.attr('data-old-filename'));
                 };
             }
 
