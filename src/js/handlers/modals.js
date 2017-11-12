@@ -26,7 +26,7 @@ var ModalsHandler = function () {
         var $el      = $(el);
         var deferred = $.Deferred();
         var callback = function (data) {
-            deferred.resolve({html: data, idx: $el.attr('data-idx')});
+            deferred.resolve({html: data, idx: $el.attr('data-idx'), nodeid: $el.attr('data-nodeid')});
         };
 
         if ($el.hasClass('modal-ide-appearance')) {
@@ -79,6 +79,7 @@ var ModalsHandler = function () {
             var $html = $(data.html);
             if (typeof data.idx !== typeof undefined) {
                 $html.find('button').attr('data-idx', data.idx);
+                $html.find('button').attr('data-nodeid', data.nodeid);
                 $modalContent.find('.modal-body').first().closest('.modal').attr('data-idx', data.idx);
             }
 

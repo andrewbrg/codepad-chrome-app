@@ -66,7 +66,7 @@ var SidebarHandler = function () {
 
     this._setNodeName = function (nodeId, nodeName) {
 
-        if (typeof nodeId === typeof undefined) {
+        if (typeof nodeId === typeof undefined || typeof nodeName === typeof undefined) {
             return false;
         }
 
@@ -82,6 +82,10 @@ var SidebarHandler = function () {
 
         $el.html(nodeName);
         $el.prepend($spanEls);
+    };
+
+    this._closeNodeModals = function (nodeId) {
+        $(document).find('.modal[data-nodeid="' + nodeId + '"]').modal('hide');
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,6 +130,7 @@ var SidebarHandler = function () {
             $sidebar.treeview('collapseAll');
         }
     };
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -273,6 +278,7 @@ var SidebarHandler = function () {
     ######################################################*/
     this.onRenameFile = function (nodeId, fileEntry) {
         this._setNodeName(nodeId, fileEntry.name);
+        this._closeNodeModals(nodeId);
     };
 
     this.onChangeNameFile = function (nodeId, fileName) {

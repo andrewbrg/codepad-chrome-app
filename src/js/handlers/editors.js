@@ -170,6 +170,16 @@ var EditorsHandler = function () {
         });
 
         aceEditor.commands.addCommand({
+            name: '__openProject',
+            bindKey: {win: 'ctrl-shift-o', mac: 'ctrl-shift-o'},
+            exec: function () {
+                $('<div></div>', {
+                    class: 'action-project-open'
+                }).appendTo('body').trigger('click').remove();
+            }
+        });
+
+        aceEditor.commands.addCommand({
             name: '__new',
             bindKey: {win: 'ctrl-n', mac: 'ctrl-n'},
             exec: function () {
@@ -241,10 +251,13 @@ var EditorsHandler = function () {
 
     this._setAceEditorMode = function (idx, fileEntry) {
 
-        idx = parseInt(idx);
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
 
         var that = this;
 
+        idx = parseInt(idx);
         if (typeof fileEntry !== typeof undefined) {
             chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
                 that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
@@ -274,6 +287,11 @@ var EditorsHandler = function () {
     };
 
     this._setTabNavName = function (idx, tabName) {
+
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
+
         this.getTabNavEl(idx).find('.tab-name').first().html(tabName);
     };
 
@@ -591,11 +609,17 @@ var EditorsHandler = function () {
 
     this.setEditorTemplate = function (idx) {
 
+        var deferred = $.Deferred();
+
+        if (typeof idx === typeof undefined) {
+            deferred.reject();
+            return deferred.promise();
+        }
+
         idx = parseInt(idx);
 
         var that      = this;
         var aceEditor = this.getEditor(idx);
-        var deferred  = $.Deferred();
 
         if (this.getEditorContent(idx) !== '') {
             deferred.resolve();
@@ -669,8 +693,11 @@ var EditorsHandler = function () {
 
     this.setEditorFileEntry = function (idx, fileEntry) {
 
-        idx = parseInt(idx);
+        if (typeof idx === typeof undefined) {
+            return false;
+        }
 
+        idx = parseInt(idx);
         this.aceEditors.forEach(function (aceEditorEntry) {
             if (aceEditorEntry.idx === idx) {
                 aceEditorEntry.fileEntry = fileEntry;
