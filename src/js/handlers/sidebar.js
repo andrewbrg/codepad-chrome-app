@@ -274,8 +274,9 @@ var SidebarHandler = function () {
                             e.target.result,
                             fileEntry,
                             nodeId
-                        );
-                        deferred.resolve(fileEntry);
+                        ).then(function () {
+                            deferred.resolve(fileEntry);
+                        });
                     });
                 });
             }

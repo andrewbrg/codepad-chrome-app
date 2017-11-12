@@ -108,7 +108,9 @@ var EditorsHandler = function () {
             return false;
         }
 
-        idx           = parseInt(idx);
+        idx = parseInt(idx);
+
+        var deferred  = $.Deferred();
         var that      = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
@@ -138,7 +140,11 @@ var EditorsHandler = function () {
             that._populateStatusBar(idx);
             that._bindAceCustomCommands(idx, aceEditor);
             that._bindAceCustomEvents(idx, aceEditor);
+
+            deferred.resolve(aceEditor);
         });
+
+        return deferred.promise();
     };
 
     this._bindAceCustomCommands = function (idx, aceEditor) {
@@ -854,6 +860,9 @@ var EditorsHandler = function () {
     ######################################################*/
     this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
 
+        var that     = this;
+        var deferred = $.Deferred();
+
         fileName = (typeof fileName === typeof undefined || fileName === null)
             ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
@@ -861,12 +870,14 @@ var EditorsHandler = function () {
         var obj = this._getNewTabObject(fileExtension, fileName, nodeId);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
-        this._bootAceEditor(obj.idx, fileContent, fileEntry);
-        this.setTabNavFocus(obj.idx);
-        this._sortableTabsInit();
+        this._bootAceEditor(obj.idx, fileContent, fileEntry).then(function () {
+            that.setTabNavFocus(obj.idx);
+            that._sortableTabsInit();
+            $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
+            deferred.resolve();
+        });
 
-        $(window).trigger('_ace.new', [obj.idx]).trigger('resize');
-        return true;
+        return deferred.promise();
     };
 
     this.onEditTabName = function (idx) {
