@@ -251,7 +251,7 @@ if (typeof $ !== typeof undefined) {
             };
 
             var fileEntry = Editors.getEditorFileEntry(e.idx);
-            if (typeof fileEntry === typeof undefined) {
+            if (typeof fileEntry === typeof undefined && typeof e.nodeId !== typeof undefined) {
                 Sidebar.onNodeClick(e.nodeId).then(function (idx, fileEntry) {
                     e.idx = idx;
                     callback(fileEntry);

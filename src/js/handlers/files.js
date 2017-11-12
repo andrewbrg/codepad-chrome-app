@@ -37,9 +37,11 @@ var FilesHandler = function () {
             data.forEach(function (retainedEntry) {
                 chrome.fileSystem.isRestorable(retainedEntry, function () {
                     chrome.fileSystem.restoreEntry(retainedEntry, function (restoredEntry) {
-                        // noinspection JSUnresolvedVariable
-                        if (restoredEntry.isDirectory) {
-                            that.openedDirs.push(restoredEntry);
+                        if (!chrome.runtime.lastError) {
+                            // noinspection JSUnresolvedVariable
+                            if (restoredEntry.isDirectory) {
+                                that.openedDirs.push(restoredEntry);
+                            }
                         }
                     });
                 });

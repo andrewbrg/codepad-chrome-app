@@ -1,3 +1,7 @@
+* {
+    outline: none;
+}
+
 html, body {
     margin: 0;
     padding: 0;
@@ -232,6 +236,7 @@ aside.ui-resizable.ui-resizing {
 /************************************* Tabs ************************************/
 /*******************************************************************************/
 *[contenteditable]:focus {
+    outline: 1px solid rgba(255, 175, 3, 0.7);
     color: rgba(255, 255, 255, .5);
     padding: 0.1rem 0.2rem;
 }
