@@ -110,8 +110,8 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var deferred  = $.Deferred();
         var that      = this;
+        var deferred  = $.Deferred();
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace

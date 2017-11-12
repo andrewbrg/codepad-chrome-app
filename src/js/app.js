@@ -235,8 +235,7 @@ if (typeof $ !== typeof undefined) {
         $(document).on('_file.rename', function (e) {
 
             var fileEntry = Editors.getEditorFileEntry(e.idx);
-
-            var callback = function (fileEntry) {
+            var callback  = function (fileEntry) {
                 Files.fileRename(fileEntry, e.oldFileName, e.newFileName).then(function (fileEntry) {
                     if (typeof fileEntry !== typeof undefined) {
                         Editors.onRenameFile(e.idx, fileEntry);
