@@ -31,5 +31,11 @@
     "clipboardRead",
     "fullscreen"
   ],
+  "icons": {
+    "16": "/src/img/logo.32.32.png",
+    "32": "/src/img/logo.64.64.png",
+    "48": "/src/img/logo.96.96.png",
+    "128": "/src/img/logo.256.256.png"
+  },
   "offline_enabled": true
 }
