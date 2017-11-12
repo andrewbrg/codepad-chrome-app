@@ -50,25 +50,11 @@ var SidebarHandler = function () {
                 return $el
             },
             actions: [{
-                name: 'New',
-                classNames: 'dropdown-item',
-                iconClass: 'fa fa-plus',
-                onClick: function () {
-                    // run when the action is clicked
-                }
-            }, {
                 name: 'Rename',
                 classNames: 'dropdown-item',
                 iconClass: 'fa fa-edit',
                 onClick: function (e) {
                     makeClickAbleEl(e).appendTo('body').trigger('click').remove();
-                }
-            }, {
-                name: 'Delete',
-                classNames: 'dropdown-item',
-                iconClass: 'fa fa-close',
-                onClick: function () {
-                    // run when the action is clicked
                 }
             }]
         });
