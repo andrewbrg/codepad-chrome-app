@@ -93,6 +93,8 @@ var FilesHandler = function () {
         if (!found) {
             this.directoryOpen(dirPath).then(function (dirEntry) {
                 deferred.resolve(dirEntry);
+            }).fail(function () {
+                deferred.reject();
             });
         }
 
