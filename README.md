@@ -5,12 +5,12 @@ Code Pad IDE is a free and lightweight IDE/text editor built for Chrome operatin
 
 The IDE supports a variety of different languages!
 
-P.S. You can also use it as a simple text editor, if that's all you need _(duh)_...
+**P.S.** You can also use it as a simple text editor, if that's all you need _(duh)_...
 
-####Currently supported languages
+#### Currently supported languages
 Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHTML, Python, Ruby, Rust, Sass, Scala, SQL, MS SQL, Plain text, XML.
 
-####Features
+#### Features
   - Project/Folder management
   - Error/bug detection and alerts
   - Ready made code snippets
@@ -24,6 +24,8 @@ Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHT
   - Works with Google drive/local storage
   - Runs in fullscreen
   
-Available for installation on the Chrome store: https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
+**Available for installation on the Chrome store:**
+
+https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
 
 [![432f8e5f36f0ea802253a53d447088ae.jpg](http://pichoster.net/images/2017/11/17/432f8e5f36f0ea802253a53d447088ae.jpg)](http://pichoster.net/image/UiWmt)
