@@ -58,10 +58,11 @@ var FilesHandler = function () {
 
         this._getRetainedEntries().then(function (data) {
 
-            var obj                       = {};
-            var retainEntryHash           = chrome.fileSystem.retainEntry(entry);
-            var retainEntryHashName       = retainEntryHash.split(':').pop();
-            var _openedDirs, _openedFiles = [];
+            var obj                 = {};
+            var _openedDirs         = [];
+            var _openedFiles        = [];
+            var retainEntryHash     = chrome.fileSystem.retainEntry(entry);
+            var retainEntryHashName = retainEntryHash.split(':').pop();
 
             if (entry.isDirectory) {
                 _openedDirs = [entry];
@@ -69,7 +70,6 @@ var FilesHandler = function () {
             else {
                 _openedFiles = [entry];
             }
-
 
             that.openedDirs.forEach(function (openedDir) {
                 // noinspection JSUnresolvedVariable

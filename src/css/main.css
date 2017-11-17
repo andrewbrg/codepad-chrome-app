@@ -30,6 +30,15 @@ main {
     position: relative;
 }
 
+.btn-primary {
+    background-color: rgba(0, 123, 255, .7);
+    border-color: rgba(0, 123, 255, .7);
+}
+
+.btn-outline-primary {
+    border-color: rgba(0, 123, 255, .7);
+}
+
 /*******************************************************************************/
 /************************************ Sidebar **********************************/
 /*******************************************************************************/
@@ -101,6 +110,7 @@ aside.ui-resizable.ui-resizing {
 .navbar {
     padding: 0 1rem;
     position: relative;
+    height: 39px;
 }
 
 .navbar .navbar-brand .btn {
@@ -149,13 +159,11 @@ aside.ui-resizable.ui-resizing {
 .ace_editor.ace_autocomplete {
     background-color: rgb(52, 58, 64) !important;
     color: rgb(154, 157, 160) !important;
-    font-size: 1rem !important;
-    -webkit-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
-    -moz-box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
+    font-size: 1.1rem !important;
     box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
     border-radius: .25rem !important;
     border: 2px solid rgba(255, 255, 255, 0.18) !important;
-    opacity: 0.9 !important;
+    opacity: 0.95 !important;
 }
 
 .ace_tooltip.ace_doc-tooltip {
@@ -171,10 +179,6 @@ aside.ui-resizable.ui-resizing {
 
 .ace_editor.ace_autocomplete .ace_completion-highlight {
     color: rgba(0, 123, 255, .9) !important;
-}
-
-.ace_editor.ace_autocomplete .ace_scroller {
-    padding: 0.2rem 0.5rem !important;
 }
 
 .ace_editor.ace_autocomplete .ace_content .ace_line.ace_selected {
