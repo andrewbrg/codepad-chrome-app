@@ -2,15 +2,16 @@
   "version": "1.0.0",
   "manifest_version": 2,
   "minimum_chrome_version": "31",
-  "name": "Code Pad",
-  "short_name": "An awesome multi-language IDE crafted for ChromeOS!",
-  "description": "An awesome multi-language IDE written in Vanilla JS and released under the GNU general public license!",
+  "name": "Code Pad IDE",
+  "short_name": "Code Pad IDE",
+  "description": "An awesome multi-language IDE written in JavaScript, crafted for ChromeOS and released under the GNU general public license!",
   "author": "Andrew Borg",
   "app": {
     "background": {
       "scripts": [
         "/src/js/app.js"
-      ]
+      ],
+      "persistent": false
     }
   },
   "file_handlers": {

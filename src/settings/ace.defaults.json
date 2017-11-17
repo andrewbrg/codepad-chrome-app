@@ -1,7 +1,7 @@
 {
   "theme": "ace/theme/monokai",
   "fontFamily": "Roboto Mono",
-  "fontSize": "12pt",
+  "fontSize": "11pt",
   "newFileName": "undefined",
   "newFileExt": "js",
   "undefinedFile": {

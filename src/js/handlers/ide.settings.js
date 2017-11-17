@@ -49,7 +49,7 @@ var IdeSettingsHandler = function () {
 
             if ($el.is('select')) {
                 $el.select2();
-                $el.trigger('change')
+                $el.trigger('change');
             }
         });
     };
@@ -62,6 +62,18 @@ var IdeSettingsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     this.init = function (Editors) {
+
+        var found = false;
+        chrome.storage.sync.get(this.parentKey, function () {
+            found = true;
+        });
+
+        if (!found) {
+            var obj             = {};
+            obj[this.parentKey] = {};
+            chrome.storage.sync.set(obj);
+        }
+
         this.Editors = Editors;
     };
 
@@ -104,6 +116,7 @@ var IdeSettingsHandler = function () {
                 that.Editors.getAllEditorObjects().forEach(function (editor) {
                     if (typeof editor !== typeof undefined) {
                         deferred.resolve(editor.ace.getOption(key));
+                        console.log(editor.ace.getOption(key));
                         return deferred.promise();
                     }
                 });
@@ -140,7 +153,6 @@ var IdeSettingsHandler = function () {
         this.apply({key: key, val: false});
         this.flush(key);
     };
-
 
     this.persistAndApply = function (obj) {
 

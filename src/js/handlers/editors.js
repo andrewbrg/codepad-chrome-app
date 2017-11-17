@@ -50,6 +50,7 @@ var EditorsHandler = function () {
 
             that.defaultTheme    = data.theme;
             that.defaultFont     = data.fontFamily;
+            that.defaultFontSize = data.fontSize;
             that.defaultFileName = data.newFileName;
 
             // noinspection JSUnresolvedVariable
