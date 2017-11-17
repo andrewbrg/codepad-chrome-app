@@ -872,7 +872,7 @@ var EditorsHandler = function () {
     /*######################################################
     ## EVENTS (Tab)
     ######################################################*/
-    this.onAddNewTab = function (fileExtension, fileName, fileContent, fileEntry, nodeId) {
+    this.onAddNewTab = function (fileExt, fileName, fileContent, fileEntry, nodeId) {
 
         var that     = this;
         var deferred = $.Deferred();
@@ -881,7 +881,7 @@ var EditorsHandler = function () {
             ? this.defaultFileName + '_' + (this.idx + 1)
             : fileName;
 
-        var obj = this._getNewTabObject(fileExtension, fileName, nodeId);
+        var obj = this._getNewTabObject(fileExt, fileName, nodeId);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
         this._bootAceEditor(obj.idx, fileContent, fileEntry).then(function () {
