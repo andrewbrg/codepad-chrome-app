@@ -29,6 +29,7 @@
         "directory"
       ]
     },
+    "syncFileSystem",
     "storage",
     "clipboardRead",
     "fullscreen"
