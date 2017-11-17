@@ -26,7 +26,7 @@ Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHT
   - Runs in fullscreen
 
 ## Installation
-Code Pad can be installed directly from the Chrome store here: https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
+The Code Pad IDE can be installed directly from the Chrome store here: https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
 
 Alternatively, if you're not running a Chrome OS device just download the codepad-chrome-app.crx file from Github and drag-and-drop it into Chrome _(minimum required version 31)_.
 
