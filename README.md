@@ -19,7 +19,7 @@ Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHT
   - Syntax folding
   - Centralized clipboard with Chrome OS
   - Tweak-able interface
-  - Ready made themes (such as Monokai or Eclipse)
+  - Ready made themes __(such as Monokai or Eclipse)__
   - Selection of editor mono-spaced fonts
   - Works with Google drive/local storage
   - Runs in fullscreen
