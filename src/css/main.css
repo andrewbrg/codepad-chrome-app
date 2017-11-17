@@ -230,6 +230,7 @@ aside.ui-resizable.ui-resizing {
 .ace_status-indicator {;
     padding: 0 5px;
     border-left: 1px solid rgba(255, 255, 255, 0.08);
+    line-height: 25px;
 }
 
 /*******************************************************************************/

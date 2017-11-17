@@ -4,6 +4,7 @@ var FilesHandler = function () {
 
     this.retainedKey = 'retEntStorage';
     this.openedDirs  = [];
+    this.openedFiles = [];
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
@@ -15,7 +16,6 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         chrome.storage.local.get(this.retainedKey, function (data) {
-
             if (chrome.runtime.lastError) {
                 that.Notifications.notify('warning', '', chrome.runtime.lastError.message);
                 deferred.reject();
@@ -42,6 +42,9 @@ var FilesHandler = function () {
                             if (restoredEntry.isDirectory) {
                                 that.openedDirs.push(restoredEntry);
                             }
+                            else {
+                                that.openedFiles.push(restoredEntry);
+                            }
                         }
                     });
                 });
@@ -55,9 +58,18 @@ var FilesHandler = function () {
 
         this._getRetainedEntries().then(function (data) {
 
-            var obj             = {};
-            var retainEntryHash = chrome.fileSystem.retainEntry(entry);
-            var _openedDirs     = [entry];
+            var obj                       = {};
+            var retainEntryHash           = chrome.fileSystem.retainEntry(entry);
+            var retainEntryHashName       = retainEntryHash.split(':').pop();
+            var _openedDirs, _openedFiles = [];
+
+            if (entry.isDirectory) {
+                _openedDirs = [entry];
+            }
+            else {
+                _openedFiles = [entry];
+            }
+
 
             that.openedDirs.forEach(function (openedDir) {
                 // noinspection JSUnresolvedVariable
@@ -66,15 +78,23 @@ var FilesHandler = function () {
                 }
             });
 
-            var retainEntryHashName = retainEntryHash.split(':').pop();
-            obj[that.retainedKey]   = [retainEntryHash];
+            that.openedFiles.forEach(function (openedFile) {
+                // noinspection JSUnresolvedVariable
+                if (openedFile.fullPath !== entry.fullPath) {
+                    _openedFiles.push(openedFile);
+                }
+            });
+
+
+            obj[that.retainedKey] = [retainEntryHash];
             data.forEach(function (retainedEntry) {
                 if (retainEntryHashName !== retainedEntry.split(':').pop()) {
                     obj[that.retainedKey].push(retainedEntry);
                 }
             });
 
-            that.openedDirs = _openedDirs;
+            that.openedDirs  = _openedDirs;
+            that.openedFiles = _openedFiles;
             chrome.storage.local.set(obj);
         });
     };

@@ -39,6 +39,11 @@
     "mode": "javascript",
     "name": "JSON"
   },
+  "less": {
+    "icon": "icon-css",
+    "mode": "less",
+    "name": "LESS"
+  },
   "md": {
     "icon": "icon-html",
     "mode": "markdown",
