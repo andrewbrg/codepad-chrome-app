@@ -35,10 +35,10 @@
     "fullscreen"
   ],
   "icons": {
-    "16": "/src/img/logo.32.png",
-    "32": "/src/img/logo.64.png",
-    "48": "/src/img/logo.96.png",
-    "128": "/src/img/logo.256.png"
+    "16": "/src/img/codepad.32.png",
+    "32": "/src/img/codepad.64.png",
+    "48": "/src/img/codepad.96.png",
+    "128": "/src/img/codepad.256.png"
   },
   "offline_enabled": true
 }
