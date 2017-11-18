@@ -13,6 +13,9 @@
                 innerBounds: {width: 1024, height: 768},
                 resizable: true,
                 focused: true,
+                frame: {
+                    color: "#343a40"
+                },
                 id: "codepad-main"
             },
             function (appWindow) {
@@ -27,6 +30,9 @@
                 innerBounds: {width: 1024, height: 768},
                 resizable: true,
                 focused: true,
+                frame: {
+                    color: "#343a40"
+                },
                 id: "codepad-main"
             },
             function (appWindow) {
