@@ -2,9 +2,10 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
-    this.retainedKey = 'retEntStorage';
-    this.openedDirs  = [];
-    this.openedFiles = [];
+    this.allowedMimes = ['text/*'];
+    this.retainedKey  = 'retEntStorage';
+    this.openedDirs   = [];
+    this.openedFiles  = [];
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
@@ -33,6 +34,7 @@ var FilesHandler = function () {
         };
         setTimeout(reEntrant, 100);
     };
+
 
     this._getRetainedEntries = function () {
 
@@ -184,6 +186,49 @@ var FilesHandler = function () {
         return deferred.promise();
     };
 
+    this.fileDrop = function (event) {
+
+        var that     = this;
+        var promises = [];
+        var deferred = $.Deferred();
+
+        // noinspection JSUnresolvedVariable
+        var files = event.originalEvent.dataTransfer.items;
+        for (var i = 0; i < files.length; i++) {
+
+            var valid = false;
+            var file  = files[i];
+
+            // noinspection JSUnresolvedFunction
+            var fileEntry = file.webkitGetAsEntry();
+            if (file.kind === 'file' && fileEntry) {
+                that.allowedMimes.forEach(function (mime) {
+                    if (file.type === '' || file.type.match(mime)) {
+                        valid = true;
+                    }
+                });
+
+                if (valid) {
+                    promises.push(that.fileOpen(fileEntry));
+                }
+            }
+        }
+
+        if (promises.length > 0) {
+            $.when.apply($, promises).done(function () {
+                var data = [];
+                for (var i = 0; i < arguments.length; i++) {
+                    data.push(arguments[i]);
+                }
+                deferred.resolve(data);
+            });
+        } else {
+            deferred.resolve([]);
+        }
+
+        return deferred.promise();
+    };
+
     this.fileOpen = function (fileEntry) {
 
         var that     = this;
@@ -197,14 +242,25 @@ var FilesHandler = function () {
         var readFile = function (fileEntry, deferred) {
             fileEntry.file(function (file) {
 
+                var valid  = false;
                 var reader = new FileReader();
 
-                reader.readAsText(file);
-                reader.onerror = onError;
-                reader.onload  = function (e) {
-                    that._retainEntry(fileEntry);
-                    deferred.resolve(e, fileEntry);
-                };
+                that.allowedMimes.forEach(function (mime) {
+                    if (file.type === '' || file.type.match(mime)) {
+                        valid = true;
+                    }
+                });
+
+                if (!valid) {
+                    onError(file.name + ' has an unsupported file type (' + file.type + ') and will not be opened');
+                } else {
+                    reader.readAsText(file);
+                    reader.onerror = onError;
+                    reader.onload  = function (e) {
+                        that._retainEntry(fileEntry);
+                        deferred.resolve(e, fileEntry);
+                    };
+                }
             }, onError);
         };
 
@@ -348,21 +404,6 @@ var FilesHandler = function () {
         });
 
         return deferred.promise();
-    };
-
-    this.fileDrop = function (data) {
-
-        var fileEntries = [];
-
-        data.items.forEach(function (item) {
-            // noinspection JSUnresolvedFunction
-            var fileEntry = item.webkitGetAsEntry();
-            if (item.kind === 'file' && item.type.match('text/*') && fileEntry) {
-                fileEntries.push(fileEntry);
-            }
-        });
-
-        return fileEntries;
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

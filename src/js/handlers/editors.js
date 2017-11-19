@@ -582,6 +582,26 @@ var EditorsHandler = function () {
         this.IdeSettings   = ideSettings;
         this.Files         = files;
 
+        document.addEventListener('drop', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(document).find('body').removeClass('drag-over');
+        });
+        document.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(document).find('body').addClass('drag-over');
+        });
+        document.addEventListener('dragenter', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        document.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(document).find('body').removeClass('drag-over');
+        });
+
         this._populateAddTabDropDown();
 
         // Handle adding settings to new tabs
@@ -997,12 +1017,34 @@ var EditorsHandler = function () {
         var that = this;
 
         this.Files.fileOpen().then(function (e, fileEntry) {
+            var fileContent = (typeof e.target.result === typeof undefined) ? undefined : e.target.result;
             that.onAddNewTab(
                 that.getExtFromFileEntry(fileEntry),
                 that.getNameFromFileEntry(fileEntry),
-                (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                fileContent,
                 fileEntry
             );
+        });
+    };
+
+    this.onDropFiles = function (event) {
+
+        var that = this;
+
+        this.Files.fileDrop(event).then(function (files) {
+            files.forEach(function (file) {
+
+                var e           = file[0];
+                var fileEntry   = file[1];
+                var fileContent = (typeof e.target.result === typeof undefined) ? undefined : e.target.result;
+
+                that.onAddNewTab(
+                    that.getExtFromFileEntry(fileEntry),
+                    that.getNameFromFileEntry(fileEntry),
+                    fileContent,
+                    fileEntry
+                );
+            });
         });
     };
 

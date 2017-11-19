@@ -197,6 +197,12 @@ if (typeof $ !== typeof undefined) {
             Editors.onOpenFile();
         });
 
+        // Drop file
+        $(document).on('drop', 'body', function (e) {
+            Editors.onDropFiles(e);
+        });
+
+
         // Rename file
         $(document).on('click', '.action-rename-file', function () {
             $.event.trigger({
@@ -207,11 +213,6 @@ if (typeof $ !== typeof undefined) {
                 oldFileName: $(document).find('input[name="file-old-filename"]').first().val(),
                 newFileName: $(document).find('input[name="file-new-filename"]').first().val()
             });
-        });
-
-        // Drop file
-        $(document).on('drop', 'body', function (data) {
-            console.log(Files.fileDrop(data));
         });
 
         // Open project

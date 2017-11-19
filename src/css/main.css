@@ -12,6 +12,12 @@ html, body {
     background-color: rgb(52, 58, 64);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-user-drag: auto;
+}
+
+body.drag-over main {
+    opacity: 0.8;
+    border: 2px dashed rgba(0, 123, 255, .5);
 }
 
 header {
