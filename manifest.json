@@ -8,9 +8,7 @@
   "author": "Andrew Borg",
   "app": {
     "background": {
-      "scripts": [
-        "/src/js/app.js"
-      ],
+      "page": "/src/html/app.html",
       "persistent": false
     }
   },

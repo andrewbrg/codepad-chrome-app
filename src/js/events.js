@@ -21,20 +21,6 @@ $(document).ready(function () {
     var $aside  = $('aside');
     var $header = $('header');
 
-    chrome.app.runtime.onLaunched.addListener(function (launchData) {
-        launchData.items.forEach(function (item) {
-            var entry  = item.entry;
-            entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
-
-
-            Files.fileOpen(entry).then(function (e, fileEntry) {
-                Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
-            });
-        });
-    });
-
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -432,6 +418,62 @@ $(document).ready(function () {
     // Sidebar nodes clicked
     $(document).on('click', '.node-sidebar', function () {
         Sidebar.onNodeClick($(this).attr('data-nodeid'));
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// ChromeOS handlers
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    var runtime = function (appWindow, isRestart) {
+        appWindow.contentWindow.__MGA__bRestart = isRestart;
+    };
+
+    chrome.app.runtime.onLaunched.addListener(function () {
+        chrome.app.window.create('src/html/app.html',
+            {
+                innerBounds: {width: 1024, height: 768},
+                resizable: true,
+                focused: true,
+                frame: {
+                    color: "#343a40"
+                },
+                id: "codepad-main"
+            },
+            function (appWindow) {
+                runtime(appWindow, false);
+            }
+        );
+    });
+
+    chrome.app.runtime.onRestarted.addListener(function () {
+        chrome.app.window.create('src/html/app.html',
+            {
+                innerBounds: {width: 1024, height: 768},
+                resizable: true,
+                focused: true,
+                frame: {
+                    color: "#343a40"
+                },
+                id: "codepad-main"
+            },
+            function (appWindow) {
+                runtime(appWindow, true);
+            }
+        );
+    });
+
+    chrome.app.runtime.onLaunched.addListener(function (launchData) {
+        launchData.items.forEach(function (item) {
+            var entry  = item.entry;
+            entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
+
+            Files.fileOpen(entry).then(function (e, fileEntry) {
+                Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
+            });
+        });
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
