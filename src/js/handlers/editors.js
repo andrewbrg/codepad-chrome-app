@@ -18,13 +18,14 @@ var EditorsHandler = function () {
     this.navFilenameHtml      = '<span class="tab-name action-edit-tab"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
 
-    this.defaultTheme      = null;
-    this.defaultFont       = null;
-    this.defaultFontSize   = null;
-    this.defaultFileName   = null;
-    this.defaultFileExt    = null;
-    this.undefinedFileMode = null;
-    this.undefinedFileIcon = null;
+    this.defaultFileNameIdx = 0;
+    this.defaultTheme       = null;
+    this.defaultFont        = null;
+    this.defaultFontSize    = null;
+    this.defaultFileName    = null;
+    this.defaultFileExt     = null;
+    this.undefinedFileMode  = null;
+    this.undefinedFileIcon  = null;
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,6 +256,18 @@ var EditorsHandler = function () {
         aceEditor.on('cut', function () {
             that.aceClipboard = aceEditor.getSelectedText();
         });
+    };
+
+    this._openFileEntryInAceEditor = function (fileContent, fileEntry) {
+
+        var that = this;
+
+        this.onAddNewTab(
+            that.getExtFromFileEntry(fileEntry),
+            that.getNameFromFileEntry(fileEntry),
+            fileContent,
+            fileEntry
+        );
     };
 
     this._setAceEditorMode = function (idx, fileEntry) {
@@ -892,9 +905,10 @@ var EditorsHandler = function () {
         var that     = this;
         var deferred = $.Deferred();
 
-        fileName = (typeof fileName === typeof undefined || fileName === null)
-            ? this.defaultFileName + '_' + (this.idx + 1)
-            : fileName;
+        if (typeof fileName === typeof undefined || fileName === null) {
+            this.defaultFileNameIdx++;
+            fileName = this.defaultFileName + '_' + this.defaultFileNameIdx;
+        }
 
         var obj = this._getNewTabObject(fileExt, fileName, nodeId);
         this.getTabsNavContainer().append(obj.nav);
@@ -1013,37 +1027,17 @@ var EditorsHandler = function () {
     ## EVENTS (File)
     ######################################################*/
     this.onOpenFile = function () {
-
         var that = this;
-
         this.Files.fileOpen().then(function (e, fileEntry) {
-            var fileContent = (typeof e.target.result === typeof undefined) ? undefined : e.target.result;
-            that.onAddNewTab(
-                that.getExtFromFileEntry(fileEntry),
-                that.getNameFromFileEntry(fileEntry),
-                fileContent,
-                fileEntry
-            );
+            that._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
         });
     };
 
     this.onDropFiles = function (event) {
-
         var that = this;
-
         this.Files.fileDrop(event).then(function (files) {
             files.forEach(function (file) {
-
-                var e           = file[0];
-                var fileEntry   = file[1];
-                var fileContent = (typeof e.target.result === typeof undefined) ? undefined : e.target.result;
-
-                that.onAddNewTab(
-                    that.getExtFromFileEntry(fileEntry),
-                    that.getNameFromFileEntry(fileEntry),
-                    fileContent,
-                    fileEntry
-                );
+                that._openFileEntryInAceEditor((typeof file[0].target.result === typeof undefined) ? undefined : file[0].target.result, file[1]);
             });
         });
     };

@@ -9,12 +9,12 @@ var NotificationsHandler = function () {
 
         switch (type) {
             case 'danger':
-                icon  = 'fa fa-fw fa-exclamation-circle';
+                icon  = 'fa fa-fw fa-exclamation-triangle';
                 sound = '/src/sounds/notif-danger.ogg';
                 console.error(message);
                 break;
             case 'warning':
-                icon  = 'fa fa-fw fa-exclamation-circle';
+                icon  = 'fa fa-fw fa-exclamation-triangle';
                 sound = '/src/sounds/notif-danger.ogg';
                 console.warn(message);
                 break;

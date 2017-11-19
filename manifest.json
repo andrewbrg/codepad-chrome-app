@@ -17,7 +17,10 @@
   "file_handlers": {
     "text": {
       "types": [
-        "text/*"
+        "text/*",
+        "application/x-shellscript",
+        "application/javascript",
+        "application/json"
       ]
     }
   },

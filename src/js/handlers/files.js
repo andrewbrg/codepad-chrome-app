@@ -2,10 +2,10 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
-    this.allowedMimes = ['text/*'];
-    this.retainedKey  = 'retEntStorage';
-    this.openedDirs   = [];
-    this.openedFiles  = [];
+    this.allowedMimeTypes = [];
+    this.openedDirs       = [];
+    this.openedFiles      = [];
+    this.retainedKey      = 'retEntStorage';
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
@@ -160,6 +160,7 @@ var FilesHandler = function () {
 
         this.Notifications = notifications;
         this._restoreEntries();
+        this.allowedMimeTypes = chrome.runtime.getManifest().file_handlers.text.types;
     };
 
     this.directoryOpen = function (dirPath) {
@@ -202,7 +203,7 @@ var FilesHandler = function () {
             // noinspection JSUnresolvedFunction
             var fileEntry = file.webkitGetAsEntry();
             if (file.kind === 'file' && fileEntry) {
-                that.allowedMimes.forEach(function (mime) {
+                that.allowedMimeTypes.forEach(function (mime) {
                     if (file.type === '' || file.type.match(mime)) {
                         valid = true;
                     }
@@ -211,14 +212,20 @@ var FilesHandler = function () {
                 if (valid) {
                     promises.push(that.fileOpen(fileEntry));
                 }
+                else {
+                    that.Notifications.notify('danger', 'Filesystem error', fileEntry.name + ' has an unsupported file type (' + fileEntry.type + ') and will not be opened');
+                }
             }
         }
 
         if (promises.length > 0) {
             $.when.apply($, promises).done(function () {
+
                 var data = [];
-                for (var i = 0; i < arguments.length; i++) {
-                    data.push(arguments[i]);
+                var args = !$.isArray(arguments[0]) ? [arguments] : arguments;
+
+                for (var i = 0; i < args.length; i++) {
+                    data.push(args[i]);
                 }
                 deferred.resolve(data);
             });
@@ -235,33 +242,40 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
 
         var readFile = function (fileEntry, deferred) {
-            fileEntry.file(function (file) {
 
-                var valid  = false;
-                var reader = new FileReader();
+            if (typeof fileEntry.file !== 'function') {
+                onError('Entry is not a file');
+                deferred.reject();
+            }
+            else {
+                fileEntry.file(function (file) {
 
-                that.allowedMimes.forEach(function (mime) {
-                    if (file.type === '' || file.type.match(mime)) {
-                        valid = true;
+                    var valid  = false;
+                    var reader = new FileReader();
+
+                    that.allowedMimeTypes.forEach(function (mime) {
+                        if (file.type === '' || file.type.match(mime)) {
+                            valid = true;
+                        }
+                    });
+
+                    if (!valid) {
+                        onError(file.name + ' has an unsupported file type (' + file.type + ') and will not be opened');
+                    } else {
+                        reader.readAsText(file);
+                        reader.onerror = onError;
+                        reader.onload  = function (e) {
+                            that._retainEntry(fileEntry);
+                            deferred.resolve(e, fileEntry);
+                        };
                     }
-                });
-
-                if (!valid) {
-                    onError(file.name + ' has an unsupported file type (' + file.type + ') and will not be opened');
-                } else {
-                    reader.readAsText(file);
-                    reader.onerror = onError;
-                    reader.onload  = function (e) {
-                        that._retainEntry(fileEntry);
-                        deferred.resolve(e, fileEntry);
-                    };
-                }
-            }, onError);
+                }, onError);
+            }
         };
 
         if (typeof fileEntry === typeof undefined) {
@@ -288,7 +302,7 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
 
@@ -334,7 +348,7 @@ var FilesHandler = function () {
         var deferred = $.Deferred();
 
         var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
 
@@ -380,7 +394,7 @@ var FilesHandler = function () {
         }
 
         var onError = function (err) {
-            that.Notifications.notify('danger', 'File Error', err);
+            that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
 
