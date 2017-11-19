@@ -33,6 +33,6 @@ Alternatively, if you're not running a Chrome OS device just follow these steps:
                                               
   - Clone this repo to your local machine
   - Visit [chrome://extensions](chrome://extensions) and enable Developer Mode.
-  - Still on the extensions page, click the button marked `Load unpacked extension` and select the directory containing the Code Pad manifest.json file.
+  - Still on the extensions page, click the button marked `Load unpacked extension...` and select the directory containing the Code Pad manifest.json file.
   
 [![432f8e5f36f0ea802253a53d447088ae.jpg](http://pichoster.net/images/2017/11/17/432f8e5f36f0ea802253a53d447088ae.jpg)](http://pichoster.net/image/UiWmt)
