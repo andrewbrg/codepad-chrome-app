@@ -455,13 +455,8 @@ var EditorsHandler = function () {
         var isRo      = typeof ro === typeof undefined ? false : ro;
         var lockClass = isRo ? 'fa-lock' : 'fa-unlock';
 
-        var mode = editor.getOption('mode').split('/').pop().toLowerCase().replace(/\b[a-z]/g, function (letter) {
-            return letter.toLowerCase();
-        });
-
-        var lineEndings = editor.getOption('newLineMode').toLowerCase().replace(/\b[a-z]/g, function (letter) {
-            return letter.toUpperCase();
-        });
+        var mode        = editor.getOption('mode').split('/').pop().toLowerCase();
+        var lineEndings = editor.getOption('newLineMode').toLowerCase();
 
         $statusBar.find('.ace_status-info').remove();
         $statusBar.append(

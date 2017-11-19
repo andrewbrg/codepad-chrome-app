@@ -10,6 +10,30 @@ var FilesHandler = function () {
     /// Private File
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    this._waitForIO = function (writer, callback) {
+
+        var that      = this;
+        var start     = Date.now();
+        var reEntrant = function () {
+
+            // noinspection JSUnresolvedVariable
+            var writerState = writer.WRITING;
+
+            if (writer.readyState === writerState && Date.now() - start < 4000) {
+                setTimeout(reEntrant, 100);
+                return;
+            }
+            if (writer.readyState === writerState) {
+                that.Notifications.notify('danger', 'File system', 'Write operation taking too long, aborting! (Writer readyState is ' + writer.readyState + ')');
+                writer.abort();
+            }
+            else {
+                callback();
+            }
+        };
+        setTimeout(reEntrant, 100);
+    };
+
     this._getRetainedEntries = function () {
 
         var that     = this;
@@ -227,9 +251,16 @@ var FilesHandler = function () {
             // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
-                writer.seek(0);
-                writer.write(new Blob([fileContent], {type: 'text/plain'}));
+                var blob = new Blob([fileContent]);
 
+                // noinspection JSUnresolvedFunction
+                writer.truncate(blob.size);
+                that._waitForIO(writer, function () {
+                    writer.seek(0);
+                    writer.write(blob, {type: 'text/plain'})
+                });
+
+                writer.onabort    = onError;
                 writer.onerror    = onError;
                 writer.onwriteend = function (e) {
                     that._retainEntry(writableEntry);
@@ -261,9 +292,16 @@ var FilesHandler = function () {
             // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
-                writer.seek(0);
-                writer.write(new Blob([fileContent], {type: 'text/plain'}));
+                var blob = new Blob([fileContent]);
 
+                // noinspection JSUnresolvedFunction
+                writer.truncate(blob.size);
+                that._waitForIO(writer, function () {
+                    writer.seek(0);
+                    writer.write(blob, {type: 'text/plain'})
+                });
+
+                writer.onabort    = onError;
                 writer.onerror    = onError;
                 writer.onwriteend = function (e) {
                     that._retainEntry(writableEntry);
@@ -310,6 +348,21 @@ var FilesHandler = function () {
         });
 
         return deferred.promise();
+    };
+
+    this.fileDrop = function (data) {
+
+        var fileEntries = [];
+
+        data.items.forEach(function (item) {
+            // noinspection JSUnresolvedFunction
+            var fileEntry = item.webkitGetAsEntry();
+            if (item.kind === 'file' && item.type.match('text/*') && fileEntry) {
+                fileEntries.push(fileEntry);
+            }
+        });
+
+        return fileEntries;
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

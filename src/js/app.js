@@ -64,6 +64,11 @@ if (typeof $ !== typeof undefined) {
         Sidebar.init(Notifications, Editors, Files);
         IdeSettings.init(Editors);
 
+        // Editor elements
+        var $main   = $('main');
+        var $aside  = $('aside');
+        var $header = $('header');
+
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -83,33 +88,10 @@ if (typeof $ !== typeof undefined) {
         });
 
         // Handle resize of window
-        var $header               = $('header');
-        var $aside                = $('aside');
-        var $sidebar              = Sidebar.getSidebar();
-        var $sidebarMenu          = $sidebar.find('.sidebar-menu');
-        var $tabsContentContainer = Editors.getTabsContentContainer();
-        var statusBarHeight       = $tabsContentContainer.find('.ace-status-bar').first().height();
-
-        $(window).on('resize', function () {
-
-            var sBarHeight        = Math.ceil(statusBarHeight).toString();
-            var headerHeight      = Math.ceil($header.height()).toString();
-            var sidebarMenuHeight = Math.ceil($sidebarMenu.height()).toString();
-            var asideHeight       = $(window).height() - (parseInt(headerHeight) + parseInt(sBarHeight));
-
-            $tabsContentContainer.css({
-                'padding-top': headerHeight + 'px',
-                'padding-bottom': sBarHeight + 'px'
-            });
-
-            $aside.css({
-                'margin-top': headerHeight + 'px',
-                'height': asideHeight.toString() + 'px'
-            });
-
-            $sidebar.css({
-                'margin-top': sidebarMenuHeight + 'px',
-                'height': (asideHeight - parseInt(sidebarMenuHeight)).toString() + 'px'
+        $(window).on('resize', function (e) {
+            $main.css({
+                'margin-top': $header.height().toString() + 'px',
+                'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
             });
         }).resize();
 
@@ -225,6 +207,11 @@ if (typeof $ !== typeof undefined) {
                 oldFileName: $(document).find('input[name="file-old-filename"]').first().val(),
                 newFileName: $(document).find('input[name="file-new-filename"]').first().val()
             });
+        });
+
+        // Drop file
+        $(document).on('drop', 'body', function (data) {
+            console.log(Files.fileDrop(data));
         });
 
         // Open project
