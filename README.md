@@ -28,6 +28,10 @@ Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHT
 ## Installation
 The Code Pad IDE can be installed directly from the Chrome store here: https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
 
-Alternatively, if you're not running a Chrome OS device just download the codepad-chrome-app.crx file from Github and drag-and-drop it into Chrome _(minimum required version 31)_.
-
+Alternatively, if you're not running a Chrome OS device just follow these steps:
+                                              
+  - Clone this repo to your local machine
+  - Visit chrome://extensions and enable Developer Mode.
+  - Still on the extensions page, click the button marked "Load unpacked extension..." and select the directory containing the manifest.json.
+  
 [![432f8e5f36f0ea802253a53d447088ae.jpg](http://pichoster.net/images/2017/11/17/432f8e5f36f0ea802253a53d447088ae.jpg)](http://pichoster.net/image/UiWmt)
