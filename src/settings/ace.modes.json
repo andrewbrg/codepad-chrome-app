@@ -4,23 +4,33 @@
     "mode": "sh",
     "name": "Bash"
   },
-  "cpp": {
-    "icon": "icon-c",
+  "c": {
+    "icon": "devicon devicon-c-plain",
     "mode": "c_cpp",
-    "name": "C++"
+    "name": "C/C++"
+  },
+  "coffee": {
+    "icon": "devicon devicon-coffeescript-original",
+    "mode": "coffee",
+    "name": "CoffeeScript"
   },
   "css": {
     "icon": "icon-css3-alt",
     "mode": "css",
     "name": "CSS3"
   },
-  "gitignore":{
+  "dockerfile": {
+    "icon": "devicon devicon-docker-plain",
+    "mode": "dockerfile",
+    "name": "DockerFile"
+  },
+  "gitignore": {
     "icon": "icon-git",
     "mode": "gitignore",
-    "name": "Gitignore"
+    "name": "GitIgnore"
   },
   "go": {
-    "icon": "icon-go",
+    "icon": "devicon devicon-go-plain",
     "mode": "golang",
     "name": "GoLang"
   },
@@ -28,6 +38,11 @@
     "icon": "icon-html5-alt",
     "mode": "html",
     "name": "HTML5"
+  },
+  "java": {
+    "icon": "devicon devicon-java-plain",
+    "mode": "java",
+    "name": "Java"
   },
   "js": {
     "icon": "icon-javascript-alt",
@@ -40,7 +55,7 @@
     "name": "JSON"
   },
   "less": {
-    "icon": "icon-css",
+    "icon": "devicon devicon-less-plain-wordmark",
     "mode": "less",
     "name": "LESS"
   },
@@ -48,6 +63,11 @@
     "icon": "icon-html",
     "mode": "markdown",
     "name": "Markdown"
+  },
+  "mssql": {
+    "icon": "icon-database",
+    "mode": "sqlserver",
+    "name": "MS SQL"
   },
   "pl": {
     "icon": "icon-perl",
@@ -94,19 +114,24 @@
     "mode": "sql",
     "name": "SQL"
   },
-  "mssql": {
-    "icon": "icon-database",
-    "mode": "sqlserver",
-    "name": "MS SQL"
+  "ts": {
+    "icon": "devicon devicon-typescript-plain",
+    "mode": "typescript",
+    "name": "TypeScript"
   },
   "txt": {
-    "icon": "fa fa-file-text",
-    "mode": "text",
+    "icon": "devicon devicon-devicon-plain",
+    "mode": "textfile",
     "name": "Plain text"
   },
   "xml": {
     "icon": "icon-html",
     "mode": "xml",
     "name": "XML"
+  },
+  "yml": {
+    "icon": "devicon devicon devicon-devicon-plain",
+    "mode": "yaml",
+    "name": "Yaml"
   }
 }
