@@ -647,9 +647,10 @@ var EditorsHandler = function () {
         var deferred = $.Deferred();
 
         if (typeof ext !== typeof undefined) {
-            var data = '';
-            $.get('/src/html/templates/' + ext + '.tpl').always(function (data) {
+            $.get('/src/html/templates/' + ext + '.tpl').done(function (data) {
                 deferred.resolve(data);
+            }).fail(function () {
+                deferred.resolve('');
             });
         }
 

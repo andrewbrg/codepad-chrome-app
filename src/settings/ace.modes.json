@@ -124,6 +124,11 @@
     "mode": "textfile",
     "name": "Plain text"
   },
+  "xhtml": {
+    "icon": "icon-html",
+    "mode": "html",
+    "name": "XHTML"
+  },
   "xml": {
     "icon": "icon-html",
     "mode": "xml",
