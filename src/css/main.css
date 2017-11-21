@@ -324,6 +324,10 @@ aside.ui-resizable.ui-resizing {
     top: 3px;
 }
 
+.tab-list li a .devicon {
+    top: 6px;
+}
+
 .tab-list li a.active .icon {
     color: rgba(0, 123, 255, .7);
 }
