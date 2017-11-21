@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.71",
   "manifest_version": 2,
   "minimum_chrome_version": "31",
   "name": "Code Pad IDE",
@@ -44,7 +44,7 @@
   "icons": {
     "16": "/src/img/codepad.16.png",
     "32": "/src/img/codepad.32.png",
-    "48": "/src/img/codepad.48.png",
+    "64": "/src/img/codepad.64.png",
     "96": "/src/img/codepad.96.png",
     "128": "/src/img/codepad.128.png",
     "256": "/src/img/codepad.256.png"

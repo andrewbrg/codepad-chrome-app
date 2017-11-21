@@ -311,13 +311,33 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link modal-content-help"
+                    <a class="nav-link dropdown-toggle"
                        href="#"
-                       data-toggle="modal"
-                       data-target=".modal-md-container">
+                       data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
                         <i class="fa fa-fw fa-question-circle"></i>
                         &nbsp;About
                     </a>
+
+                    <div class="dropdown-menu"
+                         aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item modal-content-help"
+                           href="#"
+                           data-toggle="modal"
+                           data-target=".modal-md-container">
+                            <i class="fa fa-fw fa-question-circle"></i>
+                            &nbsp;About Code Pad
+                        </a>
+
+                        <a class="dropdown-item"
+                           href="https://github.com/andrewbrg/codepad-chrome-app/issues"
+                           target="_blank">
+                            <i class="fa fa-fw fa-bug"></i>
+                            &nbsp;File a bug
+                        </a>
+                    </div>
+                </li>
             </ul>
             <a href="https://github.com/andrewbrg/codepad-chrome-app"
                target="_blank"
