@@ -4,7 +4,7 @@
   "minimum_chrome_version": "31",
   "name": "Code Pad IDE",
   "short_name": "Code Pad IDE",
-  "description": "An awesome multi-language IDE written in JavaScript, crafted for ChromeOS and released under the GNU general public license!",
+  "description": "An awesome multi-language programming IDE crafted for ChromeOS & released under the GNU public license!",
   "author": "Andrew Borg",
   "app": {
     "background": {
@@ -42,10 +42,12 @@
     "fullscreen"
   ],
   "icons": {
-    "16": "/src/img/codepad.32.png",
-    "32": "/src/img/codepad.64.png",
-    "48": "/src/img/codepad.96.png",
-    "128": "/src/img/codepad.256.png"
+    "16": "/src/img/codepad.16.png",
+    "32": "/src/img/codepad.32.png",
+    "48": "/src/img/codepad.48.png",
+    "96": "/src/img/codepad.96.png",
+    "128": "/src/img/codepad.128.png",
+    "256": "/src/img/codepad.256.png"
   },
   "offline_enabled": true
 }
