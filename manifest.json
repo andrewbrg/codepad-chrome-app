@@ -16,10 +16,12 @@
     "text": {
       "types": [
         "text/*",
+        "image/svg+xml",
         "application/x-sh",
-        "application/x-sh",
+        "application/x-csh",
         "application/x-shellscript",
         "application/javascript",
+        "application/typescript",
         "application/json",
         "application/xhtml+xml",
         "application/xml"
