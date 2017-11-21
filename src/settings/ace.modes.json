@@ -69,11 +69,6 @@
     "mode": "sqlserver",
     "name": "MS SQL"
   },
-  "pl": {
-    "icon": "icon-perl",
-    "mode": "perl",
-    "name": "Perl"
-  },
   "php": {
     "icon": "icon-php-alt",
     "mode": "php",
@@ -83,6 +78,11 @@
     "icon": "icon-php-alt",
     "mode": "php",
     "name": "PHTML"
+  },
+  "pl": {
+    "icon": "icon-perl",
+    "mode": "perl",
+    "name": "Perl"
   },
   "py": {
     "icon": "icon-python",
