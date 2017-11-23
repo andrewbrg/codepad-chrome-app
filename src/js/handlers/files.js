@@ -5,7 +5,7 @@ var FilesHandler = function () {
     this.allowedMimeTypes = [];
     this.openedDirs       = [];
     this.openedFiles      = [];
-    this.retainedKey      = 'retEntStorage';
+    this.retainedKey      = 'retained_entries_key';
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File

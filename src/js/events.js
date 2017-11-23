@@ -1,53 +1,3 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// ChromeOS handlers
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-var runtime = function (appWindow, isRestart) {
-    appWindow.contentWindow.__MGA__bRestart = isRestart;
-};
-
-chrome.app.runtime.onLaunched.addListener(function (launchData) {
-    window.launchData = undefined;
-    window.launchData = launchData;
-});
-
-chrome.app.runtime.onLaunched.addListener(function () {
-    chrome.app.window.create('src/html/app.html',
-        {
-            innerBounds: {width: 1024, height: 768},
-            resizable: true,
-            focused: true,
-            frame: {
-                color: "#343a40"
-            },
-            id: "codepad-main"
-        },
-        function (appWindow) {
-            runtime(appWindow, false);
-        }
-    );
-});
-
-chrome.app.runtime.onRestarted.addListener(function () {
-    chrome.app.window.create('src/html/app.html',
-        {
-            innerBounds: {width: 1024, height: 768},
-            resizable: true,
-            focused: true,
-            frame: {
-                color: "#343a40"
-            },
-            id: "codepad-main"
-        },
-        function (appWindow) {
-            runtime(appWindow, true);
-        }
-    );
-});
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 $(document).ready(function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,29 +16,12 @@ $(document).ready(function () {
     Sidebar.init(Notifications, Editors, Files);
     IdeSettings.init(Editors);
 
-    if (typeof window.launchData !== typeof undefined) {
-
-        var launchData    = window.launchData;
-        window.launchData = undefined;
-
-        launchData.items.forEach(function (item) {
-            var entry  = item.entry;
-            entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
-
-            Files.fileOpen(entry).then(function (e, fileEntry) {
-                Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
-            });
-        });
-    }
-
-
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Editors
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
     // Editor elements
     var $main   = $('main');
@@ -105,14 +38,6 @@ $(document).ready(function () {
         Editors.previousIdx = parseInt($(e.relatedTarget).attr('data-idx'));
         Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
     });
-
-    // Handle resize of window
-    $(window).on('resize', function (e) {
-        $main.css({
-            'margin-top': $header.height().toString() + 'px',
-            'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
-        });
-    }).resize();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -486,6 +411,36 @@ $(document).ready(function () {
     $(document).on('click', '.node-sidebar', function () {
         Sidebar.onNodeClick($(this).attr('data-nodeid'));
     });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// Global Events
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    if (typeof window.launchData !== typeof undefined) {
+
+        var launchData = window.launchData;
+        launchData.items.forEach(function (item) {
+            var entry  = item.entry;
+            entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
+
+            Files.fileOpen(entry).then(function (e, fileEntry) {
+                Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
+            });
+        });
+
+        window.launchData = undefined;
+    }
+
+    // Handle resize of window
+    $(window).on('resize', function (e) {
+        $main.css({
+            'margin-top': $header.height().toString() + 'px',
+            'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
+        });
+    }).resize();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
