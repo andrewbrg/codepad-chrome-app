@@ -11,6 +11,7 @@ $(document).ready(function () {
     var Notifications = new NotificationsHandler();
     var Files         = new FilesHandler();
 
+    Notifications.init();
     Files.init(Notifications);
     Editors.init(IdeSettings, Notifications, Files);
     Sidebar.init(Notifications, Editors, Files);

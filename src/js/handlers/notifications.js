@@ -1,5 +1,74 @@
 var NotificationsHandler = function () {
 
+    this.versionUpdateId  = 'version_update';
+    this.ratingReminderId = 'rating_reminder';
+
+    this.versionKey     = 'last_notified_version';
+    this.requestRateKey = 'requested_rating';
+
+    this.init = function () {
+
+        var that = this;
+
+        chrome.storage.local.get(this.versionKey, function (version) {
+
+            var currentVer  = chrome.runtime.getManifest().version;
+            var previousVer = version[that.versionKey] || false;
+
+            if (!previousVer || currentVer.replace(/[^0-9]/g, '') > previousVer.replace(/[^0-9]/g, '')) {
+                chrome.notifications.create(that.versionUpdateId, {
+                    type: 'basic',
+                    iconUrl: '/src/img/codepad.128.png',
+                    title: 'Code Pad IDE updated',
+                    message: 'Your installation of Code Pad has been updated to v' + currentVer
+                }, function () {
+
+                    if (chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError.message);
+                    }
+
+                    var obj              = {};
+                    obj[that.versionKey] = currentVer;
+                    chrome.storage.local.set(obj);
+                });
+            }
+        });
+
+        chrome.storage.local.get(this.requestRateKey, function (requested) {
+
+            requested = requested[that.requestRateKey] || false;
+
+            if (!requested) {
+                chrome.notifications.create(that.ratingReminderId, {
+                    type: 'basic',
+                    iconUrl: '/src/img/codepad.128.png',
+                    title: 'Do you like Code Pad?',
+                    message: 'Please help us by leaving a rating on the Chrome Store, it helps the application grow...',
+                    requireInteraction: true,
+                    isClickable: true,
+                    buttons: [{
+                        title: 'Click to give your rating'
+                    }]
+                }, function () {
+
+                    if (chrome.runtime.lastError) {
+                        console.log(chrome.runtime.lastError.message);
+                    }
+
+                    var obj                  = {};
+                    obj[that.requestRateKey] = true;
+                    chrome.storage.local.set(obj);
+                });
+            }
+        });
+
+        chrome.notifications.onButtonClicked.addListener(function (notificationId) {
+            if (notificationId === that.ratingReminderId) {
+                window.open('https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh/reviews');
+            }
+        });
+    };
+
     this.notify = function (type, title, message) {
 
         var icon;

@@ -1,7 +1,7 @@
 {
-  "version": "1.0.75",
+  "version": "1.0.76",
   "manifest_version": 2,
-  "minimum_chrome_version": "31",
+  "minimum_chrome_version": "51",
   "name": "Code Pad IDE",
   "short_name": "Code Pad IDE",
   "description": "An awesome multi-language programming IDE (editor), crafted for ChromeOS & released under GPL3.0!",
@@ -43,7 +43,8 @@
     "syncFileSystem",
     "storage",
     "clipboardRead",
-    "fullscreen"
+    "fullscreen",
+    "notifications"
   ],
   "icons": {
     "16": "/src/img/codepad.16.png",

@@ -41,16 +41,20 @@ var ModalsHandler = function () {
             $.get('/src/html/modals/file/confirm.close.tab.html').done(callback);
         }
 
-        if ($el.hasClass('modal-content-help')) {
-            $.get('/src/html/modals/content/help.html').done(callback);
-        }
-
         if ($el.hasClass('modal-github-auth')) {
             $.get('/src/html/modals/github/authenticate.html').done(callback);
         }
 
         if ($el.hasClass('modal-rename-file')) {
             $.get('/src/html/modals/file/rename.file.html').done(callback);
+        }
+
+        if ($el.hasClass('modal-content-help')) {
+            $.get('/src/html/modals/content/help.html').done(callback);
+        }
+
+        if ($el.hasClass('modal-content-rate')) {
+            $.get('/src/html/modals/content/rate.html').done(callback);
         }
 
         return deferred.promise();
