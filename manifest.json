@@ -6,7 +6,7 @@
   "short_name": "Code Pad IDE",
   "description": "An awesome multi-language programming IDE (editor), crafted for ChromeOS & released under GPL3.0!",
   "author": "Andrew Borg",
-  "homepage_url": "",
+  "homepage_url": "https://github.com/andrewbrg/codepad-chrome-app",
   "offline_enabled": true,
   "app": {
     "background": {
