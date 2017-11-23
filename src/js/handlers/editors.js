@@ -71,9 +71,6 @@ var EditorsHandler = function () {
         $(document).find('.modal[data-idx="' + idx + '"]').modal('hide');
     };
 
-    /*######################################################
-    ## Sortable UI
-    ######################################################*/
     this._sortableTabsInit = function () {
 
         var that = this;
@@ -719,7 +716,6 @@ var EditorsHandler = function () {
 
         return deferred.promise();
     };
-
 
     /*######################################################
     ## GET/SET (Editor Data Objects)
