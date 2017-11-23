@@ -7,11 +7,11 @@ var EditorsHandler = function () {
     this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
 
     this.idx                  = 0;
+    this.aceClipboard         = '';
     this.currentIdx           = null;
     this.previousIdx          = null;
-    this.aceEditors           = [];
+    this.editorDataObjs       = [];
     this.aceCleanHashes       = [];
-    this.aceClipboard         = '';
     this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab" title="Close file"></i>';
     this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes" title="Close file"></i>';
     this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
@@ -129,12 +129,7 @@ var EditorsHandler = function () {
         });
 
         // Push the editor into our records
-        this.aceEditors.push({
-            "idx": idx,
-            "ace": aceEditor,
-            "statusBar": new this.StatusBar(aceEditor, document.getElementById('status-bar-' + idx)),
-            "fileEntry": typeof fileEntry === typeof undefined || fileEntry === null ? undefined : fileEntry
-        });
+        this.setEditorDataObj(idx, fileEntry, aceEditor);
 
         // Configure
         this.setEditorContent(idx, fileContent).then(function () {
@@ -256,18 +251,6 @@ var EditorsHandler = function () {
         aceEditor.on('cut', function () {
             that.aceClipboard = aceEditor.getSelectedText();
         });
-    };
-
-    this._openFileEntryInAceEditor = function (fileContent, fileEntry) {
-
-        var that = this;
-
-        this.onAddNewTab(
-            that.getExtFromFileEntry(fileEntry),
-            that.getNameFromFileEntry(fileEntry),
-            fileContent,
-            fileEntry
-        );
     };
 
     this._setAceEditorMode = function (idx, fileEntry) {
@@ -580,6 +563,18 @@ var EditorsHandler = function () {
         this._sortableTabsInit();
     };
 
+    this.openFileEntryInAceEditor = function (fileContent, fileEntry) {
+
+        var that = this;
+
+        return this.onAddNewTab(
+            that.getExtFromFileEntry(fileEntry),
+            that.getNameFromFileEntry(fileEntry),
+            fileContent,
+            fileEntry
+        );
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -725,33 +720,59 @@ var EditorsHandler = function () {
         return deferred.promise();
     };
 
+
     /*######################################################
-    ## GET/SET (Editor File Entry)
+    ## GET/SET (Editor Data Objects)
     ######################################################*/
-    this.getEditorFileEntry = function (idx) {
+    this.getEditorDataObj = function (idx) {
 
         idx = parseInt(idx);
 
         var aceEditorFull = this.getEditor(idx, true);
 
-        if (typeof aceEditorFull !== typeof undefined) {
-            return aceEditorFull.fileEntry;
-        }
-
-        return undefined;
+        return (typeof aceEditorFull !== typeof undefined)
+            ? aceEditorFull.fileEntry
+            : undefined;
     };
 
-    this.setEditorFileEntry = function (idx, fileEntry) {
+    this.setEditorDataObj = function (idx, fileEntry, aceEditor) {
 
         if (typeof idx === typeof undefined) {
             return false;
         }
 
+        var found = false;
+
         idx = parseInt(idx);
-        this.aceEditors.forEach(function (aceEditorEntry) {
-            if (aceEditorEntry.idx === idx) {
-                aceEditorEntry.fileEntry = fileEntry;
-                return false;
+        this.editorDataObjs.forEach(function (editorDataObj) {
+            if (editorDataObj.idx === idx) {
+                editorDataObj.fileEntry = fileEntry;
+                found                   = true;
+            }
+        });
+
+        if (!found && typeof aceEditor !== typeof undefined) {
+            this.editorDataObjs.push({
+                "idx": idx,
+                "ace": aceEditor,
+                "statusBar": new this.StatusBar(aceEditor, document.getElementById('status-bar-' + idx)),
+                "fileEntry": typeof fileEntry === typeof undefined || fileEntry === null ? undefined : fileEntry
+            });
+        }
+    };
+
+    this.removeEditorDataObj = function (idx) {
+
+        if (typeof idx === typeof undefined) {
+            return;
+        }
+
+        idx = parseInt(idx);
+
+        var _editorDataObjs = [];
+        this.editorDataObjs.forEach(function (editorDataObj) {
+            if (editorDataObj.idx !== idx) {
+                _editorDataObjs.push(editorDataObj);
             }
         });
     };
@@ -768,7 +789,7 @@ var EditorsHandler = function () {
         idx          = parseInt(idx);
         var response = undefined;
 
-        this.aceEditors.forEach(function (aceEditorEntry) {
+        this.editorDataObjs.forEach(function (aceEditorEntry) {
             if (aceEditorEntry.idx === idx) {
                 response = (typeof returnFullObj !== typeof undefined && returnFullObj)
                     ? aceEditorEntry
@@ -781,7 +802,7 @@ var EditorsHandler = function () {
     };
 
     this.getAllEditorObjects = function () {
-        return this.aceEditors;
+        return this.editorDataObjs;
     };
 
     /*######################################################
@@ -987,6 +1008,7 @@ var EditorsHandler = function () {
         this.getTabContentEl(idx).remove();
         this.setTabNavFocus(this.previousIdx);
         this._closeTabModals(idx);
+        this.removeEditorDataObj(idx);
 
         $(window).trigger('resize');
 
@@ -1031,7 +1053,7 @@ var EditorsHandler = function () {
     this.onOpenFile = function () {
         var that = this;
         this.Files.fileOpen().then(function (e, fileEntry) {
-            that._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
+            that.openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
         });
     };
 
@@ -1039,7 +1061,7 @@ var EditorsHandler = function () {
         var that = this;
         this.Files.fileDrop(event).then(function (files) {
             files.forEach(function (file) {
-                that._openFileEntryInAceEditor((typeof file[0].target.result === typeof undefined) ? undefined : file[0].target.result, file[1]);
+                that.openFileEntryInAceEditor((typeof file[0].target.result === typeof undefined) ? undefined : file[0].target.result, file[1]);
             });
         });
     };
@@ -1051,7 +1073,7 @@ var EditorsHandler = function () {
         }
 
         var that      = this;
-        var fileEntry = this.getEditorFileEntry(idx);
+        var fileEntry = this.getEditorDataObj(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
             ? this.Files.fileSaveAs(this._getTabNavName(idx), this.getEditorContent(idx))
@@ -1066,7 +1088,7 @@ var EditorsHandler = function () {
                 tabName: fileEntry.name
             });
 
-            that.setEditorFileEntry(idx, fileEntry);
+            that.setEditorDataObj(idx, fileEntry);
             that._markNavTabClean(idx);
             that._closeTabModals(idx);
         });
@@ -1084,7 +1106,7 @@ var EditorsHandler = function () {
     };
 
     this.onRenameFile = function (idx, fileEntry) {
-        this.setEditorFileEntry(idx, fileEntry);
+        this.setEditorDataObj(idx, fileEntry);
         this.setEditorTemplate(idx);
         this._setTabNavName(idx, fileEntry.name);
         this._setAceEditorMode(idx);

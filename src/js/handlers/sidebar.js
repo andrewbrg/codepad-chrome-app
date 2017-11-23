@@ -263,7 +263,7 @@ var SidebarHandler = function () {
             var idx = this.Editors.getTabNavIdx(nodeId);
             if (typeof idx !== typeof undefined) {
                 that.Editors.setTabNavFocus(idx);
-                deferred.resolve(idx, that.Editors.getEditorFileEntry(idx));
+                deferred.resolve(idx, that.Editors.getEditorDataObj(idx));
             }
             else {
                 // noinspection JSUnresolvedFunction

@@ -190,7 +190,7 @@ $(document).ready(function () {
             });
         };
 
-        var fileEntry = Editors.getEditorFileEntry(e.idx);
+        var fileEntry = Editors.getEditorDataObj(e.idx);
         if (typeof fileEntry === typeof undefined && typeof e.nodeId !== typeof undefined) {
             Sidebar.onNodeClick(e.nodeId).then(function (idx, fileEntry) {
                 e.idx = idx;
@@ -421,13 +421,12 @@ $(document).ready(function () {
 
     if (typeof window.launchData !== typeof undefined) {
 
-        var launchData = window.launchData;
-        launchData.items.forEach(function (item) {
-            var entry  = item.entry;
-            entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
+        var launchData = window.launchData || [];
 
-            Files.fileOpen(entry).then(function (e, fileEntry) {
-                Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
+        launchData.items.forEach(function (item) {
+            item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
+            Files.fileOpen(item.entry).then(function (e, fileEntry) {
+                Editors.openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
             });
         });
 
@@ -443,5 +442,4 @@ $(document).ready(function () {
     }).resize();
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 });
