@@ -1,14 +1,11 @@
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/// ChromeOS handlers
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 (function () {
 
     var runtime = function (appWindow, isRestart) {
         appWindow.contentWindow.__MGA__bRestart = isRestart;
     };
 
-    chrome.app.runtime.onLaunched.addListener(function () {
+    chrome.app.runtime.onLaunched.addListener(function (launchData) {
+
         chrome.app.window.create('src/html/app.html',
             {
                 innerBounds: {width: 1024, height: 768},
@@ -21,6 +18,9 @@
             },
             function (appWindow) {
                 runtime(appWindow, false);
+                appWindow.contentWindow.addEventListener('load', function () {
+                    chrome.runtime.sendMessage({launchData: launchData});
+                });
             }
         );
     });
@@ -41,12 +41,4 @@
             }
         );
     });
-
-    window.launchData = undefined;
-    chrome.app.runtime.onLaunched.addListener(function (launchData) {
-        window.launchData = launchData;
-    });
-
 })();
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////

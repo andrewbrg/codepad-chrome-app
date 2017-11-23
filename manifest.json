@@ -12,8 +12,7 @@
     "background": {
       "scripts": [
         "/src/js/app.js"
-      ],
-      "persistent": false
+      ]
     }
   },
   "file_handlers": {

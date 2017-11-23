@@ -419,20 +419,16 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Global Events
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    if (typeof window.launchData !== typeof undefined) {
-
-        var launchData = window.launchData || [];
-
-        launchData.items.forEach(function (item) {
+    chrome.runtime.onMessage.addListener(function (message) {
+        var items = message.items || [];
+        items.forEach(function (item) {
             item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
             Files.fileOpen(item.entry).then(function (e, fileEntry) {
                 Editors.openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
             });
         });
+    });
 
-        window.launchData = undefined;
-    }
 
     // Handle resize of window
     $(window).on('resize', function (e) {
@@ -441,6 +437,7 @@ $(document).ready(function () {
             'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
         });
     }).resize();
+
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 });
