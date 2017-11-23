@@ -1,3 +1,53 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ChromeOS handlers
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+var runtime = function (appWindow, isRestart) {
+    appWindow.contentWindow.__MGA__bRestart = isRestart;
+};
+
+chrome.app.runtime.onLaunched.addListener(function (launchData) {
+    window.launchData = undefined;
+    window.launchData = launchData;
+});
+
+chrome.app.runtime.onLaunched.addListener(function () {
+    chrome.app.window.create('src/html/app.html',
+        {
+            innerBounds: {width: 1024, height: 768},
+            resizable: true,
+            focused: true,
+            frame: {
+                color: "#343a40"
+            },
+            id: "codepad-main"
+        },
+        function (appWindow) {
+            runtime(appWindow, false);
+        }
+    );
+});
+
+chrome.app.runtime.onRestarted.addListener(function () {
+    chrome.app.window.create('src/html/app.html',
+        {
+            innerBounds: {width: 1024, height: 768},
+            resizable: true,
+            focused: true,
+            frame: {
+                color: "#343a40"
+            },
+            id: "codepad-main"
+        },
+        function (appWindow) {
+            runtime(appWindow, true);
+        }
+    );
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 $(document).ready(function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,18 +66,11 @@ $(document).ready(function () {
     Sidebar.init(Notifications, Editors, Files);
     IdeSettings.init(Editors);
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if (typeof window.launchData !== typeof undefined) {
 
+        var launchData    = window.launchData;
+        window.launchData = undefined;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// ChromeOS handlers
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var runtime = function (appWindow, isRestart) {
-        appWindow.contentWindow.__MGA__bRestart = isRestart;
-    };
-
-    chrome.app.runtime.onLaunched.addListener(function (launchData) {
         launchData.items.forEach(function (item) {
             var entry  = item.entry;
             entry.type = typeof(item.type !== typeof undefined) ? item.type : entry.type;
@@ -36,42 +79,7 @@ $(document).ready(function () {
                 Editors._openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
             });
         });
-    });
-
-    chrome.app.runtime.onLaunched.addListener(function () {
-        chrome.app.window.create('src/html/app.html',
-            {
-                innerBounds: {width: 1024, height: 768},
-                resizable: true,
-                focused: true,
-                frame: {
-                    color: "#343a40"
-                },
-                id: "codepad-main"
-            },
-            function (appWindow) {
-                runtime(appWindow, false);
-            }
-        );
-    });
-
-    chrome.app.runtime.onRestarted.addListener(function () {
-        chrome.app.window.create('src/html/app.html',
-            {
-                innerBounds: {width: 1024, height: 768},
-                resizable: true,
-                focused: true,
-                frame: {
-                    color: "#343a40"
-                },
-                id: "codepad-main"
-            },
-            function (appWindow) {
-                runtime(appWindow, true);
-            }
-        );
-    });
-
+    }
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
