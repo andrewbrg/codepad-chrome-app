@@ -24,11 +24,6 @@ $(document).ready(function () {
     /// Editors
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    // Editor elements
-    var $main   = $('main');
-    var $aside  = $('aside');
-    var $header = $('header');
-
     // Rename tab
     $(document).on('dblclick', '.action-edit-tab', function () {
         Editors.onEditTabName($(this).attr('data-idx'));
@@ -366,6 +361,8 @@ $(document).ready(function () {
     /// Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    var $aside = $('aside');
+
     // Enable resizable sidebar
     $aside.resizable({
         ghost: true,
@@ -412,32 +409,6 @@ $(document).ready(function () {
     $(document).on('click', '.node-sidebar', function () {
         Sidebar.onNodeClick($(this).attr('data-nodeid'));
     });
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    /// Global Events
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    chrome.runtime.onMessage.addListener(function (message) {
-        var items = message.items || [];
-        items.forEach(function (item) {
-            item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
-            Files.fileOpen(item.entry).then(function (e, fileEntry) {
-                Editors.openFileEntryInAceEditor((typeof e.target.result === typeof undefined) ? undefined : e.target.result, fileEntry);
-            });
-        });
-    });
-
-
-    // Handle resize of window
-    $(window).on('resize', function (e) {
-        $main.css({
-            'margin-top': $header.height().toString() + 'px',
-            'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
-        });
-    }).resize();
-
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 });

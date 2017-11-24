@@ -236,7 +236,7 @@ var EditorsHandler = function () {
             name: '__beautify',
             bindKey: {win: 'ctrl-alt-l', mac: 'ctrl-alt-l'},
             exec: function () {
-                
+                that.Beautify.beautify(aceEditor.getSession());
             }
         });
     };
@@ -618,6 +618,18 @@ var EditorsHandler = function () {
 
         this._populateAddTabDropDown();
 
+
+        var $main   = $('main');
+        var $header = $('header');
+
+        // Handle resize of window
+        $(window).on('resize', function (e) {
+            $main.css({
+                'margin-top': $header.height().toString() + 'px',
+                'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
+            });
+        }).resize();
+
         // Handle adding settings to new tabs
         $(window).on('_ace.new', function (e, idx) {
             that.IdeSettings.fetchAll().then(function (settings) {
@@ -631,10 +643,33 @@ var EditorsHandler = function () {
 
         // Launch default tab
         this._loadDefaults().then(function () {
+
+            var promises        = [];
+            var launchDataItems = window.launchData.items || [];
+
+            launchDataItems.forEach(function (item) {
+                item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
+                that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
+                    promises.push(that.openFileEntryInAceEditor(
+                        (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                        fileEntry
+                    ));
+                });
+            });
+
+            if (promises.length > 0) {
+                $.when.apply($, promises).done(function () {
+                    if (that.getNumTabs() === 0) {
+                        that.onAddNewTab(that.defaultFileExt);
+                    }
+                });
+            }
             if (that.getNumTabs() === 0) {
                 that.onAddNewTab(that.defaultFileExt);
             }
         });
+
+
     };
 
     /*######################################################

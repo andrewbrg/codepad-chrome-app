@@ -5,9 +5,7 @@
     };
 
     chrome.app.runtime.onLaunched.addListener(function (launchData) {
-
-        chrome.app.window.create('src/html/app.html',
-            {
+        chrome.app.window.create('src/html/app.html', {
                 innerBounds: {width: 1024, height: 768},
                 resizable: true,
                 focused: true,
@@ -18,16 +16,13 @@
             },
             function (appWindow) {
                 runtime(appWindow, false);
-                appWindow.contentWindow.addEventListener('load', function () {
-                    chrome.runtime.sendMessage({launchData: launchData});
-                });
+                appWindow.contentWindow.launchData = launchData;
             }
         );
     });
 
     chrome.app.runtime.onRestarted.addListener(function () {
-        chrome.app.window.create('src/html/app.html',
-            {
+        chrome.app.window.create('src/html/app.html', {
                 innerBounds: {width: 1024, height: 768},
                 resizable: true,
                 focused: true,
