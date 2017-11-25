@@ -4,8 +4,8 @@ var EditorsHandler = function () {
     this.IdeSettings   = undefined;
     this.Files         = undefined;
     this.Modelist      = ace.require("ace/ext/modelist");
+    this.Modelist      = ace.require("ace/ext/chromevox");
     this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
-    this.Beautify      = ace.require('ace/ext/beautify');
 
     this.idx                  = 0;
     this.aceClipboard         = '';
@@ -229,14 +229,6 @@ var EditorsHandler = function () {
             exec: function () {
                 var fontSize = parseInt(aceEditor.getOption('fontSize').replace(/[^0-9]/g, '')) + 1;
                 that.IdeSettings.persistAndApply({key: 'fontSize', val: fontSize + 'pt'});
-            }
-        });
-
-        aceEditor.commands.addCommand({
-            name: '__beautify',
-            bindKey: {win: 'ctrl-alt-l', mac: 'ctrl-alt-l'},
-            exec: function () {
-                that.Beautify.beautify(aceEditor.getSession());
             }
         });
     };
