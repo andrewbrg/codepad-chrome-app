@@ -34,7 +34,6 @@ var IdeSettingsHandler = function () {
         this.fetch(key).then(function (val) {
 
             switch (type) {
-
                 case undefined:
                 case 'text':
                 case 'number':
