@@ -15,7 +15,7 @@ $(document).ready(function () {
     Files.init(Notifications);
     Editors.init(IdeSettings, Notifications, Files);
     Sidebar.init(Notifications, Editors, Files);
-    IdeSettings.init(Editors);
+    IdeSettings.init(Editors).then(Editors.startup());
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

@@ -581,6 +581,39 @@ var EditorsHandler = function () {
         );
     };
 
+    this.startup = function () {
+
+        var that = this;
+
+        // Launch default tab
+        this._loadDefaults().then(function () {
+
+            var promises        = [];
+            var launchDataItems = window.launchData.items || [];
+
+            launchDataItems.forEach(function (item) {
+                item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
+                that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
+                    promises.push(that.openFileEntryInAceEditor(
+                        (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                        fileEntry
+                    ));
+                });
+            });
+
+            if (promises.length > 0) {
+                $.when.apply($, promises).done(function () {
+                    if (that.getNumTabs() === 0) {
+                        that.onAddNewTab(that.defaultFileExt);
+                    }
+                });
+            }
+            else if (that.getNumTabs() === 0) {
+                that.onAddNewTab(that.defaultFileExt);
+            }
+        });
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -639,34 +672,6 @@ var EditorsHandler = function () {
                     editor.$blockScrolling = Infinity;
                 }
             });
-        });
-
-        // Launch default tab
-        this._loadDefaults().then(function () {
-
-            var promises        = [];
-            var launchDataItems = window.launchData.items || [];
-
-            launchDataItems.forEach(function (item) {
-                item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
-                that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
-                    promises.push(that.openFileEntryInAceEditor(
-                        (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
-                        fileEntry
-                    ));
-                });
-            });
-
-            if (promises.length > 0) {
-                $.when.apply($, promises).done(function () {
-                    if (that.getNumTabs() === 0) {
-                        that.onAddNewTab(that.defaultFileExt);
-                    }
-                });
-            }
-            if (that.getNumTabs() === 0) {
-                that.onAddNewTab(that.defaultFileExt);
-            }
         });
 
 

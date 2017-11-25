@@ -63,18 +63,22 @@ var IdeSettingsHandler = function () {
 
     this.init = function (Editors) {
 
-        var found = false;
-        chrome.storage.sync.get(this.parentKey, function () {
-            found = true;
+        var that     = this;
+        var deferred = $.Deferred();
+
+        that.Editors = Editors;
+
+        chrome.storage.sync.get(this.parentKey, function (obj) {
+            if (typeof obj === typeof undefined || obj[that.parentKey] === undefined) {
+                obj                 = {};
+                obj[that.parentKey] = {};
+                chrome.storage.sync.set(obj, function () {
+                    deferred.resolve();
+                });
+            }
         });
 
-        if (!found) {
-            var obj             = {};
-            obj[this.parentKey] = {};
-            chrome.storage.sync.set(obj);
-        }
-
-        this.Editors = Editors;
+        return deferred.promise();
     };
 
     this.apply = function (obj) {
@@ -100,7 +104,7 @@ var IdeSettingsHandler = function () {
 
         chrome.storage.sync.get(this.parentKey, function (obj) {
 
-            if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey) || that.Editors.getNumTabs() === 0) {
+            if (typeof obj === typeof undefined || typeof obj[that.parentKey] === typeof undefined || that.Editors.getNumTabs() === 0) {
                 deferred.reject();
             }
 
@@ -116,7 +120,6 @@ var IdeSettingsHandler = function () {
                 that.Editors.getAllEditorObjects().forEach(function (editor) {
                     if (typeof editor !== typeof undefined) {
                         deferred.resolve(editor.ace.getOption(key));
-                        console.log(editor.ace.getOption(key));
                         return deferred.promise();
                     }
                 });
@@ -239,6 +242,4 @@ var IdeSettingsHandler = function () {
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 };
