@@ -4,7 +4,6 @@ var EditorsHandler = function () {
     this.IdeSettings   = undefined;
     this.Files         = undefined;
     this.Modelist      = ace.require("ace/ext/modelist");
-    this.Modelist      = ace.require("ace/ext/chromevox");
     this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
 
     this.idx                  = 0;
@@ -665,8 +664,8 @@ var EditorsHandler = function () {
                 }
             });
         });
-
-
+        
+        ace.require("ace/ext/chromevox");
     };
 
     /*######################################################
@@ -784,7 +783,8 @@ var EditorsHandler = function () {
         this.editorDataObjs.forEach(function (editorDataObj) {
             if (editorDataObj.idx === idx) {
                 editorDataObj.fileEntry = fileEntry;
-                found                   = true;
+
+                found = true;
             }
         });
 
@@ -973,6 +973,8 @@ var EditorsHandler = function () {
         var obj = this._getNewTabObject(fileExt, fileName, nodeId);
         this.getTabsNavContainer().append(obj.nav);
         this.getTabsContentContainer().append(obj.content);
+
+
         this._bootAceEditor(obj.idx, fileContent, fileEntry).then(function () {
             that.setTabNavFocus(obj.idx);
             that._sortableTabsInit();

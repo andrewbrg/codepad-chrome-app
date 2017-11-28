@@ -149,6 +149,27 @@ var FilesHandler = function () {
         return deferred.promise();
     };
 
+    this._isValidFileMime = function (file) {
+
+        var valid = false;
+
+        console.log(file.type);
+
+        if (typeof file.type === typeof undefined ||
+            file.type === 'undefined' ||
+            file.type === '') {
+            return true;
+        }
+
+        this.allowedMimeTypes.forEach(function (mime) {
+            if (file.type.match(mime)) {
+                valid = true;
+            }
+        });
+
+        return valid;
+    };
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -197,19 +218,13 @@ var FilesHandler = function () {
         var files = event.originalEvent.dataTransfer.items;
         for (var i = 0; i < files.length; i++) {
 
-            var valid = false;
-            var file  = files[i];
+            var file = files[i];
 
             // noinspection JSUnresolvedFunction
             var fileEntry = file.webkitGetAsEntry();
             if (file.kind === 'file' && fileEntry) {
-                that.allowedMimeTypes.forEach(function (mime) {
-                    if (file.type === '' || file.type.match(mime)) {
-                        valid = true;
-                    }
-                });
 
-                if (valid) {
+                if (that._isValidFileMime(file)) {
                     promises.push(that.fileOpen(fileEntry));
                 }
                 else {
@@ -255,16 +270,9 @@ var FilesHandler = function () {
             else {
                 fileEntry.file(function (file) {
 
-                    var valid  = false;
                     var reader = new FileReader();
 
-                    that.allowedMimeTypes.forEach(function (mime) {
-                        if (file.type === '' || file.type.match(mime)) {
-                            valid = true;
-                        }
-                    });
-
-                    if (!valid) {
+                    if (!that._isValidFileMime(file)) {
                         onError(file.name + ' has an unsupported file type (' + file.type + ') and will not be opened');
                     } else {
                         reader.readAsText(file);
