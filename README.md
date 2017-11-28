@@ -9,30 +9,41 @@ The IDE supports a variety of different languages!
 **P.S.** You can also use it as a simple text editor, if that's all you need _(duh)_...
 
 ## Currently supported languages
-Bash, C++, CSS3, GoLang, HTML5, JavaScript, JSON, LESS, Markdown, Perl, PHP, PHTML, Python, Ruby, Rust, Sass, Scala, SQL, MS SQL, Plain text, XML.
+Bash, C/C++, CoffeeScript, CSS3, Dockerfile, GitIgnore, GoLang, HTML5, Java, JavaScript, JSON, Less, Markdown, MS SQL, Perl, PHP, PHTML, Plain text, Python, Ruby, Rust, Sass, Scala, SQL, TypeScript, XML, XHTML.
 
 ## Features
-  - Project/Folder management
-  - Error/bug detection and alerts
-  - Ready made code snippets
-  - Syntax highlighting
-  - Syntax auto-completion and hinting
-  - Syntax folding
-  - Centralized clipboard with Chrome OS
-  - Tweak-able interface
-  - Ready made themes _(such as Monokai or Eclipse)_
-  - Selection of editor mono-spaced fonts
-  - Works with Google drive/local storage
-  - Runs in fullscreen
+ - Full project browsing & management
+ - Over 20 familiar themes _(Monokai, etc...)_
+ - Choice of crisp monospaced editor fonts
+ - Ready-made code snippets
+ - Syntax error & bug detection/alerts
+ - Syntax highlighting
+ - Code auto-completion & hinting
+ - Code folding
+ - Works with Google Drive or Local storage
+ - Centralized clipboard with ChromeOS
+ - Automatic indent and outdent
+ - Tweakable interface
+ - Key bindings
+ - Drag & drop files with your mouse
+ - Toggle between soft tabs & real tabs
+ - Line wrapping
+ - Runs in fullscreen
+ - Cut, copy & paste functionality
 
 ## Installation
+
+**Chromebook**
+
 The Code Pad IDE can be installed directly from the Chrome store here: 
 https://chrome.google.com/webstore/detail/code-pad-ide/adaepfiocmagdimjecpifghcgfjlfmkh
 
+**Other devices**
 Alternatively, if you're not running a Chrome OS device just follow these steps:
                                               
-  - Clone this repo to your local machine
-  - Visit [chrome://extensions](chrome://extensions) and enable Developer Mode.
-  - Still on the extensions page, click the button marked `Load unpacked extension...` and select the directory containing the Code Pad manifest.json file.
+  - Clone/download this repo to your local machine
+  - Open Google Chrome browser
+  - Enter [chrome://extensions](chrome://extensions) in the URL bar and enable Developer Mode.
+  - While still on the extensions page, click the button marked `Load unpacked extension...` and select the directory containing the Code Pad manifest.json file.
   
 [![432f8e5f36f0ea802253a53d447088ae.jpg](http://pichoster.net/images/2017/11/17/432f8e5f36f0ea802253a53d447088ae.jpg)](http://pichoster.net/image/UiWmt)
