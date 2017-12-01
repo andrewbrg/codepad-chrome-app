@@ -26,7 +26,7 @@ var EditorsHandler = function () {
     this.defaultFileExt     = null;
     this.undefinedFileMode  = null;
     this.undefinedFileIcon  = null;
-
+    this.undefinedFileName  = null;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Helper
@@ -60,6 +60,8 @@ var EditorsHandler = function () {
             that.undefinedFileMode = data.undefinedFile.mode;
             // noinspection JSUnresolvedVariable
             that.undefinedFileIcon = data.undefinedFile.icon;
+            // noinspection JSUnresolvedVariable
+            that.undefinedFileName = data.undefinedFile.name;
 
             deferred.resolve();
         });
@@ -256,27 +258,25 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that = this;
+        var that      = this;
+        var aceEditor = this.getEditor(idx);
+
+        if (typeof aceEditor === typeof undefined) {
+            return false;
+        }
 
         idx = parseInt(idx);
-        if (typeof fileEntry !== typeof undefined) {
-            chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
-                var aceEditor = that.getEditor(idx);
-                if (typeof aceEditor !== typeof undefined) {
+        this._getTabMode(idx).then(function (data) {
+            if (JSON.parse(data).mode === that.undefinedFileMode) {
+                chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
                     that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
                     that._populateStatusBar(idx);
-                }
-            });
-        }
-        else {
-            this._getTabMode(idx).then(function (data) {
-                var aceEditor = that.getEditor(idx);
-                if (typeof aceEditor !== typeof undefined) {
-                    that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
-                    that._populateStatusBar(idx);
-                }
-            });
-        }
+                });
+            } else {
+                that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+                that._populateStatusBar(idx);
+            }
+        });
     };
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -391,7 +391,7 @@ var EditorsHandler = function () {
                 deferred.resolve(JSON.stringify({
                     "icon": that.undefinedFileIcon,
                     "mode": that.undefinedFileMode,
-                    "name": "Text"
+                    "name": that.undefinedFileName
                 }));
             }
             if (data.hasOwnProperty(ext)) {
@@ -664,7 +664,7 @@ var EditorsHandler = function () {
                 }
             });
         });
-        
+
         ace.require("ace/ext/chromevox");
     };
 

@@ -51,7 +51,7 @@
   },
   "json": {
     "icon": "icon-javascript-alt",
-    "mode": "javascript",
+    "mode": "json",
     "name": "JSON"
   },
   "less": {
@@ -84,6 +84,11 @@
     "mode": "perl",
     "name": "Perl"
   },
+  "pgsql": {
+    "icon": "devicon devicon-postgresql-plain",
+    "mode": "pgsql",
+    "name": "Postgre SQL"
+  },
   "py": {
     "icon": "icon-python",
     "mode": "python",
@@ -109,6 +114,11 @@
     "mode": "scala",
     "name": "Scala"
   },
+  "scss": {
+    "icon": "icon-css3-alt",
+    "mode": "scss",
+    "name": "Scss"
+  },
   "sql": {
     "icon": "icon-database",
     "mode": "sql",
@@ -119,8 +129,13 @@
     "mode": "typescript",
     "name": "TypeScript"
   },
+  "vb": {
+    "icon": "devicon devicon-visualstudio-plain",
+    "mode": "vbscript",
+    "name": "VB Script"
+  },
   "txt": {
-    "icon": "devicon devicon-devicon-plain",
+    "icon": "devicon fa fa-file-text",
     "mode": "textfile",
     "name": "Plain text"
   },

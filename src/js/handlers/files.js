@@ -153,8 +153,6 @@ var FilesHandler = function () {
 
         var valid = false;
 
-        console.log(file.type);
-
         if (typeof file.type === typeof undefined ||
             file.type === 'undefined' ||
             file.type === '') {
