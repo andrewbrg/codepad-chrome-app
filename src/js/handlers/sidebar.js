@@ -159,9 +159,12 @@ var SidebarHandler = function () {
 
             var sortFn = function (a, b) {
                 if (a.typeFile !== b.typeFile) {
-                    return a.typeFile > b.typeFile;
+                    if (a.typeFile < b.typeFile) return -1;
+                    if (a.typeFile > b.typeFile) return 1;
                 }
-                return a.text > b.text;
+                if (a.text < b.text) return -1;
+                if (a.text > b.text) return 1;
+                return 0;
             };
 
             var buildTreeViewJson = function (entry, callback) {
@@ -215,6 +218,7 @@ var SidebarHandler = function () {
                                 results = results.sort(sortFn);
 
                                 if (!--pending) {
+                                    results = results.sort(sortFn);
                                     callback(results);
                                 }
                             });
@@ -235,6 +239,7 @@ var SidebarHandler = function () {
                             results = results.sort(sortFn);
 
                             if (!--pending) {
+                                results = results.sort(sortFn);
                                 callback(results);
                             }
                         }

@@ -367,6 +367,7 @@ $(document).ready(function () {
     $aside.resizable({
         ghost: true,
         minWidth: $aside.css('min-width'),
+        handles: 'e, w',
         stop: function () {
             $(window).trigger('resize');
         }

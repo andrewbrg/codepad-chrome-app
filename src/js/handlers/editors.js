@@ -643,14 +643,19 @@ var EditorsHandler = function () {
         this._populateAddTabDropDown();
 
 
-        var $main   = $('main');
-        var $header = $('header');
+        var $main        = $('main');
+        var $header      = $('header');
+        var $sidebar     = $('.sidebar');
+        var $sidebarMenu = $('.sidebar-menu');
 
         // Handle resize of window
         $(window).on('resize', function (e) {
             $main.css({
                 'margin-top': $header.height().toString() + 'px',
                 'height': Math.ceil(e.target.innerHeight - $(document).find('.ace-status-bar').first().height() - $header.height()).toString() + 'px'
+            });
+            $sidebar.css({
+                'height': ($main.height() - $sidebarMenu.height()).toString() + 'px'
             });
         }).resize();
 

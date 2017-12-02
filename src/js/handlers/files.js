@@ -63,7 +63,11 @@ var FilesHandler = function () {
             data.forEach(function (retainedEntry) {
                 chrome.fileSystem.isRestorable(retainedEntry, function () {
                     chrome.fileSystem.restoreEntry(retainedEntry, function (restoredEntry) {
-                        if (!chrome.runtime.lastError) {
+
+                        if (chrome.runtime.lastError) {
+                            console.info(chrome.runtime.lastError.message);
+                        }
+                        else {
                             // noinspection JSUnresolvedVariable
                             if (restoredEntry.isDirectory) {
                                 that.openedDirs.push(restoredEntry);

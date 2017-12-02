@@ -24,7 +24,7 @@ var NotificationsHandler = function () {
                 }, function () {
 
                     if (chrome.runtime.lastError) {
-                        console.log(chrome.runtime.lastError.message);
+                        console.info(chrome.runtime.lastError.message);
                     }
 
                     var obj              = {};
@@ -52,7 +52,7 @@ var NotificationsHandler = function () {
                 }, function () {
 
                     if (chrome.runtime.lastError) {
-                        console.log(chrome.runtime.lastError.message);
+                        console.info(chrome.runtime.lastError.message);
                     }
 
                     var obj                  = {};
@@ -80,12 +80,12 @@ var NotificationsHandler = function () {
             case 'danger':
                 icon  = 'fa fa-fw fa-exclamation-triangle';
                 sound = '/src/sounds/notif-danger.ogg';
-                console.error(message);
+                console.info(message);
                 break;
             case 'warning':
                 icon  = 'fa fa-fw fa-exclamation-triangle';
                 sound = '/src/sounds/notif-danger.ogg';
-                console.warn(message);
+                console.info(message);
                 break;
             default:
                 icon  = 'fa fa-fw fa-bell';
