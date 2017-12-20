@@ -2,10 +2,11 @@ var FilesHandler = function () {
 
     this.Notifications = undefined;
 
-    this.allowedMimeTypes = [];
-    this.openedDirs       = [];
-    this.openedFiles      = [];
-    this.retainedKey      = 'retained_entries_key';
+    this.allowedMimeTypes      = [];
+    this.allowedExtensionTypes = [];
+    this.openedDirs            = [];
+    this.openedFiles           = [];
+    this.retainedKey           = 'retained_entries_key';
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private File
@@ -169,6 +170,12 @@ var FilesHandler = function () {
             }
         });
 
+        this.allowedExtensionTypes.forEach(function (ext) {
+            if (file.getAsFile().name.split('.').pop().toString().toLowerCase() === ext.toString().toLowerCase()) {
+                valid = true;
+            }
+        });
+
         return valid;
     };
 
@@ -183,7 +190,8 @@ var FilesHandler = function () {
 
         this.Notifications = notifications;
         this._restoreEntries();
-        this.allowedMimeTypes = chrome.runtime.getManifest().file_handlers.text.types;
+        this.allowedMimeTypes      = chrome.runtime.getManifest().file_handlers.text.types;
+        this.allowedExtensionTypes = chrome.runtime.getManifest().file_handlers.text.extensions;
     };
 
     this.directoryOpen = function (dirPath) {
