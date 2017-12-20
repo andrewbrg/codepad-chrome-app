@@ -375,13 +375,9 @@ $(document).ready(function () {
 
     // Sidebar toggle
     $aside.on('shown.bs.collapse', function () {
-        var $el = $(document).find('[data-toggle="collapse"][data-target="aside"]');
-        $el.removeClass('btn-secondary').addClass('btn-primary');
         $(window).trigger('resize');
     });
     $aside.on('hide.bs.collapse', function () {
-        var $el = $(document).find('[data-toggle="collapse"][data-target="aside"]');
-        $el.removeClass('btn-primary').addClass('btn-secondary');
         $(window).trigger('resize');
     });
 

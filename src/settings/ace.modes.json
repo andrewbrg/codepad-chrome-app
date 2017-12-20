@@ -59,6 +59,11 @@
     "mode": "less",
     "name": "LESS"
   },
+  "lua": {
+    "icon": "icon-script-alt",
+    "mode": "lua",
+    "name": "Lua"
+  },
   "md": {
     "icon": "icon-html",
     "mode": "markdown",

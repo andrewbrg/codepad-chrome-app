@@ -1,5 +1,5 @@
 {
-  "version": "1.0.82",
+  "version": "1.0.85",
   "manifest_version": 2,
   "minimum_chrome_version": "51",
   "name": "Code Pad IDE",
@@ -112,9 +112,6 @@
         "application/java",
         "application/java-byte-code",
         "application/x-java-class",
-        "application/x-x509-ca-cert",
-        "application/x-x509-user-cert",
-        "application/pkix-cert",
         "application/x-csh",
         "application/x-pointplus",
         "application/x-javascript",
@@ -129,13 +126,13 @@
         "application/x-shar",
         "application/xml",
         "application/plain",
+        "application/pkix-cert",
+        "application/pkcs7-mime",
+        "application/x-pkcs7-mime",
         "application/x-pkcs7-signature",
-        "application/pkcs7-mime",
-        "application/x-pkcs7-mime",
-        "application/pkcs7-mime",
-        "application/x-pkcs7-mime",
         "application/x-pkcs7-certreqresp",
-        "application/pkcs7-signature"
+        "application/x-x509-ca-cert",
+        "application/x-x509-user-cert"
       ]
     }
   },
@@ -151,7 +148,8 @@
     "storage",
     "clipboardRead",
     "fullscreen",
-    "notifications"
+    "notifications",
+    "https://www.google-analytics.com/"
   ],
   "icons": {
     "16": "/src/img/codepad.16.png",
