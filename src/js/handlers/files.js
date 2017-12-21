@@ -170,8 +170,12 @@ var FilesHandler = function () {
             }
         });
 
+        var fileExt = typeof file.getAsFile === 'function'
+            ? file.getAsFile().name.split('.').pop().toString().toLowerCase()
+            : '';
+
         this.allowedExtensionTypes.forEach(function (ext) {
-            if (file.getAsFile().name.split('.').pop().toString().toLowerCase() === ext.toString().toLowerCase()) {
+            if (fileExt === ext.toString().toLowerCase()) {
                 valid = true;
             }
         });

@@ -1,8 +1,8 @@
 {
-  "sh": {
-    "icon": "icon-script-alt",
-    "mode": "sh",
-    "name": "Bash"
+  "apache_conf": {
+    "icon": "devicon-apache-plain",
+    "mode": "conf",
+    "name": "Apache Config"
   },
   "c": {
     "icon": "devicon devicon-c-plain",
@@ -123,6 +123,11 @@
     "icon": "icon-css3-alt",
     "mode": "scss",
     "name": "Scss"
+  },
+  "sh": {
+    "icon": "icon-script-alt",
+    "mode": "sh",
+    "name": "Bash"
   },
   "sql": {
     "icon": "icon-database",
