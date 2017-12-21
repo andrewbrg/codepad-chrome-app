@@ -1,7 +1,7 @@
 {
-  "apache_conf": {
+  "conf": {
     "icon": "devicon-apache-plain",
-    "mode": "conf",
+    "mode": "apache_conf",
     "name": "Apache Config"
   },
   "c": {
