@@ -8,12 +8,12 @@
   "author": "Andrew Borg",
   "homepage_url": "https://github.com/andrewbrg/codepad-chrome-app",
   "offline_enabled": true,
-  "container": "GOOGLE_DRIVE",
   "app": {
     "background": {
       "scripts": [
         "/src/js/app.js"
-      ]
+      ],
+      "persistent": false
     }
   },
   "file_handlers": {

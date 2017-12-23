@@ -15,5 +15,5 @@
 
         this._privateFn = function(){
         };
-    }
+    };
 })();

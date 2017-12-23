@@ -269,6 +269,7 @@ var EditorsHandler = function () {
         this._getTabMode(idx).then(function (data) {
             if (JSON.parse(data).mode === that.undefinedFileMode) {
                 chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
+                    // noinspection JSUnresolvedVariable
                     that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
                     that._populateStatusBar(idx);
                 });

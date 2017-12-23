@@ -9,6 +9,7 @@
     "mode": "c_cpp",
     "name": "C/C++"
   },
+
   "coffee": {
     "icon": "devicon devicon-coffeescript-original",
     "mode": "coffee",
@@ -22,12 +23,12 @@
   "dockerfile": {
     "icon": "devicon devicon-docker-plain",
     "mode": "dockerfile",
-    "name": "DockerFile"
+    "name": "Docker File"
   },
   "gitignore": {
     "icon": "icon-git",
     "mode": "gitignore",
-    "name": "GitIgnore"
+    "name": "Git Ignore"
   },
   "go": {
     "icon": "devicon devicon-go-plain",
@@ -38,6 +39,16 @@
     "icon": "icon-html5-alt",
     "mode": "html",
     "name": "HTML5"
+  },
+  "hbs": {
+    "icon": "icon-html5",
+    "mode": "handlebars",
+    "name": "HTML Handlebars"
+  },
+  "twig": {
+    "icon": "icon-html5",
+    "mode": "twig",
+    "name": "HTML Twig"
   },
   "java": {
     "icon": "devicon devicon-java-plain",
@@ -57,7 +68,7 @@
   "less": {
     "icon": "devicon devicon-less-plain-wordmark",
     "mode": "less",
-    "name": "LESS"
+    "name": "Less"
   },
   "lua": {
     "icon": "icon-script-alt",
@@ -68,11 +79,6 @@
     "icon": "icon-html",
     "mode": "markdown",
     "name": "Markdown"
-  },
-  "mssql": {
-    "icon": "icon-database",
-    "mode": "sqlserver",
-    "name": "MS SQL"
   },
   "php": {
     "icon": "icon-php-alt",
@@ -88,11 +94,6 @@
     "icon": "icon-perl",
     "mode": "perl",
     "name": "Perl"
-  },
-  "pgsql": {
-    "icon": "devicon devicon-postgresql-plain",
-    "mode": "pgsql",
-    "name": "Postgre SQL"
   },
   "py": {
     "icon": "icon-python",
@@ -127,12 +128,27 @@
   "sh": {
     "icon": "icon-script-alt",
     "mode": "sh",
-    "name": "Bash"
+    "name": "Shell"
   },
   "sql": {
     "icon": "icon-database",
     "mode": "sql",
     "name": "SQL"
+  },
+  "mssql": {
+    "icon": "icon-mssql",
+    "mode": "sqlserver",
+    "name": "SQL Server"
+  },
+  "pgsql": {
+    "icon": "devicon devicon-postgresql-plain",
+    "mode": "pgsql",
+    "name": "SQL Postgres"
+  },
+  "svg": {
+    "icon": "icon-svg",
+    "mode": "svg",
+    "name": "SVG"
   },
   "ts": {
     "icon": "devicon devicon-typescript-plain",
