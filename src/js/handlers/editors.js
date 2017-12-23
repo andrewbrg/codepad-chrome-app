@@ -268,14 +268,15 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
-            if (JSON.parse(data).mode === that.undefinedFileMode) {
+            data = that.isJsonString(data) ? JSON.parse(data) : data;
+            if (data.mode === that.undefinedFileMode) {
                 chrome.fileSystem.getDisplayPath(fileEntry, function (path) {
                     // noinspection JSUnresolvedVariable
                     that.getEditor(idx).setOption('mode', that.Modelist.getModeForPath(path).mode);
                     that._populateStatusBar(idx);
                 });
             } else {
-                that.getEditor(idx).setOption('mode', 'ace/mode/' + JSON.parse(data).mode);
+                that.getEditor(idx).setOption('mode', 'ace/mode/' + data.mode);
                 that._populateStatusBar(idx);
             }
         });
@@ -390,14 +391,15 @@ var EditorsHandler = function () {
             data    = that.isJsonString(data) ? JSON.parse(data) : data;
             var ext = that._getTabFileExtension(idx);
             if (typeof ext === typeof undefined) {
-                deferred.resolve(JSON.stringify({
+                deferred.resolve({
                     "icon": that.undefinedFileIcon,
                     "mode": that.undefinedFileMode,
                     "name": that.undefinedFileName
-                }));
+                });
             }
-            if (data.hasOwnProperty(ext)) {
-                deferred.resolve(JSON.stringify(data[ext]));
+
+            if (typeof data[ext] !== typeof undefined) {
+                deferred.resolve(data[ext]);
             }
         });
 
@@ -431,6 +433,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
+            data    = that.isJsonString(data) ? JSON.parse(data) : data;
             var $el = that.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
             $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);

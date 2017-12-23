@@ -4,7 +4,7 @@ var NotificationsHandler = function () {
     this.ratingReminderId = 'rating_reminder';
 
     this.versionKey     = 'last_notified_version';
-    this.requestRateKey = 'rating_requested';
+    this.requestRateKey = 'rate_requested';
 
     this.init = function () {
 
@@ -64,7 +64,7 @@ var NotificationsHandler = function () {
 
                 }
             });
-        }, 30000);
+        }, 3000);
 
         chrome.notifications.onButtonClicked.addListener(function (notificationId) {
             if (notificationId === that.ratingReminderId) {
