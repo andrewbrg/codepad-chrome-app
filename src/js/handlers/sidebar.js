@@ -248,7 +248,7 @@ var SidebarHandler = function () {
             };
 
             that.Editors.getAllEditorModes().then(function (data) {
-                modes = JSON.parse(data);
+                modes = data;
                 buildTreeViewJson(dirEntry, function (treeViewJson) {
                     that._initTreeView(treeViewJson, dirEntry.name);
                     that.Editors.clearAllOpenTabs();

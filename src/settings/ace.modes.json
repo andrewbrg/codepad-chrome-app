@@ -9,7 +9,6 @@
     "mode": "c_cpp",
     "name": "C/C++"
   },
-
   "coffee": {
     "icon": "devicon devicon-coffeescript-original",
     "mode": "coffee",
@@ -23,7 +22,7 @@
   "dockerfile": {
     "icon": "devicon devicon-docker-plain",
     "mode": "dockerfile",
-    "name": "Docker File"
+    "name": "DockerFile"
   },
   "gitignore": {
     "icon": "icon-git",
@@ -176,7 +175,7 @@
     "name": "XML"
   },
   "yml": {
-    "icon": "devicon devicon devicon-devicon-plain",
+    "icon": "devicon devicon-devicon-plain",
     "mode": "yaml",
     "name": "Yaml"
   }

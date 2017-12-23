@@ -34,12 +34,13 @@ var NotificationsHandler = function () {
             }
         });
 
-        chrome.storage.local.get(this.requestRateKey, function (requested) {
+        window.setTimeout(function () {
+            chrome.storage.local.get(that.requestRateKey, function (requested) {
 
-            requested = requested[that.requestRateKey] || false;
+                requested = requested[that.requestRateKey] || false;
 
-            if (!requested) {
-                window.setTimeout(function () {
+                if (!requested) {
+
                     chrome.notifications.create(that.ratingReminderId, {
                         type: 'basic',
                         iconUrl: '/src/img/codepad.128.png',
@@ -60,9 +61,10 @@ var NotificationsHandler = function () {
                         obj[that.requestRateKey] = true;
                         chrome.storage.local.set(obj);
                     });
-                }, 30000);
-            }
-        });
+
+                }
+            });
+        }, 30000);
 
         chrome.notifications.onButtonClicked.addListener(function (notificationId) {
             if (notificationId === that.ratingReminderId) {

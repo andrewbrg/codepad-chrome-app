@@ -47,7 +47,6 @@ var EditorsHandler = function () {
         var deferred = $.Deferred();
 
         $.get('/src/settings/ace.defaults.json', function (data) {
-            data = JSON.parse(data);
 
             that.defaultTheme    = data.theme;
             that.defaultFont     = data.fontFamily;
@@ -386,7 +385,6 @@ var EditorsHandler = function () {
         idx          = parseInt(idx);
 
         this.getAllEditorModes().then(function (data) {
-            data    = JSON.parse(data);
             var ext = that._getTabFileExtension(idx);
             if (typeof ext === typeof undefined) {
                 deferred.resolve(JSON.stringify({
@@ -411,7 +409,6 @@ var EditorsHandler = function () {
         var that = this;
 
         this.getAllEditorModes().done(function (data) {
-            data = JSON.parse(data);
             that.getAddTabDropDownContainer().html('');
             $.each(data, function (i, v) {
                 that.getAddTabDropDownContainer().append(
@@ -430,7 +427,6 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
-            data    = JSON.parse(data);
             var $el = that.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
             $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);
