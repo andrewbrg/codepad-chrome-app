@@ -325,7 +325,7 @@ var EditorsHandler = function () {
 
         var $nav = $(
             '<li>' +
-            '<a href="#' + obj.contentId + '" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
+            '<a href="#' + obj.contentId + '" title="Double click to rename" role="tab" data-idx="' + this.idx + '" data-toggle="tab">' +
             this.navFilenameHtml +
             this.navCloseBtnHtml +
             '</a>' +
@@ -457,7 +457,7 @@ var EditorsHandler = function () {
             '<div class="ace_status-info">' +
             '<span><a href="#" class="action-toggle-readonly" title="Toggle readonly" data-toggle="tooltip"><i class="fa ' + lockClass + ' "></i></a></span>' +
             '<span data-toggle="tooltip" title="Editor mode (' + mode + ')">' + mode + '</span>' +
-            '<span data-toggle="tooltip" title="Line endings">' + lineEndings + '</span>' +
+            '<span data-toggle="tooltip" title="Line endings (' + lineEndings + ')">' + lineEndings + '</span>' +
             '</div>'
         );
     };

@@ -4,7 +4,7 @@ var NotificationsHandler = function () {
     this.ratingReminderId = 'rating_reminder';
 
     this.versionKey     = 'last_notified_version';
-    this.requestRateKey = 'requested_rating';
+    this.requestRateKey = 'rating_requested';
 
     this.init = function () {
 
