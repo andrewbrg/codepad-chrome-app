@@ -45,7 +45,7 @@ var NotificationsHandler = function () {
                         type: 'basic',
                         iconUrl: '/src/img/codepad.128.png',
                         title: 'Do you like Code Pad?',
-                        message: 'Please help us by leaving a rating on the Chrome Store, it helps the application grow...',
+                        message: 'Please leave a rating on the Chrome Store, it helps the application grow :)',
                         requireInteraction: true,
                         isClickable: true,
                         buttons: [{
