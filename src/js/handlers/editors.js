@@ -456,8 +456,8 @@ var EditorsHandler = function () {
         $statusBar.append(
             '<div class="ace_status-info">' +
             '<span><a href="#" class="action-toggle-readonly" title="Toggle readonly" data-toggle="tooltip"><i class="fa ' + lockClass + ' "></i></a></span>' +
-            '<span>' + mode + '</span>' +
-            '<span>' + lineEndings + '</span>' +
+            '<span data-toggle="tooltip" title="Editor mode (' + mode + ')">' + mode + '</span>' +
+            '<span data-toggle="tooltip" title="Line endings">' + lineEndings + '</span>' +
             '</div>'
         );
     };
