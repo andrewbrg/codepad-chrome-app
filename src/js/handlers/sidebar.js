@@ -4,7 +4,6 @@ var SidebarHandler = function () {
     this.Editors       = undefined;
     this.Files         = undefined;
 
-    this.bootstrapMenu = null;
     this.dirEntry      = null;
     this.isInitialised = false;
 
@@ -51,7 +50,7 @@ var SidebarHandler = function () {
             });
         };
 
-        this.bootstrapMenu = new BootstrapMenu('.node-sidebar', {
+        new BootstrapMenu('.node-sidebar', {
             fetchElementData: function ($el) {
                 return $el
             },
@@ -248,7 +247,7 @@ var SidebarHandler = function () {
             };
 
             that.Editors.getAllEditorModes().then(function (data) {
-                modes = data;
+                modes = that.Editors.isJsonString(data) ? JSON.parse(data) : data;
                 buildTreeViewJson(dirEntry, function (treeViewJson) {
                     that._initTreeView(treeViewJson, dirEntry.name);
                     that.Editors.clearAllOpenTabs();

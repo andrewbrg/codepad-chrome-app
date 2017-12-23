@@ -201,7 +201,8 @@ var IdeSettingsHandler = function () {
 
             if (key === 'theme') {
                 $.get('/src/settings/ace.themes.json', function (data) {
-                    $.each(JSON.parse(data), function (i1, v1) {
+                    data = that.Editors.isJsonString(data) ? JSON.parse(data) : data;
+                    $.each(data, function (i1, v1) {
                         themeOps += '<optgroup label="' + i1 + '">';
                         $.each(v1, function (i2, v2) {
                             themeOps += '<option value="' + i2 + '">' + v2 + '</option>';
@@ -214,7 +215,8 @@ var IdeSettingsHandler = function () {
             }
             else if (key === 'fontSize') {
                 $.get('/src/settings/ace.font.sizes.json', function (data) {
-                    $.each(JSON.parse(data), function (i1, v1) {
+                    data = that.Editors.isJsonString(data) ? JSON.parse(data) : data;
+                    $.each(data, function (i1, v1) {
                         fontSizeOpts += '<option value="' + i1 + '">' + v1 + '</option>';
                     });
                     $el.html(fontSizeOpts);
@@ -223,7 +225,8 @@ var IdeSettingsHandler = function () {
             }
             else if (key === 'fontFamily') {
                 $.get('/src/settings/ace.fonts.json', function (data) {
-                    $.each(JSON.parse(data), function (i1, v1) {
+                    data = that.Editors.isJsonString(data) ? JSON.parse(data) : data;
+                    $.each(data, function (i1, v1) {
                         fontOpts += '<optgroup label="' + i1 + '">';
                         $.each(v1, function (i2, v2) {
                             fontOpts += '<option value="' + i2 + '">' + v2 + '</option>';

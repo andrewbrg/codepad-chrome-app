@@ -48,6 +48,8 @@ var EditorsHandler = function () {
 
         $.get('/src/settings/ace.defaults.json', function (data) {
 
+            data = that.isJsonString(data) ? JSON.parse(data) : data;
+
             that.defaultTheme    = data.theme;
             that.defaultFont     = data.fontFamily;
             that.defaultFontSize = data.fontSize;
@@ -385,6 +387,7 @@ var EditorsHandler = function () {
         idx          = parseInt(idx);
 
         this.getAllEditorModes().then(function (data) {
+            data    = that.isJsonString(data) ? JSON.parse(data) : data;
             var ext = that._getTabFileExtension(idx);
             if (typeof ext === typeof undefined) {
                 deferred.resolve(JSON.stringify({
@@ -409,6 +412,7 @@ var EditorsHandler = function () {
         var that = this;
 
         this.getAllEditorModes().done(function (data) {
+            data = that.isJsonString(data) ? JSON.parse(data) : data;
             that.getAddTabDropDownContainer().html('');
             $.each(data, function (i, v) {
                 that.getAddTabDropDownContainer().append(
@@ -567,6 +571,15 @@ var EditorsHandler = function () {
             fileContent,
             fileEntry
         );
+    };
+
+    this.isJsonString = function (str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
     };
 
     this.startup = function () {
