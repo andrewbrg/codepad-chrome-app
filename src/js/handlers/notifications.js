@@ -39,26 +39,28 @@ var NotificationsHandler = function () {
             requested = requested[that.requestRateKey] || false;
 
             if (!requested) {
-                chrome.notifications.create(that.ratingReminderId, {
-                    type: 'basic',
-                    iconUrl: '/src/img/codepad.128.png',
-                    title: 'Do you like Code Pad?',
-                    message: 'Please help us by leaving a rating on the Chrome Store, it helps the application grow...',
-                    requireInteraction: true,
-                    isClickable: true,
-                    buttons: [{
-                        title: 'Click to give your rating'
-                    }]
-                }, function () {
+                window.setTimeout(function () {
+                    chrome.notifications.create(that.ratingReminderId, {
+                        type: 'basic',
+                        iconUrl: '/src/img/codepad.128.png',
+                        title: 'Do you like Code Pad?',
+                        message: 'Please help us by leaving a rating on the Chrome Store, it helps the application grow...',
+                        requireInteraction: true,
+                        isClickable: true,
+                        buttons: [{
+                            title: 'Click to give your rating'
+                        }]
+                    }, function () {
 
-                    if (chrome.runtime.lastError) {
-                        console.info(chrome.runtime.lastError.message);
-                    }
+                        if (chrome.runtime.lastError) {
+                            console.info(chrome.runtime.lastError.message);
+                        }
 
-                    var obj                  = {};
-                    obj[that.requestRateKey] = true;
-                    chrome.storage.local.set(obj);
-                });
+                        var obj                  = {};
+                        obj[that.requestRateKey] = true;
+                        chrome.storage.local.set(obj);
+                    });
+                }, 30000);
             }
         });
 
