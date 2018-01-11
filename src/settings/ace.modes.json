@@ -94,6 +94,11 @@
     "mode": "perl",
     "name": "Perl"
   },
+  "pm": {
+    "icon": "icon-perl",
+    "mode": "perl",
+    "name": "Perl Module"
+  },  
   "py": {
     "icon": "icon-python",
     "mode": "python",
