@@ -2,6 +2,10 @@
 
 ![7aee89d7685dfd26d92600cbd5bd636c.png](http://pichoster.net/images/2017/11/17/7aee89d7685dfd26d92600cbd5bd636c.png)
 
+## Note
+This project is not currently going to be mainainted (at least for the foreseable future), if you wish the branch or make any changes/fixes please just branch the project and do as you desire :)
+
+
 Code Pad IDE is a free and lightweight IDE/text editor built for Chrome operating system. Code Pad allows you to write code and build projects in an easy way right on your Chrome OS device.
 
 The IDE supports a variety of different languages!
