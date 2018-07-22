@@ -1,4 +1,4 @@
-# CodePad - ChromeOS multi-language IDE
+# CodePad - A Chrome OS multi-language text editor
 
 ![gghBeJ/codepad.jpg](https://image.ibb.co/gghBeJ/codepad.jpg)
 
@@ -50,5 +50,3 @@ Alternatively, if you're not running a Chrome OS device just follow these steps:
   - Open Google Chrome browser
   - Enter [chrome://extensions](chrome://extensions) in the URL bar and enable Developer Mode.
   - While still on the extensions page, click the button marked `Load unpacked extension...` and select the directory containing the Code Pad manifest.json file.
-  
-[![432f8e5f36f0ea802253a53d447088ae.jpg](http://pichoster.net/images/2017/11/17/432f8e5f36f0ea802253a53d447088ae.jpg)](http://pichoster.net/image/UiWmt)
