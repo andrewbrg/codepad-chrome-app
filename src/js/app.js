@@ -1,6 +1,7 @@
 (function () {
 
-    var runtime = function (appWindow, isRestart) {
+    var runtime = function (appWindow, launchData, isRestart) {
+        appWindow.contentWindow.launchData = launchData;
         appWindow.contentWindow.__MGA__bRestart = isRestart;
     };
 
@@ -15,13 +16,13 @@
                 id: "codepad-main"
             },
             function (appWindow) {
-                runtime(appWindow, false);
-                appWindow.contentWindow.launchData = launchData;
+                runtime(appWindow, launchData, false);
+
             }
         );
     });
 
-    chrome.app.runtime.onRestarted.addListener(function () {
+    chrome.app.runtime.onRestarted.addListener(function (launchData) {
         chrome.app.window.create('src/html/app.html', {
                 innerBounds: {width: 1024, height: 768},
                 resizable: true,
@@ -32,7 +33,7 @@
                 id: "codepad-main"
             },
             function (appWindow) {
-                runtime(appWindow, true);
+                runtime(appWindow, launchData, true);
             }
         );
     });
