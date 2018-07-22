@@ -591,39 +591,46 @@ var EditorsHandler = function () {
 
         // Launch default tab
         this._loadDefaults().then(function () {
+            that.handleLaunchData(window.launchData.items);
+        });
+    };
 
-            var openFiles = function () {
+    this.handleLaunchData = function (launchDataItems) {
 
-                var deferred = $.Deferred();
-                var promises = [];
-                var launchDataItems = window.launchData.items || [];
+        var that = this;
+        var openFiles = function () {
 
-                launchDataItems.forEach(function (item) {
-                    item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
-                    that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
-                        promises.push(that.openFileEntryInAceEditor(
-                            (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
-                            fileEntry
-                        ));
-                    });
+            var deferred = $.Deferred();
+            var promises = [];
+            launchDataItems = typeof launchDataItems === typeof undefined
+                ? launchDataItems
+                : [];
+
+            launchDataItems.forEach(function (item) {
+                item.entry.type = (typeof item.type !== typeof undefined) ? item.type : item.entry.type;
+                that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
+                    promises.push(that.openFileEntryInAceEditor(
+                        (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                        fileEntry
+                    ));
                 });
-
-                $.when.apply($, promises).done(function () {
-                    deferred.resolve();
-                });
-
-                return deferred.promise();
-            };
-
-            openFiles().then(function () {
-                window.setTimeout(function () {
-                    if (that.getNumTabs() === 0) {
-                        that.onAddNewTab(that.defaultFileExt);
-                    }
-                }, 400)
-            }).fail(function () {
-                that.onAddNewTab(that.defaultFileExt);
             });
+
+            $.when.apply($, promises).done(function () {
+                deferred.resolve();
+            });
+
+            return deferred.promise();
+        };
+
+        openFiles().then(function () {
+            window.setTimeout(function () {
+                if (that.getNumTabs() === 0) {
+                    that.onAddNewTab(that.defaultFileExt);
+                }
+            }, 400)
+        }).fail(function () {
+            that.onAddNewTab(that.defaultFileExt);
         });
     };
 

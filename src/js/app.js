@@ -2,7 +2,7 @@
 
     var runtime = function (appWindow, launchData, isRestart) {
         appWindow.contentWindow.launchData = launchData;
-        appWindow.contentWindow.__MGA__bRestart = isRestart;
+        appWindow.contentWindow.__MGA__bRestart = isRestart
     };
 
     chrome.app.runtime.onLaunched.addListener(function (launchData) {
@@ -17,7 +17,6 @@
             },
             function (appWindow) {
                 runtime(appWindow, launchData, false);
-
             }
         );
     });

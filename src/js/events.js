@@ -4,18 +4,23 @@ $(document).ready(function () {
     /// Globals and initializations
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var Editors       = new EditorsHandler();
-    var Modals        = new ModalsHandler();
-    var IdeSettings   = new IdeSettingsHandler();
-    var Sidebar       = new SidebarHandler();
+    var Editors = new EditorsHandler();
+    var Modals = new ModalsHandler();
+    var IdeSettings = new IdeSettingsHandler();
+    var Sidebar = new SidebarHandler();
     var Notifications = new NotificationsHandler();
-    var Files         = new FilesHandler();
+    var Files = new FilesHandler();
 
     Notifications.init();
     Files.init(Notifications);
     Editors.init(IdeSettings, Notifications, Files);
     Sidebar.init(Notifications, Editors, Files);
     IdeSettings.init(Editors).then(Editors.startup());
+
+    chrome.app.runtime.onLaunched.addListener(function (launchData) {
+        Editors.handleLaunchData(launchData.items);
+        console.log('asdasd');
+    });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -32,7 +37,7 @@ $(document).ready(function () {
     // Maintain correct record of the current and previous idx
     $(document).on('shown.bs.tab', '*[data-toggle="tab"]', function (e) {
         Editors.previousIdx = parseInt($(e.relatedTarget).attr('data-idx'));
-        Editors.currentIdx  = parseInt($(e.target).attr('data-idx'));
+        Editors.currentIdx = parseInt($(e.target).attr('data-idx'));
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,7 +50,7 @@ $(document).ready(function () {
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
 
-        var $relTgt  = $(e.relatedTarget);
+        var $relTgt = $(e.relatedTarget);
         var callback = function () {
         };
 
@@ -117,7 +122,7 @@ $(document).ready(function () {
     $(document).on('click', '.action-save', function () {
 
         var attr = $(this).attr('data-idx');
-        var idx  = (typeof attr !== typeof undefined && attr !== false) ? attr : Editors.currentIdx;
+        var idx = (typeof attr !== typeof undefined && attr !== false) ? attr : Editors.currentIdx;
 
         Editors.onSaveFile(idx);
     });
