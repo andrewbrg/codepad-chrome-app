@@ -1,32 +1,32 @@
 var EditorsHandler = function () {
 
     this.Notifications = undefined;
-    this.IdeSettings   = undefined;
-    this.Files         = undefined;
-    this.Modelist      = ace.require("ace/ext/modelist");
-    this.StatusBar     = ace.require('ace/ext/statusbar').StatusBar;
+    this.IdeSettings = undefined;
+    this.Files = undefined;
+    this.Modelist = ace.require("ace/ext/modelist");
+    this.StatusBar = ace.require('ace/ext/statusbar').StatusBar;
 
-    this.idx                  = 0;
-    this.aceClipboard         = '';
-    this.currentIdx           = null;
-    this.previousIdx          = null;
-    this.editorDataObjs       = [];
-    this.aceCleanHashes       = [];
-    this.navCloseBtnHtml      = '<i class="fa fa-fw fa-close text-white action-close-tab" title="Close file"></i>';
-    this.navDirtyBtnHtml      = '<i class="fa fa-fw fa-circle-o dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes" title="Close file"></i>';
-    this.navTabIconHtml       = '<i class="filetype-icon icon"></i>';
-    this.navFilenameHtml      = '<span class="tab-name action-edit-tab"></span>';
+    this.idx = 0;
+    this.aceClipboard = '';
+    this.currentIdx = null;
+    this.previousIdx = null;
+    this.editorDataObjs = [];
+    this.aceCleanHashes = [];
+    this.navCloseBtnHtml = '<i class="fa fa-fw fa-close text-white action-close-tab" title="Close file"></i>';
+    this.navDirtyBtnHtml = '<i class="fa fa-fw fa-circle-o dirty-tab modal-confirm-close-tab" data-toggle="modal" data-target=".modal-md-container" data-title="Save changes" title="Close file"></i>';
+    this.navTabIconHtml = '<i class="filetype-icon icon"></i>';
+    this.navFilenameHtml = '<span class="tab-name action-edit-tab"></span>';
     this.newFileDropdownEntry = '<a class="dropdown-item action-add-tab" href="#"></a>';
 
     this.defaultFileNameIdx = 0;
-    this.defaultTheme       = null;
-    this.defaultFont        = null;
-    this.defaultFontSize    = null;
-    this.defaultFileName    = null;
-    this.defaultFileExt     = null;
-    this.undefinedFileMode  = null;
-    this.undefinedFileIcon  = null;
-    this.undefinedFileName  = null;
+    this.defaultTheme = null;
+    this.defaultFont = null;
+    this.defaultFontSize = null;
+    this.defaultFileName = null;
+    this.defaultFileExt = null;
+    this.undefinedFileMode = null;
+    this.undefinedFileIcon = null;
+    this.undefinedFileName = null;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Private Helper
@@ -43,20 +43,20 @@ var EditorsHandler = function () {
 
     this._loadDefaults = function () {
 
-        var that     = this;
+        var that = this;
         var deferred = $.Deferred();
 
         $.get('/src/settings/ace.defaults.json', function (data) {
 
             data = that.isJsonString(data) ? JSON.parse(data) : data;
 
-            that.defaultTheme    = data.theme;
-            that.defaultFont     = data.fontFamily;
+            that.defaultTheme = data.theme;
+            that.defaultFont = data.fontFamily;
             that.defaultFontSize = data.fontSize;
             that.defaultFileName = data.newFileName;
 
             // noinspection JSUnresolvedVariable
-            that.defaultFileExt    = data.newFileExt;
+            that.defaultFileExt = data.newFileExt;
             // noinspection JSUnresolvedVariable
             that.undefinedFileMode = data.undefinedFile.mode;
             // noinspection JSUnresolvedVariable
@@ -114,7 +114,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var that      = this;
+        var that = this;
         var aceEditor = ace.edit('codepad-editor-' + idx);
 
         // Configure Ace
@@ -259,7 +259,7 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that      = this;
+        var that = this;
         var aceEditor = this.getEditor(idx);
 
         if (typeof aceEditor === typeof undefined) {
@@ -317,13 +317,13 @@ var EditorsHandler = function () {
             tabName += '.' + fileExt;
         }
 
-        var obj          = {};
-        obj.idx          = this.idx;
-        obj.contentId    = 'tab-' + this.idx;
+        var obj = {};
+        obj.idx = this.idx;
+        obj.contentId = 'tab-' + this.idx;
         obj.codeEditorId = 'codepad-editor-' + this.idx;
-        obj.statusBarId  = 'status-bar-' + this.idx;
-        obj.tabName      = tabName;
-        obj.nodeId       = nodeId;
+        obj.statusBarId = 'status-bar-' + this.idx;
+        obj.tabName = tabName;
+        obj.nodeId = nodeId;
 
         var $nav = $(
             '<li>' +
@@ -366,8 +366,8 @@ var EditorsHandler = function () {
 
     this._getTabFileExtension = function (idx) {
 
-        idx        = parseInt(idx);
-        var $el    = this.getTabNavEl(idx);
+        idx = parseInt(idx);
+        var $el = this.getTabNavEl(idx);
         var regExp = /(?:\.([^.]+))?$/;
 
         if (typeof $el !== typeof undefined) {
@@ -383,12 +383,12 @@ var EditorsHandler = function () {
 
     this._getTabMode = function (idx) {
 
-        var that     = this;
+        var that = this;
         var deferred = $.Deferred();
-        idx          = parseInt(idx);
+        idx = parseInt(idx);
 
         this.getAllEditorModes().then(function (data) {
-            data    = that.isJsonString(data) ? JSON.parse(data) : data;
+            data = that.isJsonString(data) ? JSON.parse(data) : data;
             var ext = that._getTabFileExtension(idx);
             if (typeof ext === typeof undefined) {
                 deferred.resolve({
@@ -433,7 +433,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
         this._getTabMode(idx).then(function (data) {
-            data    = that.isJsonString(data) ? JSON.parse(data) : data;
+            data = that.isJsonString(data) ? JSON.parse(data) : data;
             var $el = that.getTabNavEl(idx).find('*[data-toggle="tab"]').first();
             $el.find('.filetype-icon').remove();
             $el.append(that.navTabIconHtml);
@@ -445,14 +445,14 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var editor     = this.getEditor(idx);
+        var editor = this.getEditor(idx);
         var $statusBar = this.getStatusBarContentEl(idx);
 
-        var ro        = editor.getOption('readOnly');
-        var isRo      = typeof ro === typeof undefined ? false : ro;
+        var ro = editor.getOption('readOnly');
+        var isRo = typeof ro === typeof undefined ? false : ro;
         var lockClass = isRo ? 'fa-lock' : 'fa-unlock';
 
-        var mode        = editor.getOption('mode').split('/').pop().toLowerCase();
+        var mode = editor.getOption('mode').split('/').pop().toLowerCase();
         var lineEndings = editor.getOption('newLineMode').toLowerCase();
 
         $statusBar.find('.ace_status-info').remove();
@@ -487,12 +487,12 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var found = false;
-        var hash  = this._getHash(this.getEditor(idx).getValue());
+        var hash = this._getHash(this.getEditor(idx).getValue());
 
         $.each(this.aceCleanHashes, function (i, v) {
             if (v.idx === idx) {
                 v.hash = hash;
-                found  = true;
+                found = true;
             }
         });
 
@@ -535,7 +535,7 @@ var EditorsHandler = function () {
 
     this.setTabNavFocus = function (idx) {
 
-        idx              = parseInt(idx);
+        idx = parseInt(idx);
         this.previousIdx = parseInt(this.currentIdx);
 
         if (this.getNumTabs() === 0) {
@@ -592,29 +592,38 @@ var EditorsHandler = function () {
         // Launch default tab
         this._loadDefaults().then(function () {
 
-            var promises        = [];
-            var launchDataItems = window.launchData.items || [];
+            var openFiles = function () {
 
-            launchDataItems.forEach(function (item) {
-                item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
-                that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
-                    promises.push(that.openFileEntryInAceEditor(
-                        (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
-                        fileEntry
-                    ));
+                var deferred = $.Deferred();
+                var promises = [];
+                var launchDataItems = window.launchData.items || [];
+
+                launchDataItems.forEach(function (item) {
+                    item.entry.type = typeof(item.type !== typeof undefined) ? item.type : item.entry.type;
+                    that.Files.fileOpen(item.entry).then(function (e, fileEntry) {
+                        promises.push(that.openFileEntryInAceEditor(
+                            (typeof e.target.result === typeof undefined) ? undefined : e.target.result,
+                            fileEntry
+                        ));
+                    });
                 });
-            });
 
-            if (promises.length > 0) {
                 $.when.apply($, promises).done(function () {
+                    deferred.resolve();
+                });
+
+                return deferred.promise();
+            };
+
+            openFiles().then(function () {
+                window.setTimeout(function () {
                     if (that.getNumTabs() === 0) {
                         that.onAddNewTab(that.defaultFileExt);
                     }
-                });
-            }
-            else if (that.getNumTabs() === 0) {
+                }, 400)
+            }).fail(function () {
                 that.onAddNewTab(that.defaultFileExt);
-            }
+            });
         });
     };
 
@@ -630,8 +639,8 @@ var EditorsHandler = function () {
         var that = this;
 
         this.Notifications = notifications;
-        this.IdeSettings   = ideSettings;
-        this.Files         = files;
+        this.IdeSettings = ideSettings;
+        this.Files = files;
 
         document.addEventListener('drop', function (e) {
             e.preventDefault();
@@ -656,9 +665,9 @@ var EditorsHandler = function () {
         this._populateAddTabDropDown();
 
 
-        var $main        = $('main');
-        var $header      = $('header');
-        var $sidebar     = $('.sidebar');
+        var $main = $('main');
+        var $header = $('header');
+        var $sidebar = $('.sidebar');
         var $sidebarMenu = $('.sidebar-menu');
 
         // Handle resize of window
@@ -693,7 +702,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var ext      = this._getTabFileExtension(idx);
+        var ext = this._getTabFileExtension(idx);
         var deferred = $.Deferred();
 
         if (typeof ext !== typeof undefined) {
@@ -718,7 +727,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var that      = this;
+        var that = this;
         var aceEditor = this.getEditor(idx);
 
         if (this.getEditorContent(idx) !== '') {
@@ -743,7 +752,7 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var value     = '';
+        var value = '';
         var aceEditor = this.getEditor(idx);
 
         if (typeof aceEditor !== typeof undefined && typeof value !== typeof undefined && value !== null) {
@@ -758,7 +767,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var aceEditor = this.getEditor(idx);
-        var deferred  = $.Deferred();
+        var deferred = $.Deferred();
 
         if (typeof content === typeof undefined) {
             this.setEditorTemplate(idx).then(function () {
@@ -841,7 +850,7 @@ var EditorsHandler = function () {
 
     this.getEditor = function (idx, returnFullObj) {
 
-        idx          = parseInt(idx);
+        idx = parseInt(idx);
         var response = undefined;
 
         this.editorDataObjs.forEach(function (aceEditorEntry) {
@@ -879,7 +888,7 @@ var EditorsHandler = function () {
         idx = parseInt(idx);
 
         var isClean = false;
-        var hash    = this._getHash(this.getEditor(idx).getValue());
+        var hash = this._getHash(this.getEditor(idx).getValue());
 
         $.each(this.aceCleanHashes, function (i, v) {
             if (v.idx === idx && v.hash === hash) {
@@ -936,7 +945,7 @@ var EditorsHandler = function () {
 
         $.each(this.getTabsNavContainer().find('.tab-name'), function (i, el) {
 
-            var $el  = $(el);
+            var $el = $(el);
             var attr = $el.attr('data-nodeid');
 
             if (typeof attr !== typeof undefined && parseInt(attr) === parseInt(nodeId)) {
@@ -980,7 +989,7 @@ var EditorsHandler = function () {
     ######################################################*/
     this.onAddNewTab = function (fileExt, fileName, fileContent, fileEntry, nodeId) {
 
-        var that     = this;
+        var that = this;
         var deferred = $.Deferred();
 
         if (typeof fileName === typeof undefined || fileName === null) {
@@ -1011,9 +1020,9 @@ var EditorsHandler = function () {
 
         idx = parseInt(idx);
 
-        var that        = this;
-        var $tabNameEl  = this.getTabNavEl(idx).find('.tab-name').first();
-        var $siblings   = $tabNameEl.siblings().css('visibility', 'hidden');
+        var that = this;
+        var $tabNameEl = this.getTabNavEl(idx).find('.tab-name').first();
+        var $siblings = $tabNameEl.siblings().css('visibility', 'hidden');
         var oldFileName = $tabNameEl.html();
 
 
@@ -1129,7 +1138,7 @@ var EditorsHandler = function () {
             return false;
         }
 
-        var that      = this;
+        var that = this;
         var fileEntry = this.getEditorDataObj(idx);
 
         var promise = (typeof fileEntry === typeof undefined)
