@@ -1,6 +1,6 @@
 # CodePad - ChromeOS multi-language IDE
 
-![7aee89d7685dfd26d92600cbd5bd636c.png](http://pichoster.net/images/2017/11/17/7aee89d7685dfd26d92600cbd5bd636c.png)
+![gghBeJ/codepad.jpg](https://image.ibb.co/gghBeJ/codepad.jpg)
 
 ## Note
 This project is not currently going to be mainainted (at least for the foreseable future), if you wish the branch or make any changes/fixes please just branch the project and do as you desire :)
