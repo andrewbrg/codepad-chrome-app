@@ -181,11 +181,11 @@ aside.ui-resizable.ui-resizing {
 .ace_editor.ace_autocomplete {
     background-color: rgb(52, 58, 64) !important;
     color: rgb(154, 157, 160) !important;
-    font-size: 1.1rem !important;
-    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2) !important;
+    font-size: 1.2rem !important;
+    box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255, 255, 255, 0.18) !important;
     border-radius: .25rem !important;
-    border: 2px solid rgba(255, 255, 255, 0.18) !important;
     opacity: 0.95 !important;
+    border: none!important;
 }
 
 .ace_tooltip.ace_doc-tooltip {
@@ -452,6 +452,12 @@ select:focus,
 .dropdown-menu {
     background-color: #262a2e;
     border: 1px solid rgba(255, 255, 255, 0.18);
+    max-height: 650px;
+
+}
+
+.add-file-container .dropdown-menu {
+    overflow-y: scroll;
 }
 
 .dropdown-item,
