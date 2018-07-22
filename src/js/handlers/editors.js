@@ -602,7 +602,7 @@ var EditorsHandler = function () {
 
             var deferred = $.Deferred();
             var promises = [];
-            launchDataItems = typeof launchDataItems === typeof undefined
+            launchDataItems = typeof launchDataItems !== typeof undefined
                 ? launchDataItems
                 : [];
 

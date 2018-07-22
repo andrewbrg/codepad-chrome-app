@@ -17,10 +17,6 @@ $(document).ready(function () {
     Sidebar.init(Notifications, Editors, Files);
     IdeSettings.init(Editors).then(Editors.startup());
 
-    chrome.app.runtime.onLaunched.addListener(function (launchData) {
-        Editors.handleLaunchData(launchData.items);
-        console.log('asdasd');
-    });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -147,7 +143,6 @@ $(document).ready(function () {
         Editors.onDropFiles(e);
     });
 
-
     // Rename file
     $(document).on('click', '.action-rename-file', function () {
         $.event.trigger({
@@ -207,6 +202,11 @@ $(document).ready(function () {
     $(document).on('_file.changename', function (e) {
         Editors.onChangeNameFile(e.idx, e.tabName);
         Sidebar.onChangeNameFile(e.idx, e.nodeId, e.tabName);
+    });
+
+    // User opens file from outside app
+    chrome.app.runtime.onLaunched.addListener(function (launchData) {
+        Editors.handleLaunchData(launchData.items);
     });
 
 
