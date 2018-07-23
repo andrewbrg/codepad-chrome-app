@@ -698,8 +698,6 @@ var EditorsHandler = function () {
                 }
             });
         });
-
-        ace.require("ace/ext/chromevox");
     };
 
     /*######################################################
