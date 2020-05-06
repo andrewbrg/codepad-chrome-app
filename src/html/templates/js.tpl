@@ -1,19 +1,16 @@
-(function(){
-    var BoilerplateClass = function () {
+/**
+ * Example class
+**/
+class ClassicalGreeting {
+    constructor(greeting = "Hello", name = "World") {
+        this.greeting = greeting;
+        this.name = name;
+    }
 
-        // Properties
-        this.publicProperty   = 'foo';
-        this._privateProperty = 'bar';
+    greet() {
+        return `${this.greeting}, ${this.name}!`;
+    }
+}
 
-        // Constructor
-        this.initialise = function(){
-        };
-
-        // Functions
-        this.publicFn = function(){
-        };
-
-        this._privateFn = function(){
-        };
-    };
-})();
+const classyGreeting = new ClassicalGreeting("Hey", "folks");
+console.log(classyGreeting.greet());

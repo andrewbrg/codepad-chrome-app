@@ -185,7 +185,7 @@ aside.ui-resizable.ui-resizing {
     box-shadow: 3px 3px 20px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255, 255, 255, 0.18) !important;
     border-radius: .25rem !important;
     opacity: 0.95 !important;
-    border: none!important;
+    border: none !important;
 }
 
 .ace_tooltip.ace_doc-tooltip {
@@ -558,6 +558,11 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 
 .btn.btn-expanded {
     width: 100%;
+}
+
+.paypal-donate:hover {
+    opacity: 0.8;
+    cursor: pointer;
 }
 
 /*******************************************************************************/
