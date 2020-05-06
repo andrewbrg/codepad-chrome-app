@@ -1,4 +1,4 @@
-var SidebarHandler = function () {
+let SidebarHandler = function () {
 
     this.Notifications = undefined;
     this.Editors       = undefined;
@@ -13,7 +13,7 @@ var SidebarHandler = function () {
 
     this._initTreeView = function (dirTreeJson, title) {
 
-        var $sidebar = this.getSidebar();
+        let $sidebar = this.getSidebar();
 
         if (dirTreeJson.length === 0) {
             return false;
@@ -35,9 +35,9 @@ var SidebarHandler = function () {
 
     this._initBootstrapMenu = function () {
 
-        var that = this;
+        let that = this;
 
-        var makeClickAbleEl = function (e) {
+        let makeClickAbleEl = function (e) {
             return $('<a></a>', {
                 'class': 'modal-rename-file',
                 'data-toggle': 'modal',
@@ -75,11 +75,11 @@ var SidebarHandler = function () {
             return false;
         }
 
-        var $el      = this.getSidebar().find('.node-sidebar[data-nodeid="' + nodeId + '"]').first();
-        var $spanEls = $el.find('span');
+        let $el      = this.getSidebar().find('.node-sidebar[data-nodeid="' + nodeId + '"]').first();
+        let $spanEls = $el.find('span');
 
         // Update the node
-        var node = this.getSidebar().treeview('getNode', nodeId);
+        let node = this.getSidebar().treeview('getNode', nodeId);
         if (typeof node !== typeof undefined) {
             node.path = node.path.replace(node.text, nodeName);
             node.text = nodeName;
@@ -123,14 +123,14 @@ var SidebarHandler = function () {
     };
 
     this.expandNodes = function () {
-        var $sidebar = this.getSidebar();
+        let $sidebar = this.getSidebar();
         if (this.isInitialised) {
             $sidebar.treeview('expandAll');
         }
     };
 
     this.compressNodes = function () {
-        var $sidebar = this.getSidebar();
+        let $sidebar = this.getSidebar();
         if (this.isInitialised) {
             $sidebar.treeview('collapseAll');
         }
@@ -149,14 +149,14 @@ var SidebarHandler = function () {
     ######################################################*/
     this.onOpenProject = function () {
 
-        var that  = this;
-        var modes = [];
+        let that  = this;
+        let modes = [];
 
         this.Files.directoryOpen().then(function (dirEntry) {
 
             that.dirEntry = dirEntry;
 
-            var sortFn = function (a, b) {
+            let sortFn = function (a, b) {
                 if (a.typeFile !== b.typeFile) {
                     if (a.typeFile < b.typeFile) return -1;
                     if (a.typeFile > b.typeFile) return 1;
@@ -166,19 +166,19 @@ var SidebarHandler = function () {
                 return 0;
             };
 
-            var buildTreeViewJson = function (entry, callback) {
+            let buildTreeViewJson = function (entry, callback) {
 
-                var results = [];
+                let results = [];
 
                 // noinspection JSUnresolvedFunction
                 entry.createReader().readEntries(function (entries) {
 
-                    var pending = entries.length;
+                    let pending = entries.length;
 
                     if (!pending) {
 
                         // noinspection JSUnresolvedVariable
-                        var obj = {
+                        let obj = {
                             text: entry.name,
                             path: entry.fullPath,
                             typeFile: 0,
@@ -200,7 +200,7 @@ var SidebarHandler = function () {
                             buildTreeViewJson(item, function (res) {
 
                                 // noinspection JSUnresolvedVariable
-                                var obj = {
+                                let obj = {
                                     text: item.name,
                                     path: item.fullPath,
                                     typeFile: 0,
@@ -224,7 +224,7 @@ var SidebarHandler = function () {
                         }
                         else {
 
-                            var ext = that.Editors.getExtFromFileEntry(item);
+                            let ext = that.Editors.getExtFromFileEntry(item);
 
                             // noinspection JSUnresolvedVariable
                             results.push({
@@ -258,13 +258,13 @@ var SidebarHandler = function () {
 
     this.onNodeClick = function (nodeId) {
 
-        var that     = this;
-        var deferred = $.Deferred();
-        var node     = this.getSidebar().treeview('getNode', nodeId);
+        let that     = this;
+        let deferred = $.Deferred();
+        let node     = this.getSidebar().treeview('getNode', nodeId);
 
         if (node.typeFile === 1) {
 
-            var idx = this.Editors.getTabNavIdx(nodeId);
+            let idx = this.Editors.getTabNavIdx(nodeId);
             if (typeof idx !== typeof undefined) {
                 that.Editors.setTabNavFocus(idx);
                 deferred.resolve(idx, that.Editors.getEditorDataObj(idx));

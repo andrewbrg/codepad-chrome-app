@@ -1,4 +1,4 @@
-var FilesHandler = function () {
+let FilesHandler = function () {
 
     this.Notifications = undefined;
 
@@ -14,12 +14,12 @@ var FilesHandler = function () {
 
     this._waitForIO = function (writer, callback) {
 
-        var that      = this;
-        var start     = Date.now();
-        var reEntrant = function () {
+        let that      = this;
+        let start     = Date.now();
+        let reEntrant = function () {
 
             // noinspection JSUnresolvedVariable
-            var writerState = writer.WRITING;
+            let writerState = writer.WRITING;
 
             if (writer.readyState === writerState && Date.now() - start < 4000) {
                 setTimeout(reEntrant, 100);
@@ -39,8 +39,8 @@ var FilesHandler = function () {
 
     this._getRetainedEntries = function () {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
         chrome.storage.local.get(this.retainedKey, function (data) {
             if (chrome.runtime.lastError) {
@@ -48,7 +48,7 @@ var FilesHandler = function () {
                 deferred.reject();
             }
             else {
-                var retainedEntries = data[that.retainedKey] || [];
+                let retainedEntries = data[that.retainedKey] || [];
                 deferred.resolve(retainedEntries);
             }
         });
@@ -58,7 +58,7 @@ var FilesHandler = function () {
 
     this._restoreEntries = function () {
 
-        var that = this;
+        let that = this;
 
         this._getRetainedEntries().then(function (data) {
             data.forEach(function (retainedEntry) {
@@ -85,15 +85,15 @@ var FilesHandler = function () {
 
     this._retainEntry = function (entry) {
 
-        var that = this;
+        let that = this;
 
         this._getRetainedEntries().then(function (data) {
 
-            var obj                 = {};
-            var _openedDirs         = [];
-            var _openedFiles        = [];
-            var retainEntryHash     = chrome.fileSystem.retainEntry(entry);
-            var retainEntryHashName = retainEntryHash.split(':').pop();
+            let obj                 = {};
+            let _openedDirs         = [];
+            let _openedFiles        = [];
+            let retainEntryHash     = chrome.fileSystem.retainEntry(entry);
+            let retainEntryHashName = retainEntryHash.split(':').pop();
 
             if (entry.isDirectory) {
                 _openedDirs = [entry];
@@ -132,9 +132,9 @@ var FilesHandler = function () {
 
     this._getParentDirForFile = function (dirPath) {
 
-        var deferred = $.Deferred();
+        let deferred = $.Deferred();
 
-        var found = false;
+        let found = false;
         this.openedDirs.forEach(function (openedDir) {
             // noinspection JSUnresolvedVariable
             if (openedDir.fullPath === dirPath) {
@@ -156,7 +156,7 @@ var FilesHandler = function () {
 
     this._isValidFileMime = function (file) {
 
-        var valid = false;
+        let valid = false;
 
         if (typeof file.type === typeof undefined ||
             file.type === 'undefined' ||
@@ -170,7 +170,7 @@ var FilesHandler = function () {
             }
         });
 
-        var fileExt = typeof file.getAsFile === 'function'
+        let fileExt = typeof file.getAsFile === 'function'
             ? file.getAsFile().name.split('.').pop().toString().toLowerCase()
             : '';
 
@@ -200,10 +200,10 @@ var FilesHandler = function () {
 
     this.directoryOpen = function (dirPath) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
-        var onError = function (err) {
+        let onError = function (err) {
             that.Notifications.notify('danger', 'Directory Error', err);
             deferred.reject();
         };
@@ -224,18 +224,18 @@ var FilesHandler = function () {
 
     this.fileDrop = function (event) {
 
-        var that     = this;
-        var promises = [];
-        var deferred = $.Deferred();
+        let that     = this;
+        let promises = [];
+        let deferred = $.Deferred();
 
         // noinspection JSUnresolvedVariable
-        var files = event.originalEvent.dataTransfer.items;
-        for (var i = 0; i < files.length; i++) {
+        let files = event.originalEvent.dataTransfer.items;
+        for (let i = 0; i < files.length; i++) {
 
-            var file = files[i];
+            let file = files[i];
 
             // noinspection JSUnresolvedFunction
-            var fileEntry = file.webkitGetAsEntry();
+            let fileEntry = file.webkitGetAsEntry();
             if (file.kind === 'file' && fileEntry) {
 
                 if (that._isValidFileMime(file)) {
@@ -250,10 +250,10 @@ var FilesHandler = function () {
         if (promises.length > 0) {
             $.when.apply($, promises).done(function () {
 
-                var data = [];
-                var args = !$.isArray(arguments[0]) ? [arguments] : arguments;
+                let data = [];
+                let args = !$.isArray(arguments[0]) ? [arguments] : arguments;
 
-                for (var i = 0; i < args.length; i++) {
+                for (let i = 0; i < args.length; i++) {
                     data.push(args[i]);
                 }
                 deferred.resolve(data);
@@ -267,15 +267,15 @@ var FilesHandler = function () {
 
     this.fileOpen = function (fileEntry) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
-        var onError = function (err) {
+        let onError = function (err) {
             that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
 
-        var readFile = function (fileEntry, deferred) {
+        let readFile = function (fileEntry, deferred) {
 
             if (typeof fileEntry.file !== 'function') {
                 onError('Entry is not a file');
@@ -284,7 +284,7 @@ var FilesHandler = function () {
             else {
                 fileEntry.file(function (file) {
 
-                    var reader = new FileReader();
+                    let reader = new FileReader();
 
                     if (!that._isValidFileMime(file)) {
                         onError(file.name + ' has an unsupported file type (' + file.type + ') and will not be opened');
@@ -320,10 +320,10 @@ var FilesHandler = function () {
 
     this.fileSave = function (fileEntry, fileContent) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
-        var onError = function (err) {
+        let onError = function (err) {
             that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
@@ -343,7 +343,7 @@ var FilesHandler = function () {
             // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
-                var blob = new Blob([fileContent]);
+                let blob = new Blob([fileContent]);
 
                 // noinspection JSUnresolvedFunction
                 writer.truncate(blob.size);
@@ -366,10 +366,10 @@ var FilesHandler = function () {
 
     this.fileSaveAs = function (fileName, fileContent) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
-        var onError = function (err) {
+        let onError = function (err) {
             that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
@@ -384,7 +384,7 @@ var FilesHandler = function () {
             // noinspection JSUnresolvedFunction
             writableEntry.createWriter(function (writer) {
 
-                var blob = new Blob([fileContent]);
+                let blob = new Blob([fileContent]);
 
                 // noinspection JSUnresolvedFunction
                 writer.truncate(blob.size);
@@ -407,15 +407,15 @@ var FilesHandler = function () {
 
     this.fileRename = function (fileEntry, oldFileName, newFileName) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
         if (typeof fileEntry === typeof undefined || typeof newFileName === typeof undefined) {
             deferred.resolve(undefined);
             return deferred.promise();
         }
 
-        var onError = function (err) {
+        let onError = function (err) {
             that.Notifications.notify('danger', 'Filesystem error', err);
             deferred.reject();
         };
@@ -428,7 +428,7 @@ var FilesHandler = function () {
             }
 
             // noinspection JSUnresolvedVariable
-            var dirPath = fileEntry.fullPath.replace(writableFileEntry.fullPath, '');
+            let dirPath = fileEntry.fullPath.replace(writableFileEntry.fullPath, '');
 
             that._getParentDirForFile(dirPath).then(function (dirEntry) {
                 // noinspection JSUnresolvedFunction

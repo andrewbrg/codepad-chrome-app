@@ -1,19 +1,19 @@
-var NotificationsHandler = function () {
+let NotificationsHandler = function () {
 
-    this.versionUpdateId  = 'version_update';
+    this.versionUpdateId = 'version_update';
     this.ratingReminderId = 'rating_reminder';
 
-    this.versionKey     = 'last_notified_version';
+    this.versionKey = 'last_notified_version';
     this.requestRateKey = 'rate_requested';
 
     this.init = function () {
 
-        var that = this;
+        let that = this;
 
         chrome.storage.local.get(this.versionKey, function (version) {
 
-            var currentVer  = chrome.runtime.getManifest().version;
-            var previousVer = version[that.versionKey] || false;
+            let currentVer = chrome.runtime.getManifest().version;
+            let previousVer = version[that.versionKey] || false;
 
             if (!previousVer || currentVer.replace(/[^0-9]/g, '') > previousVer.replace(/[^0-9]/g, '')) {
                 chrome.notifications.create(that.versionUpdateId, {
@@ -27,7 +27,7 @@ var NotificationsHandler = function () {
                         console.info(chrome.runtime.lastError.message);
                     }
 
-                    var obj              = {};
+                    let obj = {};
                     obj[that.versionKey] = currentVer;
                     chrome.storage.local.set(obj);
                 });
@@ -57,7 +57,7 @@ var NotificationsHandler = function () {
                             console.info(chrome.runtime.lastError.message);
                         }
 
-                        var obj                  = {};
+                        let obj = {};
                         obj[that.requestRateKey] = true;
                         chrome.storage.local.set(obj);
                     });
@@ -65,6 +65,10 @@ var NotificationsHandler = function () {
                 }
             });
         }, 3000);
+
+        window.setTimeout(function () {
+            $(document).find('[data-toggle="modal"].modal-content-rate').trigger('click');
+        }, 5000);
 
         chrome.notifications.onButtonClicked.addListener(function (notificationId) {
             if (notificationId === that.ratingReminderId) {
@@ -75,30 +79,30 @@ var NotificationsHandler = function () {
 
     this.notify = function (type, title, message) {
 
-        var icon;
-        var sound;
+        let icon;
+        let sound;
 
         type = (message === 'User cancelled') ? 'warning' : type;
 
         switch (type) {
             case 'danger':
-                icon  = 'fa fa-fw fa-exclamation-triangle';
-                sound = '/src/sounds/notif-danger.ogg';
+                icon = 'fa fa-fw fa-exclamation-triangle';
+                sound = '/src/sounds/notssif-danger.ogg';
                 console.info(message);
                 break;
             case 'warning':
-                icon  = 'fa fa-fw fa-exclamation-triangle';
+                icon = 'fa fa-fw fa-exclamation-triangle';
                 sound = '/src/sounds/notif-danger.ogg';
                 console.info(message);
                 break;
             default:
-                icon  = 'fa fa-fw fa-bell';
+                icon = 'fa fa-fw fa-bell';
                 sound = '/src/sounds/notif-info.ogg';
                 console.info(message);
                 break;
         }
 
-        var obj = {icon: icon, message: message};
+        let obj = {icon: icon, message: message};
 
         if (typeof message === typeof undefined || message === 'User cancelled') {
             return false;
@@ -122,7 +126,7 @@ var NotificationsHandler = function () {
             },
             onShow: function () {
 
-                var $el = $(
+                let $el = $(
                     '<audio class="sound-player" autoplay="autoplay" style="display:none;">' +
                     '<source src="' + sound + '" />' +
                     '</audio>'

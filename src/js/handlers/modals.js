@@ -1,11 +1,11 @@
-var ModalsHandler = function () {
+let ModalsHandler = function () {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// Public methods
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     this.getModalContainer = function (el) {
 
-        var dt = $(el).attr('data-target');
+        let dt = $(el).attr('data-target');
 
         return (typeof dt === typeof undefined)
             ? undefined
@@ -23,9 +23,9 @@ var ModalsHandler = function () {
 
     this._getModalContent = function (el) {
 
-        var $el      = $(el);
-        var deferred = $.Deferred();
-        var callback = function (data) {
+        let $el      = $(el);
+        let deferred = $.Deferred();
+        let callback = function (data) {
             deferred.resolve({html: data, idx: $el.attr('data-idx'), nodeid: $el.attr('data-nodeid')});
         };
 
@@ -66,22 +66,22 @@ var ModalsHandler = function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     this.onShowBs = function (el, callback) {
 
-        var $el = $(el);
-        var $mc = this.getModalContainer($el);
+        let $el = $(el);
+        let $mc = this.getModalContainer($el);
 
         if (typeof $mc === typeof undefined) {
             return false;
         }
 
         this._getModalContent($el).done(function (data) {
-            var $modalContent = $mc.find('.modal-content').first();
+            let $modalContent = $mc.find('.modal-content').first();
 
-            var title = (typeof $el.attr('data-title') !== typeof undefined)
+            let title = (typeof $el.attr('data-title') !== typeof undefined)
                 ? $el.attr('data-title')
                 : $el.html();
 
-            var $html  = $(data.html);
-            var $modal = $modalContent.find('.modal-body').first().closest('.modal');
+            let $html  = $(data.html);
+            let $modal = $modalContent.find('.modal-body').first().closest('.modal');
 
             if (typeof data.idx !== typeof undefined) {
                 $html.find('button').attr('data-idx', data.idx);
@@ -104,8 +104,8 @@ var ModalsHandler = function () {
 
     this.onHideBs = function (el) {
 
-        var $el           = $(el);
-        var $modalContent = $el.find('.modal-content').first();
+        let $el           = $(el);
+        let $modalContent = $el.find('.modal-content').first();
 
         $modalContent.find('.modal-title').first().html('');
         $modalContent.find('.modal-body').first().html('');

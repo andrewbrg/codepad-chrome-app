@@ -1,6 +1,6 @@
 (function () {
 
-    var runtime = function (appWindow, launchData, isRestart) {
+    let runtime = function (appWindow, launchData, isRestart) {
         appWindow.contentWindow.launchData = launchData;
         appWindow.contentWindow.__MGA__bRestart = isRestart
     };

@@ -4,12 +4,12 @@ $(document).ready(function () {
     /// Globals and initializations
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var Editors = new EditorsHandler();
-    var Modals = new ModalsHandler();
-    var IdeSettings = new IdeSettingsHandler();
-    var Sidebar = new SidebarHandler();
-    var Notifications = new NotificationsHandler();
-    var Files = new FilesHandler();
+    let Editors = new EditorsHandler();
+    let Modals = new ModalsHandler();
+    let IdeSettings = new IdeSettingsHandler();
+    let Sidebar = new SidebarHandler();
+    let Notifications = new NotificationsHandler();
+    let Files = new FilesHandler();
 
     Notifications.init();
     Files.init(Notifications);
@@ -46,8 +46,8 @@ $(document).ready(function () {
     // Push the template into the modal before showing it
     $(document).on('show.bs.modal', '.modal', function (e) {
 
-        var $relTgt = $(e.relatedTarget);
-        var callback = function () {
+        let $relTgt = $(e.relatedTarget);
+        let callback = function () {
         };
 
         if ($relTgt.hasClass('modal-ide-settings') || $relTgt.hasClass('modal-ide-appearance')) {
@@ -79,7 +79,7 @@ $(document).ready(function () {
     // Remove the template from the modal after closing it
     $(document).on('hide.bs.modal', '.modal', function (e) {
         Modals.onHideBs(e.currentTarget);
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.focus();
         }
@@ -106,7 +106,7 @@ $(document).ready(function () {
     // New tab
     $(document).on('click', '.action-add-tab', function () {
 
-        var fileType = $(this).attr('data-type');
+        let fileType = $(this).attr('data-type');
         if (typeof fileType === typeof undefined || !fileType) {
             fileType = Editors.defaultFileExt;
         }
@@ -117,8 +117,8 @@ $(document).ready(function () {
     // Save file
     $(document).on('click', '.action-save', function () {
 
-        var attr = $(this).attr('data-idx');
-        var idx = (typeof attr !== typeof undefined && attr !== false) ? attr : Editors.currentIdx;
+        let attr = $(this).attr('data-idx');
+        let idx = (typeof attr !== typeof undefined && attr !== false) ? attr : Editors.currentIdx;
 
         Editors.onSaveFile(idx);
     });
@@ -167,7 +167,7 @@ $(document).ready(function () {
 
     // Rename file
     $(document).on('_file.rename', function (e) {
-        var callback = function (fileEntry) {
+        let callback = function (fileEntry) {
             Files.fileRename(fileEntry, e.oldFileName, e.newFileName).then(function (fileEntry) {
                 if (typeof fileEntry !== typeof undefined) {
                     Editors.onRenameFile(e.idx, fileEntry);
@@ -186,7 +186,7 @@ $(document).ready(function () {
             });
         };
 
-        var fileEntry = Editors.getEditorDataObj(e.idx);
+        let fileEntry = Editors.getEditorDataObj(e.idx);
         if (typeof fileEntry === typeof undefined && typeof e.nodeId !== typeof undefined) {
             Sidebar.onNodeClick(e.nodeId).then(function (idx, fileEntry) {
                 e.idx = idx;
@@ -219,7 +219,7 @@ $(document).ready(function () {
 
     // Perform search on current active editor
     $(document).on('click', '.action-search', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('find');
         }
@@ -227,7 +227,7 @@ $(document).ready(function () {
 
     // Perform undo on current active editor
     $(document).on('click', '.action-undo', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.undo();
         }
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
     // Perform redo on current active editor
     $(document).on('click', '.action-redo', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.redo();
         }
@@ -243,7 +243,7 @@ $(document).ready(function () {
 
     // Perform cut on current active editor
     $(document).on('click', '.action-cut', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('cut');
         }
@@ -251,7 +251,7 @@ $(document).ready(function () {
 
     // Perform copy on current active editor
     $(document).on('click', '.action-copy', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('copy');
         }
@@ -259,7 +259,7 @@ $(document).ready(function () {
 
     // Perform paste to current active editor
     $(document).on('click', '.action-paste', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined && Editors.aceClipboard.length > 0) {
             aceEditor.execCommand('paste', Editors.aceClipboard);
         }
@@ -267,7 +267,7 @@ $(document).ready(function () {
 
     // Perform select all
     $(document).on('click', '.action-select-all', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('selectall');
         }
@@ -275,7 +275,7 @@ $(document).ready(function () {
 
     // Perform fold all current active editor
     $(document).on('click', '.action-fold-all', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.focus();
             aceEditor.getSession().foldAll();
@@ -284,7 +284,7 @@ $(document).ready(function () {
 
     // Perform unfold all current active editor
     $(document).on('click', '.action-unfold-all', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.focus();
             aceEditor.getSession().unfold();
@@ -298,7 +298,7 @@ $(document).ready(function () {
 
     // Perform minimize
     $(document).on('click', '.action-minimize', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('__minimize');
         }
@@ -306,7 +306,7 @@ $(document).ready(function () {
 
     // Perform maximize
     $(document).on('click', '.action-maximize', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('__maximize');
         }
@@ -314,7 +314,7 @@ $(document).ready(function () {
 
     // Perform fullscreen
     $(document).on('click', '.action-fullscreen', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('__fullscreen');
         }
@@ -322,7 +322,7 @@ $(document).ready(function () {
 
     // Perform font increase
     $(document).on('click', '.action-font-increase', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('__fontIncrease');
         }
@@ -330,7 +330,7 @@ $(document).ready(function () {
 
     // Perform font decrease
     $(document).on('click', '.action-font-decrease', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             aceEditor.execCommand('__fontDecrease');
         }
@@ -345,7 +345,7 @@ $(document).ready(function () {
 
     // Toggle read only mode on current active tab
     $(document).on('click', '.action-toggle-readonly', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             Editors.onToggleReadOnly(Editors.currentIdx);
         }
@@ -353,7 +353,7 @@ $(document).ready(function () {
 
     // Toggle read only mode on all tabs
     $(document).on('click', '.action-toggle-readonly-all', function () {
-        var aceEditor = Editors.getCurrentEditor();
+        let aceEditor = Editors.getCurrentEditor();
         if (typeof aceEditor !== typeof undefined) {
             Editors.onToggleReadOnly();
         }
@@ -366,7 +366,7 @@ $(document).ready(function () {
     /// Sidebar
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var $aside = $('aside');
+    let $aside = $('aside');
 
     // Enable resizable sidebar
     $aside.resizable({

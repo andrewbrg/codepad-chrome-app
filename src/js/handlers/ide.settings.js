@@ -1,4 +1,4 @@
-var IdeSettingsHandler = function () {
+let IdeSettingsHandler = function () {
 
     this.Editors   = undefined;
     this.parentKey = 'ide_settings';
@@ -13,7 +13,7 @@ var IdeSettingsHandler = function () {
             return this;
         }
 
-        var that = this;
+        let that = this;
         chrome.storage.sync.get(this.parentKey, function (obj) {
 
             if (typeof obj === typeof undefined || !obj.hasOwnProperty(that.parentKey)) {
@@ -27,9 +27,9 @@ var IdeSettingsHandler = function () {
 
     this._populateViewSetting = function (el) {
 
-        var $el  = $(el);
-        var type = $el.attr('type');
-        var key  = $el.attr('data-option').toString();
+        let $el  = $(el);
+        let type = $el.attr('type');
+        let key  = $el.attr('data-option').toString();
 
         this.fetch(key).then(function (val) {
 
@@ -62,8 +62,8 @@ var IdeSettingsHandler = function () {
 
     this.init = function (Editors) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
         that.Editors = Editors;
 
@@ -98,8 +98,8 @@ var IdeSettingsHandler = function () {
 
     this.fetch = function (key) {
 
-        var that     = this;
-        var deferred = $.Deferred();
+        let that     = this;
+        let deferred = $.Deferred();
 
         chrome.storage.sync.get(this.parentKey, function (obj) {
 
@@ -135,7 +135,7 @@ var IdeSettingsHandler = function () {
 
     this.flush = function (key) {
 
-        var that = this;
+        let that = this;
 
         if (typeof key !== typeof undefined) {
             chrome.storage.sync.get(this.parentKey, function (obj) {
@@ -169,10 +169,10 @@ var IdeSettingsHandler = function () {
 
     this.getKeyValFromEl = function (el) {
 
-        var $el  = $(el);
-        var type = $el.attr('type');
-        var key  = $el.attr('data-option').toString();
-        var obj  = {key: key, val: undefined};
+        let $el  = $(el);
+        let type = $el.attr('type');
+        let key  = $el.attr('data-option').toString();
+        let obj  = {key: key, val: undefined};
 
         if (typeof key === typeof undefined) {
             return obj;
@@ -189,15 +189,15 @@ var IdeSettingsHandler = function () {
 
     this.decorateView = function () {
 
-        var that         = this;
-        var fontOpts     = '';
-        var themeOps     = '';
-        var fontSizeOpts = '';
+        let that         = this;
+        let fontOpts     = '';
+        let themeOps     = '';
+        let fontSizeOpts = '';
 
         $(document).find('[data-action="ide-setting"][data-option]').each(function (i, v) {
 
-            var $el = $(v);
-            var key = $el.attr('data-option').toString();
+            let $el = $(v);
+            let key = $el.attr('data-option').toString();
 
             if (key === 'theme') {
                 $.get('/src/settings/ace.themes.json', function (data) {
