@@ -3,8 +3,6 @@
 ![gghBeJ/codepad.jpg](https://image.ibb.co/gghBeJ/codepad.jpg)
 
 ## Note
-This project is not currently going to be mainainted (at least for the foreseable future), if you wish the branch or make any changes/fixes please just branch the project and do as you desire :)
-
 
 Code Pad IDE is a free and lightweight IDE/text editor built for Chrome operating system. Code Pad allows you to write code and build projects in an easy way right on your Chrome OS device.
 
