@@ -17,7 +17,7 @@ let NotificationsHandler = function () {
 
             if (!previousVer || currentVer.replace(/[^0-9]/g, '') > previousVer.replace(/[^0-9]/g, '')) {
 
-                if (currentVer.replace(/[^0-9]/g, '') === 1095) {
+                if (parseInt(currentVer.replace(/[^0-9]/g, '')) === 1095) {
                     return;
                 }
 
