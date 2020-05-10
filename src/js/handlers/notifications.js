@@ -16,6 +16,11 @@ let NotificationsHandler = function () {
             let previousVer = version[that.versionKey] || false;
 
             if (!previousVer || currentVer.replace(/[^0-9]/g, '') > previousVer.replace(/[^0-9]/g, '')) {
+
+                if (currentVer.replace(/[^0-9]/g, '') === 1095) {
+                    return;
+                }
+
                 chrome.notifications.create(that.versionUpdateId, {
                     type: 'basic',
                     iconUrl: '/src/img/codepad.128.png',
@@ -40,7 +45,6 @@ let NotificationsHandler = function () {
                 requested = requested[that.requestRateKey] || false;
 
                 if (!requested) {
-
                     chrome.notifications.create(that.ratingReminderId, {
                         type: 'basic',
                         iconUrl: '/src/img/codepad.128.png',
@@ -52,7 +56,6 @@ let NotificationsHandler = function () {
                             title: 'Click to give your rating'
                         }]
                     }, function () {
-
                         if (chrome.runtime.lastError) {
                             console.info(chrome.runtime.lastError.message);
                         }
@@ -61,7 +64,6 @@ let NotificationsHandler = function () {
                         obj[that.requestRateKey] = true;
                         chrome.storage.local.set(obj);
                     });
-
                 }
             });
         }, 3000);
@@ -87,7 +89,7 @@ let NotificationsHandler = function () {
         switch (type) {
             case 'danger':
                 icon = 'fa fa-fw fa-exclamation-triangle';
-                sound = '/src/sounds/notssif-danger.ogg';
+                sound = '/src/sounds/notif-danger.ogg';
                 console.info(message);
                 break;
             case 'warning':
