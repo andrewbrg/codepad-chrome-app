@@ -5,6 +5,7 @@ let NotificationsHandler = function () {
 
     this.versionKey = 'last_notified_version';
     this.requestRateKey = 'rate_requested';
+    this.disableRateKey = 'rate_disabled';
 
     this.init = function () {
 
@@ -68,9 +69,15 @@ let NotificationsHandler = function () {
             });
         }, 3000);
 
-        window.setTimeout(function () {
-            $(document).find('[data-toggle="modal"].modal-content-rate').trigger('click');
-        }, 5000);
+
+        chrome.storage.local.get(that.disableRateKey, function (requested) {
+            requested = requested[that.disableRateKey] || false;
+            if (!requested) {
+                window.setTimeout(function () {
+                    $(document).find('[data-toggle="modal"].modal-content-rate').trigger('click');
+                }, 5000);
+            }
+        });
 
         chrome.notifications.onButtonClicked.addListener(function (notificationId) {
             if (notificationId === that.ratingReminderId) {

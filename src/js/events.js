@@ -85,6 +85,13 @@ $(document).ready(function () {
         }
     });
 
+    $(document).on('click', '.disable-rate', function (e) {
+        let obj = {};
+        obj[Notifications.disableRateKey] = true;
+        chrome.storage.local.set(obj);
+        $(e.currentTarget).closest('.modal').find('[data-dismiss="modal"]').trigger('click');
+    });
+
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -192,8 +199,7 @@ $(document).ready(function () {
                 e.idx = idx;
                 callback(fileEntry);
             });
-        }
-        else {
+        } else {
             callback(fileEntry);
         }
     });
