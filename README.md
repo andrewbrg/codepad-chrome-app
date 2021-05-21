@@ -1,4 +1,4 @@
-# CodePad - A Chrome OS multi-language text editor
+# Codeden - A Uni-Platform multi-language text editor
 
 ![gghBeJ/codepad.jpg](https://image.ibb.co/gghBeJ/codepad.jpg)
 
