@@ -48,3 +48,4 @@ Alternatively, if you're not running a Chrome OS device just follow these steps:
   - Open Google Chrome browser
   - Enter [chrome://extensions](chrome://extensions) in the URL bar and enable Developer Mode.
   - While still on the extensions page, click the button marked `Load unpacked extension...` and select the directory containing the Code Pad manifest.json file.
+  - The app should be 'installed' on your device and should be accessible via your start menu or programs folder
