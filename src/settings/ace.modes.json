@@ -59,11 +59,6 @@
     "mode": "javascript",
     "name": "JavaScript"
   },
-  "jsx":{
-    "icon": "icon-javascript-alt",
-    "mode": "jsx",
-    "name": "JSX"
-  },
   "json": {
     "icon": "icon-javascript-alt",
     "mode": "json",
@@ -163,11 +158,6 @@
     "icon": "devicon devicon-typescript-plain",
     "mode": "typescript",
     "name": "TypeScript"
-  },
-  "tsx":{
-    "icon": "devicon devicon-typescript-plain",
-    "mode": "tsx",
-    "name": "TSX"
   },
   "vb": {
     "icon": "devicon devicon-visualstudio-plain",
