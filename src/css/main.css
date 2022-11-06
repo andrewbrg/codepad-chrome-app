@@ -606,3 +606,18 @@ input.cmn-tgl-rnd-flt:checked + label:after {
 .bootstrapMenu .dropdown-item .fa {
     font-size: 0.9rem;
 }
+
+/*******************************************************************************/
+/******************************** Range Slider Fix *****************************/
+/*******************************************************************************/
+.range-slider {
+    white-space: nowrap;
+}
+
+.range-slider > * {
+    display: inline-block;
+}
+
+.range-slider-range {
+    width: 95.5%;
+}

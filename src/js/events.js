@@ -100,7 +100,18 @@ $(document).ready(function () {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     $(document).on('input change', '[data-action="ide-setting"]', function () {
-        IdeSettings.persistAndApply(IdeSettings.getKeyValFromEl($(this)));
+        let $this = $(this);
+        let $next = $(this).next();
+
+        IdeSettings.persistAndApply(IdeSettings.getKeyValFromEl($this));
+
+        if ($this.hasClass('range-slider-range')) {
+            $next.text($this.val());
+
+            let title = $next.attr('title').split(', ');
+            title[1] = 'Current: ' + $this.val();
+            $next.attr('title', title.join(', '));
+        }
     });
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
